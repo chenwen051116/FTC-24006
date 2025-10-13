@@ -49,6 +49,8 @@ public class BohanTele extends CommandOpMode {
         //Commands
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::toggleRPM);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> limelight.startDetect());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> limelight.stopDetect());
         //DRIVER TWO
     }
 

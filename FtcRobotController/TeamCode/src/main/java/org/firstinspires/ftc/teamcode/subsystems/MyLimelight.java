@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static java.lang.Math.sqrt;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.limelightvision.LLFieldMap;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -39,11 +41,13 @@ public class MyLimelight extends SubsystemBase {
 
     public double returnDis() {
         // Fetch most recent vision result each scheduler loop
-        if (llenable){
-            aprilTagLatestResult = limelight.getLatestResult();
+        aprilTagLatestResult = limelight.getLatestResult();
+        if (llenable && hasTarget()){
             List<LLResultTypes.FiducialResult> fiducialResults = aprilTagLatestResult.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                    return fr.getRobotPoseTargetSpace().getPosition().y;
+                    return sqrt(fr.getTargetPoseCameraSpace().getPosition().y * fr.getTargetPoseCameraSpace().getPosition().y
+                            + (fr.getTargetPoseCameraSpace().getPosition().x) * (fr.getTargetPoseCameraSpace().getPosition().x)
+                                    + (fr.getTargetPoseCameraSpace().getPosition().z) * (fr.getTargetPoseCameraSpace().getPosition().z) );
             }
         }
         return 0;

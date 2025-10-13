@@ -17,10 +17,7 @@ public class IntakeCommand extends CommandBase {
     }
 
     public void execute() {
-        if (gamepad1.right_trigger > 0.3 && !intake.ballAtTransfer){
-            intake.setIntakePower(0.9);
-            intake.setTransferPower(0.6);
-        } else if (gamepad1.right_trigger > 0.3 && intake.ballAtTransfer){
+        if (gamepad1.right_trigger > 0.3 ){
             intake.setTransferPower(0);
             intake.setIntakePower(0.9);
         }else if (gamepad1.left_trigger > 0.3){
@@ -30,7 +27,7 @@ public class IntakeCommand extends CommandBase {
             intake.setTransferPower(-1);
             intake.setIntakePower(-0.7);
         }else if (gamepad1.right_bumper) {
-            intake.setTransferPower(0.9);
+            intake.setTransferPower(1);
             intake.setIntakePower(1);
         }else {
             intake.setTransferPower(0);

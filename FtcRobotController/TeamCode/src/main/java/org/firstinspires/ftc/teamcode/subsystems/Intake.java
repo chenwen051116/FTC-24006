@@ -39,10 +39,10 @@ public class Intake extends SubsystemBase {
     }
     @Override
     public void periodic() { // FTC 0.001s cycle
-        if (getDist() < 100) {
-            ballAtTransfer = true;
-        }else{
-            ballAtTransfer = false;
-        }
+//        if (getDist() < 100) {
+//            ballAtTransfer = true;
+//        }else{
+//            ballAtTransfer = false;
+//        }
     }
 }
