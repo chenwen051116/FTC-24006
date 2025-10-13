@@ -49,6 +49,12 @@ public class MyLimelight extends SubsystemBase {
         return 0;
     }
 
+    public void startDetect(){
+        llenable = true;
+    }
+    public void stopDetect(){
+        llenable = false;
+    }
     public boolean hasTarget() { //Has to be a METHOD instead a VARIABLE since limelight is constantly updating
         return aprilTagLatestResult != null && aprilTagLatestResult.isValid(); //This will return true only if the data is not empty and valid
     }
