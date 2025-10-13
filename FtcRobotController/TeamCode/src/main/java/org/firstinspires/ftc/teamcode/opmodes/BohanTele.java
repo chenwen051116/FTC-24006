@@ -21,12 +21,14 @@ import org.firstinspires.ftc.teamcode.commands.DriveInTeleOpCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 
 @TeleOp
 public class BohanTele extends CommandOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
+    private Shooter shooter;
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
@@ -39,8 +41,9 @@ public class BohanTele extends CommandOpMode {
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         intake = new Intake(hardwareMap);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
-        //Driver One
-
+        shooter = new Shooter(hardwareMap);
+        //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::toggleRPM);
         //DRIVER TWO
     }
 
@@ -48,7 +51,14 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
+        
+        // Update shooter PID
+        shooter.updateFlywheelPID();
+        
         telemetry.addData("Distance", intake.getDist());
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
         telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
         telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);

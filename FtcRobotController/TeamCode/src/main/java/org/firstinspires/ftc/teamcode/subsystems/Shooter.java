@@ -14,13 +14,15 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
     
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.001;  // Proportional gain
-    public static double Ki = 0.0001; // Integral gain  
+    public static double Kp = 0.006;  // Proportional gain
+    public static double Ki = 0.0; // Integral gain
     public static double Kd = 0.0;    // Derivative gain
-    public static double pidThreshold = 200.0; // RPM threshold for PID vs full power control
+    public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
+    public static double tolerance = 30.0; // RPM tolerance for "at target" determination
     
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
+    private int rpmToggle = 0;
 
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
@@ -40,8 +42,8 @@ public class Shooter extends SubsystemBase {
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  // Has encoder
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
         
-        // Set PID tolerance (adjust as needed)
-        pidController.setTolerance(50.0); // 50 RPM tolerance
+        // Set PID tolerance (adjustable via static parameter)
+        pidController.setTolerance(tolerance);
     }
     
     /**
@@ -74,35 +76,51 @@ public class Shooter extends SubsystemBase {
         return pidController.atSetPoint();
     }
     
+    // Store current motor power for telemetry/graphing
+    private double currentMotorPower = 0.0;
+    private double currentPIDOutput = 0.0;
+    
     /**
      * Update PID controller and set motor powers
      * Call this method in main loop for continuous control
      */
     public void updateFlywheelPID() {
         if (targetRPM > 0) {
+            // Update PID parameters and tolerance in case they were changed via dashboard
+            pidController.setPID(Kp, Ki, Kd);
+            pidController.setTolerance(tolerance);
+            
             double currentRPM = getFlyWheelRPM();
             double rpmDifference = targetRPM - currentRPM;
             
             double power;
+            double pidOutput = 0.0;
             
             if (Math.abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
-                pidController.setPID(Kp, Ki, Kd);
-                double output = pidController.calculate(currentRPM);
-                power = Math.max(0.0, Math.min(1.0, output)); //smart brahhh
+                pidOutput = pidController.calculate(currentRPM);
+                power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
             } else if (rpmDifference > pidThreshold) {
                 // Large speed increase needed - use full power
                 power = 1.0;
+                pidOutput = 1.0; // PID would output 1.0 but we're overriding
             } else {
                 // Large speed decrease needed - use no power (let inertia slow it down)
                 power = 0.0;
+                pidOutput = 0.0; // PID would output negative but we're overriding
             }
+            
+            // Store values for telemetry/graphing
+            currentMotorPower = power;
+            currentPIDOutput = pidOutput;
             
             // Apply power to both motors
             shooterLeft.setPower(power);
             shooterRight.setPower(power);
         } else {
             // Stop motors if no target set
+            currentMotorPower = 0.0;
+            currentPIDOutput = 0.0;
             shooterLeft.setPower(0);
             shooterRight.setPower(0);
         }
@@ -122,14 +140,34 @@ public class Shooter extends SubsystemBase {
         setFlywheelPower(0);
         pidController.reset();
     }
+    
+    // One-liner toggle: cycles through 0→3000→4000→5000→0 RPM
+    public void toggleRPM() { setTargetRPM(new double[]{0, 3600, 3800, 4000}[rpmToggle = (rpmToggle + 1) % 4]); }
 
+    /**
+     * Get current motor power (for graphing/telemetry)
+     */
+    public double getCurrentMotorPower() {
+        return currentMotorPower;
+    }
+    
+    /**
+     * Get current PID output (for graphing/telemetry)
+     */
+    public double getCurrentPIDOutput() {
+        return currentPIDOutput;
+    }
+    
     public void updateTelemetry() {
         telemetry.addData("Target RPM", targetRPM);
         telemetry.addData("Current RPM", getFlyWheelRPM());
         telemetry.addData("At Target", isAtTargetRPM());
+        telemetry.addData("Motor Power", currentMotorPower);
+        telemetry.addData("PID Output", currentPIDOutput);
         telemetry.addData("Kp", Kp);
         telemetry.addData("Ki", Ki);
         telemetry.addData("Kd", Kd);
         telemetry.addData("PID Threshold", pidThreshold);
+        telemetry.addData("Tolerance", tolerance);
     }
 }

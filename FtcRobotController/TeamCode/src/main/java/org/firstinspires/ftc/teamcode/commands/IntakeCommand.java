@@ -29,6 +29,9 @@ public class IntakeCommand extends CommandBase {
         }else if (gamepad1.left_bumper) {
             intake.setTransferPower(-1);
             intake.setIntakePower(-0.7);
+        }else if (gamepad1.right_bumper) {
+            intake.setTransferPower(0.9);
+            intake.setIntakePower(1);
         }else {
             intake.setTransferPower(0);
             intake.setIntakePower(0);

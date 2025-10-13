@@ -29,6 +29,8 @@ public class PIDMotorsTuning extends OpMode {
     
     public static double pidThreshold = 200.0;
     
+    public static double tolerance = 50.0;
+    
     public static double targetRPM = 2000.0;
     
     private Shooter shooter;
@@ -46,6 +48,7 @@ public class PIDMotorsTuning extends OpMode {
         Shooter.Ki = Ki;
         Shooter.Kd = Kd;
         Shooter.pidThreshold = pidThreshold;
+        Shooter.tolerance = tolerance;
         
         dashboardTelemetry.addData("Status", "Clean PID Tuning Ready - Use Dashboard to adjust parameters");
         dashboardTelemetry.update();
@@ -58,6 +61,7 @@ public class PIDMotorsTuning extends OpMode {
         Shooter.Ki = Ki;
         Shooter.Kd = Kd;
         Shooter.pidThreshold = pidThreshold;
+        Shooter.tolerance = tolerance;
         
         // Set target and update PID
         shooter.setTargetRPM(targetRPM);
@@ -70,12 +74,15 @@ public class PIDMotorsTuning extends OpMode {
         packet.put("Target RPM", targetRPM);
         packet.put("Current RPM", shooter.getFlyWheelRPM());
         packet.put("RPM Error", targetRPM - shooter.getFlyWheelRPM());
+        packet.put("Motor Power", shooter.getCurrentMotorPower());
+        packet.put("PID Output", shooter.getCurrentPIDOutput());
         
         // Add PID parameters
         packet.put("Kp", Kp);
         packet.put("Ki", Ki);
         packet.put("Kd", Kd);
         packet.put("Threshold", pidThreshold);
+        packet.put("Tolerance", tolerance);
         packet.put("At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         
         // Send packet to dashboard for graphing
@@ -85,12 +92,15 @@ public class PIDMotorsTuning extends OpMode {
         dashboardTelemetry.addData("Target RPM", "%.1f", targetRPM);
         dashboardTelemetry.addData("Current RPM", "%.1f", shooter.getFlyWheelRPM());
         dashboardTelemetry.addData("RPM Error", "%.1f", targetRPM - shooter.getFlyWheelRPM());
+        dashboardTelemetry.addData("Motor Power", "%.3f", shooter.getCurrentMotorPower());
+        dashboardTelemetry.addData("PID Output", "%.3f", shooter.getCurrentPIDOutput());
         dashboardTelemetry.addData("At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         dashboardTelemetry.addData("", "");
         dashboardTelemetry.addData("Kp", "%.6f", Kp);
         dashboardTelemetry.addData("Ki", "%.6f", Ki);
         dashboardTelemetry.addData("Kd", "%.6f", Kd);
         dashboardTelemetry.addData("Threshold", "%.1f", pidThreshold);
+        dashboardTelemetry.addData("Tolerance", "%.1f", tolerance);
         dashboardTelemetry.update();
     }
     
