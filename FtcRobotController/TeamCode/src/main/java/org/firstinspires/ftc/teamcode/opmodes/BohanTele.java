@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveInTeleOpCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 
@@ -29,6 +30,7 @@ public class BohanTele extends CommandOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
+    private MyLimelight limelight;
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
@@ -42,6 +44,9 @@ public class BohanTele extends CommandOpMode {
         intake = new Intake(hardwareMap);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
+        limelight = new MyLimelight(hardwareMap);
+        limelight.initRvision();
+        //Commands
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::toggleRPM);
         //DRIVER TWO
@@ -62,6 +67,8 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
         telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
         telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
+        telemetry.addData("Apriltag Area", limelight.returnDis());
+
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
 //        telemetry.addData("BL Power", drivetrain.getBackLeftPower());

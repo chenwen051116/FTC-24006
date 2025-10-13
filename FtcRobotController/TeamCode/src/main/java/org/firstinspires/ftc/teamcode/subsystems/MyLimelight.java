@@ -16,18 +16,37 @@ public class MyLimelight extends SubsystemBase {
     private final Limelight3A limelight;
     private LLResult aprilTagLatestResult;
     private final ElapsedTime timer = new ElapsedTime();
+    private boolean llenable = false;
 
     public MyLimelight(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // fast updates
+
     }
 
-    @Override
-    public void periodic() {
+    public void initRvision(){
+        limelight.pipelineSwitch(8);
+        limelight.start();
+    }
+    public void initBvision(){
+        limelight.pipelineSwitch(7);
+        limelight.start();
+    }
+    public void initPatvision(){
+        limelight.pipelineSwitch(9);
+        limelight.start();
+    }
+
+    public double returnDis() {
         // Fetch most recent vision result each scheduler loop
-        if (limelight.isRunning()){
+        if (llenable){
             aprilTagLatestResult = limelight.getLatestResult();
+            List<LLResultTypes.FiducialResult> fiducialResults = aprilTagLatestResult.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                    return fr.getRobotPoseTargetSpace().getPosition().y;
+            }
         }
+        return 0;
     }
 
     public boolean hasTarget() { //Has to be a METHOD instead a VARIABLE since limelight is constantly updating
