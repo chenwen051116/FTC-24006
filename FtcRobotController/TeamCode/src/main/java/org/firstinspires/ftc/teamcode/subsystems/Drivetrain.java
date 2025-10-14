@@ -10,7 +10,18 @@ public class Drivetrain extends SubsystemBase {
     private final DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
     //servos
+    public static double Kp = 0.018;
 
+    public double llTx = 0;
+    public enum DriveStatus{
+        Tele,Autofocusing
+    }
+
+    public DriveStatus drivestatus = DriveStatus.Tele;
+
+    public void setDriveStatus(DriveStatus status){
+        drivestatus = status;
+    }
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
@@ -27,9 +38,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void teleDrive (double frontBackVelocity, double strafeVelocity, double turnVelocity){
+
         double y = frontBackVelocity;
         double x = strafeVelocity;
-        double rx = turnVelocity;
+        double rx = 0;
+        if(drivestatus == DriveStatus.Tele) {
+            rx = turnVelocity;
+        }
+        else if(drivestatus == DriveStatus.Autofocusing){
+            rx = Kp*llTx;
+        }
+
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
@@ -46,6 +65,10 @@ public class Drivetrain extends SubsystemBase {
         backRightMotor.setPower(backRightPower);
     }
     // 在 Drivetrain getter
+
+    public void updatellTx(double tX){
+        llTx = tX;
+    }
     public double getFrontLeftPower() {
         return frontLeftMotor.getPower();
     }

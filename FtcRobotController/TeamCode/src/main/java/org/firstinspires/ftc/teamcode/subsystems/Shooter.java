@@ -24,12 +24,24 @@ public class Shooter extends SubsystemBase {
     
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
-    private int rpmToggle = 0;
+
+    private double distance = 0;
+
+    public enum ShooterStatus {
+        Stop,Idling,Shooting
+    }
+
+
+
+    public ShooterStatus shooterStatus = ShooterStatus.Stop;
+    public Robot.Side side = Robot.Side.Red;
+
+
 
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
-        
+
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
 
@@ -43,19 +55,25 @@ public class Shooter extends SubsystemBase {
         // Configure motor modes - only shooterLeft has encoder
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  // Has encoder
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
-        
+
         // Set PID tolerance (adjustable via static parameter)
         pidController.setTolerance(tolerance);
     }
-    
+
     /**
      * Get current flywheel velocity in rad/s
      * Uses shooterLeft (the motor with encoder) for velocity feedback
      */
+    public void setShooterStatus(ShooterStatus status){
+        shooterStatus = status;
+    }
     public double getFlyWheelVelocity() {
         return shooterLeft.getVelocity() * (2.0 * Math.PI) / 60.0; // Convert RPM to rad/s
     }
-    
+
+    public void updateDis(double dis){
+        distance = dis;
+    }
     /**
      * Get current flywheel RPM
      * Uses shooterLeft (the motor with encoder) for velocity feedback
@@ -77,11 +95,11 @@ public class Shooter extends SubsystemBase {
     public boolean isAtTargetRPM() {
         return pidController.atSetPoint();
     }
-    
+
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
     private double currentPIDOutput = 0.0;
-    
+
     /**
      * Update PID controller and set motor powers
      * Call this method in main loop for continuous control
@@ -91,13 +109,13 @@ public class Shooter extends SubsystemBase {
             // Update PID parameters and tolerance in case they were changed via dashboard
             pidController.setPID(Kp, Ki, Kd);
             pidController.setTolerance(tolerance);
-            
+
             double currentRPM = getFlyWheelRPM();
             double rpmDifference = targetRPM - currentRPM;
-            
+
             double power;
             double pidOutput = 0.0;
-            
+
             if (Math.abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
                 pidOutput = pidController.calculate(currentRPM);
@@ -111,11 +129,11 @@ public class Shooter extends SubsystemBase {
                 power = 0.0;
                 pidOutput = 0.0; // PID would output negative but we're overriding
             }
-            
+
             // Store values for telemetry/graphing
             currentMotorPower = power;
             currentPIDOutput = pidOutput;
-            
+
             // Apply power to both motors
             shooterLeft.setPower(power);
             shooterRight.setPower(power);
@@ -127,7 +145,7 @@ public class Shooter extends SubsystemBase {
             shooterRight.setPower(0);
         }
     }
-    
+
     /**
      * Set flywheel power directly (bypasses PID)
      */
@@ -142,8 +160,7 @@ public class Shooter extends SubsystemBase {
         setFlywheelPower(0);
         pidController.reset();
     }
-    
-    // One-liner toggle: cycles through 0→3000→4000→5000→0 RPM
+
     public void toggleRPM() { setTargetRPM(aimRPM); }
 
     /**
@@ -152,7 +169,7 @@ public class Shooter extends SubsystemBase {
     public double getCurrentMotorPower() {
         return currentMotorPower;
     }
-    
+
     /**
      * Get current PID output (for graphing/telemetry)
      */
@@ -162,6 +179,15 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
        updateFlywheelPID();
+       if(shooterStatus == ShooterStatus.Shooting){
+           toggleRPM();
+       }
+       else if(shooterStatus == ShooterStatus.Stop){
+           completeStop();
+       }
+       else if(shooterStatus == ShooterStatus.Idling) {
+           setTargetRPM(4000);
+       }
     }
     public void updateTelemetry() {
         telemetry.addData("Target RPM", targetRPM);

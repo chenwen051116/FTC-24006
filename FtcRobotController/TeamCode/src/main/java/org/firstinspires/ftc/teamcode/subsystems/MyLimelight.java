@@ -21,14 +21,23 @@ public class MyLimelight extends SubsystemBase {
     private final ElapsedTime timer = new ElapsedTime();
     private boolean llenable = false;
 
-    public MyLimelight(HardwareMap hardwareMap) {
+    private Robot.Side side =  Robot.Side.Red;
+
+    public MyLimelight(HardwareMap hardwareMap, Robot.Side side) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // fast updates
+        this.side = side;
 
     }
-    public void initBluePipeline(){
-        limelight.pipelineSwitch(7);
-        limelight.start();
+    public void initPipeline(){
+        if(side == Robot.Side.Blue){
+            limelight.pipelineSwitch(7);
+            limelight.start();
+        }
+        else {
+            limelight.pipelineSwitch(8);
+            limelight.start();
+        }
     }
     public void initRedPipeline(){
         limelight.pipelineSwitch(8);
