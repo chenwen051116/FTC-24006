@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import static java.lang.Math.sqrt;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.hardware.limelightvision.LLFieldMap;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.ArrayList;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import java.util.List;
 
 public class MyLimelight extends SubsystemBase {
@@ -25,29 +26,61 @@ public class MyLimelight extends SubsystemBase {
         limelight.setPollRateHz(100); // fast updates
 
     }
-
-    public void initRvision(){
-        limelight.pipelineSwitch(8);
-        limelight.start();
-    }
-    public void initBvision(){
+    public void initBluePipeline(){
         limelight.pipelineSwitch(7);
         limelight.start();
     }
-    public void initPatvision(){
+    public void initRedPipeline(){
+        limelight.pipelineSwitch(8);
+        limelight.start();
+    }
+    public void initPatternPipeline(){
         limelight.pipelineSwitch(9);
         limelight.start();
     }
-
-    public double returnDis() {
+    public double getPitch() {
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getFiducialResults().get(0)
+                    .getTargetPoseCameraSpace().getOrientation().getPitch(AngleUnit.DEGREES);
+        }
+        return 0;
+    }
+    public double getX() {
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getFiducialResults().get(0)
+                    .getTargetPoseCameraSpace().getPosition().x;
+        }
+        return 0;
+    }
+    public double getY() {
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getFiducialResults().get(0)
+                    .getTargetPoseCameraSpace().getPosition().y;
+        }
+        return 0;
+    }
+    public double getZ() {
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getFiducialResults().get(0)
+                    .getTargetPoseCameraSpace().getPosition().z;
+        }
+        return 0;
+    }
+    public double getTx() {
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getTx();
+        }
+        return 0;
+    }
+    public double getDis() {
         // Fetch most recent vision result each scheduler loop
-        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()){
             List<LLResultTypes.FiducialResult> fiducialResults = aprilTagLatestResult.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                     return sqrt(fr.getTargetPoseCameraSpace().getPosition().y * fr.getTargetPoseCameraSpace().getPosition().y
                             + (fr.getTargetPoseCameraSpace().getPosition().x) * (fr.getTargetPoseCameraSpace().getPosition().x)
-                                    + (fr.getTargetPoseCameraSpace().getPosition().z) * (fr.getTargetPoseCameraSpace().getPosition().z) );
+                            + (fr.getTargetPoseCameraSpace().getPosition().z) * (fr.getTargetPoseCameraSpace().getPosition().z)
+                    );
             }
         }
         return 0;
@@ -66,12 +99,17 @@ public class MyLimelight extends SubsystemBase {
     public LLResult getAprilTagResult() {
         return aprilTagLatestResult;
     }
-
-    public void switchPipeline(int index) {
-        limelight.pipelineSwitch(index);
-    }
     public int getAprilTagID() {
-        return hasTarget() && !aprilTagLatestResult.getFiducialResults().isEmpty() ?
+        return llenable && hasTarget() && !aprilTagLatestResult.getFiducialResults().isEmpty() ?
                 aprilTagLatestResult.getFiducialResults().get(0).getFiducialId() : -1;
     }
+    @Override
+    public void periodic() {
+        // This is called automatically by FTCLib’s scheduler every cycle
+        if (llenable) {
+            aprilTagLatestResult = limelight.getLatestResult();
+        }
+    }
 }
+
+

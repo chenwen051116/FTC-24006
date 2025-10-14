@@ -19,10 +19,13 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.DriveInTeleOpCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+
+import java.util.List;
 
 
 @TeleOp
@@ -45,12 +48,13 @@ public class BohanTele extends CommandOpMode {
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
-        limelight.initRvision();
+
+        limelight.initRedPipeline(); //TEMPORARY
         //Commands
+        LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::toggleRPM);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> limelight.startDetect());
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> limelight.stopDetect());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
         //DRIVER TWO
     }
 
@@ -58,18 +62,18 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-        
-        // Update shooter PID
-        shooter.updateFlywheelPID();
-        
-        telemetry.addData("Distance", intake.getDist());
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
         telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
         telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
-        telemetry.addData("Apriltag Area", limelight.returnDis());
+        telemetry.addData("Apriltag dist", limelight.getDis());
+        telemetry.addData("Apriltag X", limelight.getX());
+        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
+        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
+        telemetry.addData("Pitch", limelight.getPitch());
+
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());

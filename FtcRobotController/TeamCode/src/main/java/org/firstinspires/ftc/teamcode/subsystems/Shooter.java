@@ -157,7 +157,10 @@ public class Shooter extends SubsystemBase {
     public double getCurrentPIDOutput() {
         return currentPIDOutput;
     }
-    
+    @Override
+    public void periodic(){
+       updateFlywheelPID();
+    }
     public void updateTelemetry() {
         telemetry.addData("Target RPM", targetRPM);
         telemetry.addData("Current RPM", getFlyWheelRPM());
