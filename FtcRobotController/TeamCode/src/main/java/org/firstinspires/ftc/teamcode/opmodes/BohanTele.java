@@ -45,6 +45,7 @@ public class BohanTele extends LinearOpMode {
             GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
             waitForStart();
             while (opModeIsActive()) {
+                robot.update();
                 robot.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.7*gamepad1.right_stick_x);
                 if (gamepad1.a) {
                     robot.shooter.toggleRPM();
