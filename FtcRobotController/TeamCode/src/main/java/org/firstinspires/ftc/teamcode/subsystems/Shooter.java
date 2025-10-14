@@ -19,6 +19,8 @@ public class Shooter extends SubsystemBase {
     public static double Kd = 0.0;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 30.0; // RPM tolerance for "at target" determination
+
+    public static double aimRPM = 0;
     
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
@@ -142,7 +144,7 @@ public class Shooter extends SubsystemBase {
     }
     
     // One-liner toggle: cycles through 0→3000→4000→5000→0 RPM
-    public void toggleRPM() { setTargetRPM(new double[]{0, 3600, 3800, 4000}[rpmToggle = (rpmToggle + 1) % 4]); }
+    public void toggleRPM() { setTargetRPM(aimRPM); }
 
     /**
      * Get current motor power (for graphing/telemetry)
