@@ -48,6 +48,7 @@ public class MyLimelight extends SubsystemBase {
         limelight.start();
     }
     public double getPitch() {
+        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
                     .getTargetPoseCameraSpace().getOrientation().getPitch(AngleUnit.DEGREES);
@@ -55,6 +56,7 @@ public class MyLimelight extends SubsystemBase {
         return 0;
     }
     public double getX() {
+        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
                     .getTargetPoseCameraSpace().getPosition().x;
@@ -62,6 +64,7 @@ public class MyLimelight extends SubsystemBase {
         return 0;
     }
     public double getY() {
+        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
                     .getTargetPoseCameraSpace().getPosition().y;
@@ -69,6 +72,7 @@ public class MyLimelight extends SubsystemBase {
         return 0;
     }
     public double getZ() {
+        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
                     .getTargetPoseCameraSpace().getPosition().z;
@@ -76,12 +80,14 @@ public class MyLimelight extends SubsystemBase {
         return 0;
     }
     public double getTx() {
+        aprilTagLatestResult = limelight.getLatestResult();
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getTx();
         }
         return 0;
     }
     public double getDis() {
+        aprilTagLatestResult = limelight.getLatestResult();
         // Fetch most recent vision result each scheduler loop
         if (llenable && hasTarget()){
             List<LLResultTypes.FiducialResult> fiducialResults = aprilTagLatestResult.getFiducialResults();
@@ -102,23 +108,20 @@ public class MyLimelight extends SubsystemBase {
         llenable = false;
     }
     public boolean hasTarget() { //Has to be a METHOD instead a VARIABLE since limelight is constantly updating
+        aprilTagLatestResult = limelight.getLatestResult();
         return aprilTagLatestResult != null && aprilTagLatestResult.isValid(); //This will return true only if the data is not empty and valid
     }
 
     public LLResult getAprilTagResult() {
+        aprilTagLatestResult = limelight.getLatestResult();
         return aprilTagLatestResult;
     }
     public int getAprilTagID() {
+        aprilTagLatestResult = limelight.getLatestResult();
         return llenable && hasTarget() && !aprilTagLatestResult.getFiducialResults().isEmpty() ?
                 aprilTagLatestResult.getFiducialResults().get(0).getFiducialId() : -1;
     }
-    @Override
-    public void periodic() {
-        // This is called automatically by FTCLib’s scheduler every cycle
-        if (llenable) {
-            aprilTagLatestResult = limelight.getLatestResult();
-        }
-    }
+
 }
 
 
