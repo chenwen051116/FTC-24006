@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -43,6 +44,9 @@ public class BohanTele extends LinearOpMode {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
             GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
             GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
+            ToggleButtonReader autoReader = new ToggleButtonReader(
+                   gamepadEx1, GamepadKeys.Button.X
+            );
             waitForStart();
             while (opModeIsActive()) {
                 robot.update();
@@ -50,7 +54,7 @@ public class BohanTele extends LinearOpMode {
                 if (gamepad1.a) {
                     robot.shooter.toggleRPM();
                 }
-                if(gamepad1.x){
+                if(autoReader.getState()){
                     robot.setDrivetrainStatus(Drivetrain.DriveStatus.Autofocusing);
                 }
                 else{
