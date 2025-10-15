@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
-
+@Autonomous
 public class RedAuto extends LinearOpMode {
     private Robot robot;
     private Robot.Side side = Robot.Side.Red;
@@ -29,7 +30,7 @@ public class RedAuto extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                    drive.actionBuilder(beginPose).splineToLinearHeading(51.8294, 0).build()
+                    drive.actionBuilder(beginPose).splineToLinearHeading(new Pose2d(51.8294,-14.1222, Math.toRadians(-90.7360)), Math.PI/2).build()
         );
 
             throw new RuntimeException();

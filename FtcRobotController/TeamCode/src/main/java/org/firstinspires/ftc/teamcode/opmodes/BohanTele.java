@@ -78,6 +78,8 @@ public class BohanTele extends LinearOpMode {
                 telemetry.addData("Apriltag(PoI) Tx", robot.limelight.getTx());
                 telemetry.addData("Apriltag ID", robot.limelight.getAprilTagID());
                 telemetry.addData("Pitch", robot.limelight.getPitch());
+                telemetry.addData("State", robot.drivetrain.llTx);
+                telemetry.addData("State2", robot.drivetrain.drivestatus);
                 telemetry.update();
         }
     }

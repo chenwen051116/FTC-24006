@@ -18,6 +18,7 @@ public class Robot {
 
     public void init(){
         limelight.initPipeline();
+        limelight.startDetect();
     }
 
     public Robot(HardwareMap hardwareMap, Side side){
