@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
 
-    private double distance = 0;
+    public double distance = 0;
 
     public enum ShooterStatus {
         Stop,Idling,Shooting
