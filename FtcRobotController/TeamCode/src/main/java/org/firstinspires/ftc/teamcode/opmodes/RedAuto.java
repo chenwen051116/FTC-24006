@@ -17,22 +17,18 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
 public class RedAuto extends LinearOpMode {
-    private Drivetrain drivetrain;
-    private Intake intake;
-    private Shooter shooter;
-    private MyLimelight limelight;
-    private MecanumDrive drive;
+    private Robot robot;
+    private Robot.Side side = Robot.Side.Red;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d beginPose = new Pose2d(0, 0, 0);
-        drivetrain = new Drivetrain(hardwareMap);
-        intake = new Intake(hardwareMap);
-        shooter = new Shooter(hardwareMap);
-        limelight = new MyLimelight(hardwareMap);
-
+        robot = new Robot(hardwareMap, side);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         waitForStart();
 
-            drive = new MecanumDrive(hardwareMap, beginPose);
+
 //            Actions.runBlocking(
 //                    drive.actionBuilder(beginPose).
             throw new RuntimeException();
