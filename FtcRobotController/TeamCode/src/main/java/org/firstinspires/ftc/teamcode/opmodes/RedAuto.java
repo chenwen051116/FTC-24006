@@ -28,9 +28,10 @@ public class RedAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         waitForStart();
 
+        Actions.runBlocking(
+                    drive.actionBuilder(beginPose).splineToLinearHeading(51.8294, 0).build()
+        );
 
-//            Actions.runBlocking(
-//                    drive.actionBuilder(beginPose).
             throw new RuntimeException();
         }
     }
