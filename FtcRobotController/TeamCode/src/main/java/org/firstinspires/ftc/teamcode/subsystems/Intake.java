@@ -78,6 +78,17 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() { // FTC 0.001s cycle
-
+        if(!shooterauto) {
+            intake.setPower(intakeCurrentState.intakePower);
+            transfer.setPower(intakeCurrentState.transferPower);
+        }
+        else{
+            if(autotrans){
+                intakeCurrentState = IntakeTransferState.Send_It_Up;
+            }
+            else{
+                intakeCurrentState = IntakeTransferState.Intake_Steady;
+            }
+        }
     }
 }
