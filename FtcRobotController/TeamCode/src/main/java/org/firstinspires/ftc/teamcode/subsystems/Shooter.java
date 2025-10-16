@@ -28,6 +28,7 @@ public class Shooter extends SubsystemBase {
 
     public double distance = 0;
 
+
     public enum ShooterStatus {
         Stop,Idling,Shooting
     }
@@ -93,7 +94,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return pidController.atSetPoint();
+        return (getTargetRPM() < getFlyWheelRPM() + 200);
     }
 
     // Store current motor power for telemetry/graphing
@@ -104,6 +105,16 @@ public class Shooter extends SubsystemBase {
      * Update PID controller and set motor powers
      * Call this method in main loop for continuous control
      */
+    public void settoShooting(){
+        shooterStatus = ShooterStatus.Shooting;
+    }
+    public void settoStop(){
+        shooterStatus = ShooterStatus.Stop;
+    }
+
+    public void settoIdle(){
+        shooterStatus = ShooterStatus.Idling;
+    }
     public void updateFlywheelPID() {
         if (targetRPM > 0) {
             // Update PID parameters and tolerance in case they were changed via dashboard
@@ -167,6 +178,18 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    public void updateAim() {
+        if (distance > 3.25){
+            setTargetRPM(3750);
+        }
+        else{
+            setTargetRPM(300*distance+2750);
+        }
+
+    }
+
+
+
     /**
      * Get current motor power (for graphing/telemetry)
      */
@@ -184,13 +207,13 @@ public class Shooter extends SubsystemBase {
     public void periodic(){
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
-            toggleRPM();
+            updateAim();
         }
         else if(shooterStatus == ShooterStatus.Stop){
             completeStop();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
-            setTargetRPM(4000);
+            setTargetRPM(3000);
         }
     }
     public void updateTelemetry() {

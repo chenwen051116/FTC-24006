@@ -13,6 +13,8 @@ public class Intake extends SubsystemBase {
     private final DistanceSensor transferBreakBeam;
     private IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
+    public boolean shooterauto = false;
+    public boolean autotrans = false;
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
@@ -29,7 +31,9 @@ public class Intake extends SubsystemBase {
     }
 
     public void setIntakePower(double power) {
+
         intake.setPower(power);
+
     }
 
     public void setTransferPower(double power) {
@@ -49,9 +53,27 @@ public class Intake extends SubsystemBase {
     }
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
-        intake.setPower(intakeCurrentState.intakePower);
-        transfer.setPower(intakeCurrentState.transferPower);
+        if(!shooterauto) {
+            intake.setPower(intakeCurrentState.intakePower);
+            transfer.setPower(intakeCurrentState.transferPower);
+        }
+        else{
+            if(autotrans){
+                intakeCurrentState = IntakeTransferState.Send_It_Up;
+            }
+            else{
+                intakeCurrentState = IntakeTransferState.Intake_Steady;
+            }
+        }
 
+    }
+
+    public void updateAutoshoot(boolean auto){
+        shooterauto = auto;
+    }
+
+    public void updateautotranse(boolean auto){
+       autotrans = auto;
     }
 
     @Override
