@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void updateautotranse(boolean auto){
-       autotrans = auto;
+        autotrans = auto;
     }
 
     @Override
