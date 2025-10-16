@@ -18,8 +18,8 @@ public class TestAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     private int pathState;
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
-    private final Pose scorePose = new Pose(60, 85, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose startPose = new Pose(0, 0, Math.toRadians(0)); // Start Pose of our robot.
+    private final Pose scorePose = new Pose(74.30735190083662, -16.529023177980438, -1.578); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private PathChain grabPickup1;
 
     public void buildPaths() {
