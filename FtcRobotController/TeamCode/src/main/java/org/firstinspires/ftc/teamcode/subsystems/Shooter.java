@@ -160,7 +160,11 @@ public class Shooter extends SubsystemBase {
         pidController.reset();
     }
 
-    public void toggleRPM() { setTargetRPM(aimRPM); }
+    public void toggleRPM() {
+        setTargetRPM(aimRPM);
+        shooterStatus = ShooterStatus.Shooting;
+
+    }
 
     /**
      * Get current motor power (for graphing/telemetry)
