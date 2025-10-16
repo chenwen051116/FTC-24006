@@ -89,6 +89,8 @@ public class Intake extends SubsystemBase {
             else{
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
             }
+            intake.setPower(intakeCurrentState.intakePower);
+            transfer.setPower(intakeCurrentState.transferPower);
         }
     }
 }
