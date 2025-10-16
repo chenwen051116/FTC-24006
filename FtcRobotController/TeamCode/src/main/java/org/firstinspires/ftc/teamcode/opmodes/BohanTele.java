@@ -62,6 +62,8 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
+        shooter.periodic();
+        shooter.updateDis(limelight.getDis());
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
@@ -73,6 +75,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
         telemetry.addData("Apriltag ID", limelight.getAprilTagID());
         telemetry.addData("Pitch", limelight.getPitch());
+        telemetry.addData("Shooterdis", shooter.distance);
 
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());

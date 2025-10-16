@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-       intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public double getDist(){
