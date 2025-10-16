@@ -54,9 +54,8 @@ public class BohanTele extends CommandOpMode {
         LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::settoShooting);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(shooter::settoStop);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(shooter::settoIdle);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenReleased(shooter::settoStop);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(shooter::settoStop);
+
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
         //DRIVER TWO
     }
