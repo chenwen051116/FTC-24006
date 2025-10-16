@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+@Config
 public class Shooter extends SubsystemBase {
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
@@ -160,7 +161,11 @@ public class Shooter extends SubsystemBase {
         pidController.reset();
     }
 
-    public void toggleRPM() { setTargetRPM(aimRPM); }
+    public void toggleRPM() {
+        setTargetRPM(aimRPM);
+        shooterStatus = ShooterStatus.Shooting;
+
+    }
 
     /**
      * Get current motor power (for graphing/telemetry)
