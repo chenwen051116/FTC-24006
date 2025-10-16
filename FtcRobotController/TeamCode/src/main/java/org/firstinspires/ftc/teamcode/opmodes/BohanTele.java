@@ -53,7 +53,10 @@ public class BohanTele extends CommandOpMode {
         //Commands
         LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::toggleRPM);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::settoShooting);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(shooter::settoStop);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(shooter::settoIdle);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenReleased(shooter::settoStop);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
         //DRIVER TWO
     }
@@ -63,7 +66,14 @@ public class BohanTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
         shooter.periodic();
-        shooter.updateDis(limelight.getDis());
+        if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+            intake.updateAutoshoot(true);
+            intake.updateautotranse(shooter.isAtTargetRPM());
+            shooter.updateDis(limelight.getDis());
+        }
+        else{
+            intake.updateAutoshoot(false);
+        }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
