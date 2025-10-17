@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
+import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 @Autonomous(name = "TestAuto")
 public class TestAuto extends OpMode {
 
@@ -63,6 +64,7 @@ public class TestAuto extends OpMode {
             case 1:
                 if(!follower.isBusy()) {
                     if(!firstshooting) {
+                        shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         scheduler.addTaskAfter(5000, new Runnable() {
                             @Override
@@ -100,7 +102,15 @@ public class TestAuto extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
+        shooter.periodic();
+        if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+            intake.updateAutoshoot(true);
+            intake.updateautotranse(shooter.isAtTargetRPM());
+            shooter.updateDis(limelight.getDis());
+        }
+        else{
+            intake.updateAutoshoot(false);
+        }
         autonomousPathUpdate();
 
         // Feedback to Driver Hub for debugging

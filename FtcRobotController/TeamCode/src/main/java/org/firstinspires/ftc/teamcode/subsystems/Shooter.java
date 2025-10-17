@@ -28,6 +28,11 @@ public class Shooter extends SubsystemBase {
 
     public double distance = 0;
 
+    public boolean idelOn = false;
+
+    public boolean focused = false;
+
+
 
     public enum ShooterStatus {
         Stop,Idling,Shooting
@@ -65,6 +70,9 @@ public class Shooter extends SubsystemBase {
      * Get current flywheel velocity in rad/s
      * Uses shooterLeft (the motor with encoder) for velocity feedback
      */
+    public void updateFocused(boolean focus){
+        focused = focus;
+    }
     public void setShooterStatus(ShooterStatus status){
         shooterStatus = status;
     }
@@ -94,7 +102,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + 200);
+        return (getTargetRPM() < getFlyWheelRPM() + 200 && getTargetRPM() > getFlyWheelRPM());
     }
 
     // Store current motor power for telemetry/graphing
@@ -111,6 +119,7 @@ public class Shooter extends SubsystemBase {
     public void settoStop(){
         shooterStatus = ShooterStatus.Stop;
     }
+
 
     public void settoIdle(){
         shooterStatus = ShooterStatus.Idling;
@@ -206,7 +215,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
         updateFlywheelPID();
-        if(shooterStatus == ShooterStatus.Shooting){
+        if(shooterStatus == ShooterStatus.Shooting && focused){
             updateAim();
         }
         else if(shooterStatus == ShooterStatus.Stop){

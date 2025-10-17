@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -34,6 +35,9 @@ public class BohanTele extends CommandOpMode {
     private Intake intake;
     private Shooter shooter;
     private MyLimelight limelight;
+
+    private ButtonReader Yreader;
+    private ButtonReader Xreader;
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
@@ -41,6 +45,8 @@ public class BohanTele extends CommandOpMode {
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
+        Yreader = new ButtonReader(gamepadEx1, GamepadKeys.Button.Y);
+        Xreader = new ButtonReader(gamepadEx1, GamepadKeys.Button.X);
         //Subsystems
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
@@ -53,8 +59,6 @@ public class BohanTele extends CommandOpMode {
         //Commands
         LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(shooter::settoShooting);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(shooter::settoStop);
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
         //DRIVER TWO
@@ -69,9 +73,29 @@ public class BohanTele extends CommandOpMode {
             intake.updateAutoshoot(true);
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
+            shooter.updateFocused(limelight.isFocused());
         }
         else{
             intake.updateAutoshoot(false);
+        }
+        if(Yreader.wasJustPressed()){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+            else if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
+                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+            }
+            else{
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+        }
+        if(Xreader.wasJustPressed()){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+            else{
+                shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+            }
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());

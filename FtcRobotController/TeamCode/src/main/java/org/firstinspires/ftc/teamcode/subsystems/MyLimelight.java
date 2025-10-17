@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -26,6 +27,9 @@ public class MyLimelight extends SubsystemBase {
         limelight.setPollRateHz(100); // fast updates
 
     }
+
+
+
     public void initBluePipeline(){
         limelight.pipelineSwitch(7);
         limelight.start();
@@ -71,6 +75,10 @@ public class MyLimelight extends SubsystemBase {
             return aprilTagLatestResult.getTx();
         }
         return 0;
+    }
+
+    public boolean isFocused(){
+        return abs(getTx()) < 0.1;
     }
     public double getDis() {
         // Fetch most recent vision result each scheduler loop
