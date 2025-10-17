@@ -103,11 +103,8 @@ public class BohanTele extends CommandOpMode {
             yholding = false;
             yjustpressed = false;
         }
-        if(yjustpressed){
-            if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
-                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-            }
-            else if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
+        if(yjustpressed&&shooter.shooterStatus != Shooter.ShooterStatus.Shooting){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
             }
             else{
@@ -116,6 +113,7 @@ public class BohanTele extends CommandOpMode {
             yjustpressed = false;
         }
         if(xjustpressed){
+
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
@@ -123,6 +121,7 @@ public class BohanTele extends CommandOpMode {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
             }
             xjustpressed = false;
+
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
