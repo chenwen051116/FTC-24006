@@ -94,7 +94,7 @@ public class BohanTele extends CommandOpMode {
         }
 
         if(gamepad1.y){
-            if(!xholding){
+            if(!yholding){
                 yjustpressed = true;
                 yholding = true;
             }
