@@ -22,7 +22,7 @@ public class TestAuto extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private int pathState;
+    private int pathState =0;
     private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(60, 85, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose PrepGather1 = new Pose(60, 85, Math.toRadians(135));
@@ -45,7 +45,7 @@ public class TestAuto extends OpMode {
                 .build();
 
         prepGatherPath1 = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, PrepGather1))
+                .addPath(new BezierLine(ShootPose1, PrepGather1))
                 .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
 
                 .build();
@@ -82,6 +82,13 @@ public class TestAuto extends OpMode {
                 intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                 setPathState(3);
                 break;
+            case 3:
+                if(!follower.isBusy()) {
+                    setPathState(4);
+                }
+                break;
+
+
         }
     }
     private void sleep(long ms){
