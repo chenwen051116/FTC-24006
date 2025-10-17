@@ -102,6 +102,7 @@ public class TestAuto extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
+        intake.periodic();
         shooter.periodic();
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
