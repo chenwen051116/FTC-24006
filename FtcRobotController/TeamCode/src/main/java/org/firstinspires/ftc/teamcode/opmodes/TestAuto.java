@@ -8,6 +8,8 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import static android.os.SystemClock.sleep;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -21,6 +23,7 @@ public class TestAuto extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
+    private ElapsedTime timer = new ElapsedTime();
 
     private int pathState =0;
     private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
@@ -66,16 +69,18 @@ public class TestAuto extends OpMode {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        scheduler.addTaskAfter(5000, new Runnable() {
-                            @Override
-                            public void run() {
-                                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                                setPathState(2);
-                            }
-                        });
+                        timer.reset();
+
                         firstshooting = true;
                     }
-                        break;
+                    else{
+                        if(timer.seconds() > 3){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            setPathState(2);
+
+                        }
+                    }
+                    //break;
 
                 }
             case 2:
