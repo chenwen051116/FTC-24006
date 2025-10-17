@@ -36,8 +36,13 @@ public class BohanTele extends CommandOpMode {
     private Shooter shooter;
     private MyLimelight limelight;
 
-    private ButtonReader Yreader;
-    private ButtonReader Xreader;
+    private boolean xjustpressed = false;
+    private boolean xholding = false;
+    private boolean yjustpressed = false;
+    private boolean yholding = false;
+
+
+
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
@@ -45,8 +50,6 @@ public class BohanTele extends CommandOpMode {
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
-        Yreader = new ButtonReader(gamepadEx1, GamepadKeys.Button.Y);
-        Xreader = new ButtonReader(gamepadEx1, GamepadKeys.Button.X);
         //Subsystems
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
@@ -78,7 +81,29 @@ public class BohanTele extends CommandOpMode {
         else{
             intake.updateAutoshoot(false);
         }
-        if(Yreader.wasJustPressed()){
+
+        if(gamepad1.x){
+            if(!xholding){
+                xjustpressed = true;
+                xholding = true;
+            }
+        }
+        else{
+            xholding = false;
+            xjustpressed = false;
+        }
+
+        if(gamepad1.y){
+            if(!xholding){
+                yjustpressed = true;
+                yholding = true;
+            }
+        }
+        else{
+            yholding = false;
+            yjustpressed = false;
+        }
+        if(yjustpressed){
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
@@ -88,14 +113,16 @@ public class BohanTele extends CommandOpMode {
             else{
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
+            yjustpressed = false;
         }
-        if(Xreader.wasJustPressed()){
+        if(xjustpressed){
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
             else{
                 shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
             }
+            xjustpressed = false;
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
