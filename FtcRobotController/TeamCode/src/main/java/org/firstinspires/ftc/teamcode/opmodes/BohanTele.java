@@ -113,7 +113,6 @@ public class BohanTele extends CommandOpMode {
             yjustpressed = false;
         }
         if(xjustpressed){
-
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
