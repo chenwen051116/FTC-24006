@@ -107,6 +107,7 @@ public class TestAuto extends OpMode {
             intake.updateAutoshoot(true);
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
+            shooter.updateFocused(true);
         }
         else{
             intake.updateAutoshoot(false);
