@@ -63,7 +63,7 @@ public class TestAuto extends OpMode {
                 break;
             case 1:
                 if(!follower.isBusy()) {
-                    if(!firstshooting) {
+                    if (!firstshooting) {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         scheduler.addTaskAfter(5000, new Runnable() {
@@ -73,9 +73,10 @@ public class TestAuto extends OpMode {
                                 setPathState(2);
                             }
                         });
+                        firstshooting = true;
                     }
-                    firstshooting = true;
-                    break;
+                        break;
+
                 }
             case 2:
                 follower.followPath(prepGatherPath1);
@@ -109,6 +110,7 @@ public class TestAuto extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
+        follower.update();
         intake.periodic();
         shooter.periodic();
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
