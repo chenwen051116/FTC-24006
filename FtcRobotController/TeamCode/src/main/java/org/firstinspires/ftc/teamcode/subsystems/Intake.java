@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
 
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
