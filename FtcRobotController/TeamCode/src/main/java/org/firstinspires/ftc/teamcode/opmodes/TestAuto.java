@@ -102,7 +102,7 @@ public class TestAuto extends OpMode {
                 }
             case 2:
                 if(!follower.isBusy()) {
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     follower.followPath(prepGatherPath1);
                     setPathState(3);
                 }
@@ -110,6 +110,7 @@ public class TestAuto extends OpMode {
             case 3:
                 if(!follower.isBusy()) {
                     setPathState(4);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 }
                 break;
             case 4:
