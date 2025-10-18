@@ -55,7 +55,7 @@ public class Intake extends SubsystemBase {
     }
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
-        if(!shooterauto) {
+        if(!shooterauto || autoforce) {
             intake.setPower(intakeCurrentState.intakePower);
             transfer.setPower(intakeCurrentState.transferPower);
         }

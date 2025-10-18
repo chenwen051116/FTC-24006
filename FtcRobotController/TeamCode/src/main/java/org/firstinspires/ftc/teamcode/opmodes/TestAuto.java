@@ -103,7 +103,6 @@ public class TestAuto extends OpMode {
                             intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
-                            intake.autoforce = true;
                             intake.autoforce = false;
                             intake.periodic();
                         }
@@ -115,6 +114,7 @@ public class TestAuto extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    shooter.periodic();
                     follower.followPath(prepGatherPath1);
                     setPathState(3);
                 }
@@ -123,6 +123,7 @@ public class TestAuto extends OpMode {
                 if(!follower.isBusy()) {
                     setPathState(4);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    shooter.periodic();
                 }
                 break;
             case 4:
@@ -137,6 +138,7 @@ public class TestAuto extends OpMode {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.periodic();
                         timer.resetTimer();
 
                         firstshooting = true;
@@ -163,7 +165,6 @@ public class TestAuto extends OpMode {
                             intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
-                            intake.autoforce = true;
                             intake.autoforce = false;
                             intake.periodic();
                         }
