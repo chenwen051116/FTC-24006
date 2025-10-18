@@ -113,7 +113,9 @@ public class TestAuto extends OpMode {
                 }
             case 2:
                 if(!follower.isBusy()) {
+
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(prepGatherPath1);
                     setPathState(3);
@@ -123,6 +125,7 @@ public class TestAuto extends OpMode {
                 if(!follower.isBusy()) {
                     setPathState(4);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                 }
                 break;
