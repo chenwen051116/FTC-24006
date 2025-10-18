@@ -61,6 +61,7 @@ public class TestAuto extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 follower.followPath(Shootpath1);
                 setPathState(1);
                 break;
@@ -74,7 +75,7 @@ public class TestAuto extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 3){
+                        if(timer.getElapsedTimeSeconds()> 5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             setPathState(2);
 
