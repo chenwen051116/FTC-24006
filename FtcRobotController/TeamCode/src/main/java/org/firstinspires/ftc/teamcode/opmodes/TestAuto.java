@@ -84,16 +84,21 @@ public class TestAuto extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<3){
+                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
+                            intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                         }
-                        if(timer.getElapsedTimeSeconds()>3&&timer.getElapsedTimeSeconds()<3.5){
+                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.1){
                             intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
                         }
-                        if(timer.getElapsedTimeSeconds()>3.5&&timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>3.1&&timer.getElapsedTimeSeconds()<3.4){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.autoforce = false;
                         }
 
                     }
@@ -130,16 +135,21 @@ public class TestAuto extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                            setPathState(6);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(2);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.5&&timer.getElapsedTimeSeconds()<3){
+                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
+                            intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                         }
-                        if(timer.getElapsedTimeSeconds()>3&&timer.getElapsedTimeSeconds()<3.5){
+                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.1){
                             intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
                         }
-                        if(timer.getElapsedTimeSeconds()>3.5&&timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>3.1&&timer.getElapsedTimeSeconds()<3.4){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.autoforce = false;
                         }
 
                     }

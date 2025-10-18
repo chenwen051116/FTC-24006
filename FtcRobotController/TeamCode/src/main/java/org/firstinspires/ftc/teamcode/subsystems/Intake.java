@@ -15,6 +15,8 @@ public class Intake extends SubsystemBase {
 
     public boolean shooterauto = false;
     public boolean autotrans = false;
+
+    public boolean autoforce = false;
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
@@ -78,7 +80,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() { // FTC 0.001s cycle
-        if(!shooterauto) {
+        if(!shooterauto || autoforce) {
             intake.setPower(intakeCurrentState.intakePower);
             transfer.setPower(intakeCurrentState.transferPower);
         }
