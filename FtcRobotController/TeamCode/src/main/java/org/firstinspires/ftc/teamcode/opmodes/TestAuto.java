@@ -75,11 +75,20 @@ public class TestAuto extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 5){
+                        if(timer.getElapsedTimeSeconds()> 7){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             setPathState(2);
-
                         }
+                        if(timer.getElapsedTimeSeconds()>5&&timer.getElapsedTimeSeconds()<5.2){
+                            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+                        }
+                        if(timer.getElapsedTimeSeconds()>5.2&&timer.getElapsedTimeSeconds()<6){
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                        }
+                        if(timer.getElapsedTimeSeconds()>6){
+                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                        }
+                        
                     }
                     break;
 
