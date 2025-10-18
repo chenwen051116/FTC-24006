@@ -86,7 +86,7 @@ public class TestAuto extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             setPathState(2);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.5&&timer.getElapsedTimeSeconds()<3){
+                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<3){
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                         }
                         if(timer.getElapsedTimeSeconds()>3&&timer.getElapsedTimeSeconds()<3.5){
