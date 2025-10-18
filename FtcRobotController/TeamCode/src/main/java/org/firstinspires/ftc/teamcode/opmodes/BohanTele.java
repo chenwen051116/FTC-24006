@@ -54,16 +54,20 @@ public class BohanTele extends CommandOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         intake = new Intake(hardwareMap);
+        intake.setSwingBarPos(0.4);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
 
         limelight.initRedPipeline(); //TEMPORARY
+
         //Commands
         LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
         //DRIVER TWO
     }
 

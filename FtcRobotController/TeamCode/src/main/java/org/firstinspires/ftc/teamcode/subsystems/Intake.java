@@ -5,11 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
+    private final Servo swingBar;
     private final DistanceSensor transferBreakBeam;
     private IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -20,12 +22,16 @@ public class Intake extends SubsystemBase {
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
+        swingBar = hardwareMap.get(Servo.class, "swingBar");
         transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
 
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+    public void setSwingBarPos(double pos) {
+        swingBar.setPosition(pos);
     }
 
     public double getDist(){
