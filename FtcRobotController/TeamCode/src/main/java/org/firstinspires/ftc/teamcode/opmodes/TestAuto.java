@@ -26,9 +26,9 @@ public class TestAuto extends OpMode {
     private ElapsedTime timer = new ElapsedTime();
 
     private int pathState =0;
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(60, 85, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose PrepGather1 = new Pose(60, 85, Math.toRadians(135));
+    private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
+    private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.436764);
+    private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
     private boolean firstshooting = false;
     private PathChain Shootpath1;
     private PathChain prepGatherPath1;
