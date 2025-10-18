@@ -128,7 +128,9 @@ public class TestAuto extends OpMode {
             case 4:
 
                 follower.followPath(Shootpath2);
+                firstshooting = false;
                 setPathState(5);
+
                 break;
             case 5:
                 if(!follower.isBusy()) {
