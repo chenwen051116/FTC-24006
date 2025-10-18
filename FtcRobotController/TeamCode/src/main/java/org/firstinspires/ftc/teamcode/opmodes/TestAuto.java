@@ -29,8 +29,10 @@ public class TestAuto extends OpMode {
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.436764);
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
+
+    private final Pose FinishGather1 = new Pose(24.7910, -35.2588, -1.590508);
     private boolean firstshooting = false;
-    private PathChain Shootpath1;
+    private PathChain Shootpath1, Shootpath2;
     private PathChain prepGatherPath1;
 
     public Intake intake;
@@ -50,9 +52,14 @@ public class TestAuto extends OpMode {
         prepGatherPath1 = follower.pathBuilder()
                 .addPath(new BezierLine(ShootPose1, PrepGather1))
                 .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
-
+                .addPath(new BezierLine(PrepGather1, FinishGather1))
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .build();
 
+        Shootpath2 = follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather1, ShootPose1))
+                .setLinearHeadingInterpolation(FinishGather1.getHeading(), ShootPose1.getHeading())
+                .build();
 
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
 
@@ -75,7 +82,7 @@ public class TestAuto extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 5.6){
+                        if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             setPathState(2);
                         }
@@ -85,11 +92,8 @@ public class TestAuto extends OpMode {
                         if(timer.getElapsedTimeSeconds()>3&&timer.getElapsedTimeSeconds()<3.5){
                             intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
                         }
-                        if(timer.getElapsedTimeSeconds()>3.5&&timer.getElapsedTimeSeconds()<5){
+                        if(timer.getElapsedTimeSeconds()>3.5&&timer.getElapsedTimeSeconds()<4.2){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                        }
-                        if(timer.getElapsedTimeSeconds()>5.5){
-                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                         }
 
                     }
@@ -99,7 +103,7 @@ public class TestAuto extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     follower.followPath(prepGatherPath1);
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+
                     setPathState(3);
                 }
                 break;
@@ -108,6 +112,39 @@ public class TestAuto extends OpMode {
                     setPathState(4);
                 }
                 break;
+            case 4:
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                follower.followPath(Shootpath2);
+                setPathState(5);
+                break;
+            case 5:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            setPathState(6);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.5&&timer.getElapsedTimeSeconds()<3){
+                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                        }
+                        if(timer.getElapsedTimeSeconds()>3&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.5&&timer.getElapsedTimeSeconds()<4.2){
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                        }
+
+                    }
+                    break;
+
+                }
 
 
         }
