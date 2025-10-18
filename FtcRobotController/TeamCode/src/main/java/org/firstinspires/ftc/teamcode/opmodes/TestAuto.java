@@ -83,16 +83,18 @@ public class TestAuto extends OpMode {
                     break;
 
                 }
-//            case 2:
-//                follower.followPath(prepGatherPath1);
-//                intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-//                setPathState(3);
-//                break;
-//            case 3:
-//                if(!follower.isBusy()) {
-//                    setPathState(4);
-//                }
-//                break;
+            case 2:
+                if(!follower.isBusy()) {
+                    follower.followPath(prepGatherPath1);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    setPathState(3);
+                }
+                break;
+            case 3:
+                if(!follower.isBusy()) {
+                    setPathState(4);
+                }
+                break;
 
 
         }
