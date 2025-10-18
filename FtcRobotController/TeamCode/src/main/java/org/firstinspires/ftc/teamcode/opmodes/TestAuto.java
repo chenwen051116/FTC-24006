@@ -207,51 +207,51 @@ public class TestAuto extends OpMode {
                     shooter.periodic();
                 }
                 break;
-//            case 8:
-//
-//                follower.followPath(Shootpath3);
-//                firstshooting = false;
-//                setPathState(9);
-//
-//                break;
-//            case 9:
-//                if(!follower.isBusy()) {
-//                    if (!firstshooting) {
-//                        shooter.updateFocused(true);
-//                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-//                        timer.resetTimer();
-//
-//                        firstshooting = true;
-//                    }
-//                    else{
-//                        if(timer.getElapsedTimeSeconds()> 4.2){
-//                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-//                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-//                            setPathState(10);
-//                        }
-//                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
-//                            intake.autoforce = true;
-//                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-//                            intake.periodic();
-//                        }
-//                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.05){
-//                            intake.autoforce = true;
-//                            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
-//                            intake.periodic();
-//                        }
-//                        if(timer.getElapsedTimeSeconds()>3.05&&timer.getElapsedTimeSeconds()<3.4){
-//                            intake.autoforce = true;
-//                            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-//                            intake.periodic();
-//                        }
-//                        if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
-//                            intake.autoforce = false;
-//                            intake.periodic();
-//                        }
-//
-//                    }
-//                    break;
-//                }
+            case 8:
+
+                follower.followPath(Shootpath3);
+                firstshooting = false;
+                setPathState(9);
+
+                break;
+            case 9:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(10);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.05){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.05&&timer.getElapsedTimeSeconds()<3.4){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.autoforce = false;
+                            intake.periodic();
+                        }
+
+                    }
+                    break;
+                }
 
 
         }
