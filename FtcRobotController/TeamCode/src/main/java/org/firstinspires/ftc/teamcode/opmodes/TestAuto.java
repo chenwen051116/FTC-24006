@@ -30,11 +30,11 @@ public class TestAuto extends OpMode {
     private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.446764);
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
 
-    private final Pose FinishGather1 = new Pose(24.7910, -35.2588, -1.590508);
+    private final Pose FinishGather1 = new Pose(24.7910, -37.2588, -1.590508);
 
     private final Pose PrepGather2 = new Pose(50.849, -17.19286, -1.590508);
 
-    private final Pose FinishGather2 = new Pose(50.849, -35.2588, -1.590508);
+    private final Pose FinishGather2 = new Pose(50.849, -37.2588, -1.590508);
     private boolean firstshooting = false;
     private PathChain Shootpath1, Shootpath2, Shootpath3;
     private PathChain prepGatherPath1, prepGatherPath2;
