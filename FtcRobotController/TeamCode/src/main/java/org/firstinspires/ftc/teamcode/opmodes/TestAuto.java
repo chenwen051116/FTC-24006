@@ -99,7 +99,7 @@ public class TestAuto extends OpMode {
                         }
                         if(timer.getElapsedTimeSeconds()>3.0&&timer.getElapsedTimeSeconds()<3.4){
                             intake.autoforce = true;
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                             intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
@@ -163,7 +163,7 @@ public class TestAuto extends OpMode {
                         }
                         if(timer.getElapsedTimeSeconds()>3.0&&timer.getElapsedTimeSeconds()<3.4){
                             intake.autoforce = true;
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                             intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
