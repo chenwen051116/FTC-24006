@@ -32,6 +32,8 @@ public class Shooter extends SubsystemBase {
 
     public boolean focused = false;
 
+    public boolean automode = false;
+
 
 
     public enum ShooterStatus {
@@ -199,6 +201,10 @@ public class Shooter extends SubsystemBase {
         }
 
         if (distance < 0.01){
+            setTargetRPM(3500);
+        }
+
+        if(automode){
             setTargetRPM(3500);
         }
     }

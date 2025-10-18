@@ -113,7 +113,7 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 4:
-                
+
                 follower.followPath(Shootpath2);
                 setPathState(5);
                 break;
@@ -200,6 +200,7 @@ public class TestAuto extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
+        shooter.automode = true;
         limelight = new MyLimelight(hardwareMap);
         limelight.initRedPipeline();
         limelight.startDetect();
