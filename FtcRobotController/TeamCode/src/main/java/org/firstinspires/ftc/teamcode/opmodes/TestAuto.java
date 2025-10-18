@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 public class TestAuto extends OpMode {
 
     private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer;
-    private ElapsedTime timer = new ElapsedTime();
+    private Timer pathTimer, actionTimer, opmodeTimer, timer;
+    //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState =0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
@@ -69,12 +69,12 @@ public class TestAuto extends OpMode {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        timer.reset();
+                        timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.seconds() > 3){
+                        if(timer.getElapsedTimeSeconds()> 3){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             setPathState(2);
 
@@ -141,10 +141,9 @@ public class TestAuto extends OpMode {
     @Override
     public void init() {
         pathTimer = new Timer();
+        timer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
-
-
         follower = Constants.createFollower(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
