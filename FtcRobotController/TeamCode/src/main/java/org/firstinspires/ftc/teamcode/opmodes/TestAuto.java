@@ -31,9 +31,13 @@ public class TestAuto extends OpMode {
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
 
     private final Pose FinishGather1 = new Pose(24.7910, -35.2588, -1.590508);
+
+    private final Pose PrepGather2 = new Pose(50.849, -17.19286, -1.590508);
+
+    private final Pose FinishGather2 = new Pose(50.849, -35.2588, -1.590508);
     private boolean firstshooting = false;
-    private PathChain Shootpath1, Shootpath2;
-    private PathChain prepGatherPath1;
+    private PathChain Shootpath1, Shootpath2, Shootpath3;
+    private PathChain prepGatherPath1, prepGatherPath2;
 
     public Intake intake;
     public Shooter shooter;
@@ -56,13 +60,24 @@ public class TestAuto extends OpMode {
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .build();
 
+
+
         Shootpath2 = follower.pathBuilder()
                 .addPath(new BezierLine(FinishGather1, ShootPose1))
                 .setLinearHeadingInterpolation(FinishGather1.getHeading(), ShootPose1.getHeading())
                 .build();
 
+        prepGatherPath2 = follower.pathBuilder()
+                .addPath(new BezierLine(ShootPose1, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .build();
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-
+        Shootpath3 = follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather2, ShootPose1))
+                .setLinearHeadingInterpolation(FinishGather2.getHeading(), ShootPose1.getHeading())
+                .build();
     }
 
     public void autonomousPathUpdate() {
@@ -150,6 +165,69 @@ public class TestAuto extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.05){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.05&&timer.getElapsedTimeSeconds()<3.4){
+                            intake.autoforce = true;
+                            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                            intake.periodic();
+                        }
+                        if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.autoforce = false;
+                            intake.periodic();
+                        }
+
+                    }
+                    break;
+                }
+            case 6:
+                if(!follower.isBusy()) {
+
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath2);
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if(!follower.isBusy()) {
+                    setPathState(8);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                }
+                break;
+            case 8:
+
+                follower.followPath(Shootpath3);
+                firstshooting = false;
+                setPathState(9);
+
+                break;
+            case 9:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(10);
                         }
                         if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
                             intake.autoforce = true;
