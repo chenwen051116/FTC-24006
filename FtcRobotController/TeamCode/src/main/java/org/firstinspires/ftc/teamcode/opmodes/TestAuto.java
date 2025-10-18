@@ -141,15 +141,22 @@ public class TestAuto extends OpMode {
                         if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
                             intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                            intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.1){
+                            intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+                            intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.1&&timer.getElapsedTimeSeconds()<3.4){
+                            intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            intake.periodic();
                         }
                         if(timer.getElapsedTimeSeconds()>3.4&&timer.getElapsedTimeSeconds()<3.5){
+                            intake.autoforce = true;
                             intake.autoforce = false;
+                            intake.periodic();
                         }
 
                     }
