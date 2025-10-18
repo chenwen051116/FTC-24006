@@ -164,7 +164,7 @@ public class TestAuto extends OpMode {
                         if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(2);
+                            setPathState(6);
                         }
                         if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
                             intake.autoforce = true;
