@@ -138,7 +138,6 @@ public class TestAuto extends OpMode {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        shooter.periodic();
                         timer.resetTimer();
 
                         firstshooting = true;
@@ -147,19 +146,19 @@ public class TestAuto extends OpMode {
                         if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(6);
+                            setPathState(2);
                         }
                         if(timer.getElapsedTimeSeconds()>2.3&&timer.getElapsedTimeSeconds()<2.8){
                             intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                             intake.periodic();
                         }
-                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.1){
+                        if(timer.getElapsedTimeSeconds()>2.8&&timer.getElapsedTimeSeconds()<3.0){
                             intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
                             intake.periodic();
                         }
-                        if(timer.getElapsedTimeSeconds()>3.1&&timer.getElapsedTimeSeconds()<3.4){
+                        if(timer.getElapsedTimeSeconds()>3.0&&timer.getElapsedTimeSeconds()<3.4){
                             intake.autoforce = true;
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             intake.periodic();
@@ -171,7 +170,6 @@ public class TestAuto extends OpMode {
 
                     }
                     break;
-
                 }
 
 
@@ -206,6 +204,7 @@ public class TestAuto extends OpMode {
         }
         else{
             intake.updateAutoshoot(false);
+            shooter.updateFocused(false);
         }
         autonomousPathUpdate();
 
@@ -215,6 +214,7 @@ public class TestAuto extends OpMode {
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.addData("timer", timer.getElapsedTimeSeconds());
+        telemetry.addData("shooter state", shooter.shooterStatus);
         telemetry.update();
     }
 
