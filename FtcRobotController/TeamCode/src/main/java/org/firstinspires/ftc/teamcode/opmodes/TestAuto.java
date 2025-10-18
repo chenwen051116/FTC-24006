@@ -80,19 +80,19 @@ public class TestAuto extends OpMode {
 
                         }
                     }
-                    //break;
+                    break;
 
                 }
-            case 2:
-                follower.followPath(prepGatherPath1);
-                intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                setPathState(3);
-                break;
-            case 3:
-                if(!follower.isBusy()) {
-                    setPathState(4);
-                }
-                break;
+//            case 2:
+//                follower.followPath(prepGatherPath1);
+//                intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+//                setPathState(3);
+//                break;
+//            case 3:
+//                if(!follower.isBusy()) {
+//                    setPathState(4);
+//                }
+//                break;
 
 
         }
@@ -134,6 +134,7 @@ public class TestAuto extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("timer", timer.getElapsedTimeSeconds());
         telemetry.update();
     }
 
