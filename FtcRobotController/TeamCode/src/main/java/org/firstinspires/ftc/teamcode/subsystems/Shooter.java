@@ -210,7 +210,7 @@ public class Shooter extends SubsystemBase {
             setTargetRPM(3500);
         }
         else if(automode&&!autoLonger){
-            setTargetRPM(3100);
+            setTargetRPM(3000);
         }
     }
 
