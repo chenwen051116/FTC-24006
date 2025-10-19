@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 import static java.lang.Math.abs;
 
+import android.health.connect.datatypes.units.Power;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -141,7 +143,7 @@ public class Shooter extends SubsystemBase {
             pidController.setTolerance(tolerance);
 
             double currentRPM = getFlyWheelRPM();
-            double rpmDifference = targetRPM - currentRPM;
+            double rpmDifference = currentRPM - targetRPM;
 
             double pidinput = rpmDifference/100.0;
             double power;
@@ -151,7 +153,7 @@ public class Shooter extends SubsystemBase {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
                 pidOutput = pidController.calculate(pidinput);
                 power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
-            } else if (rpmDifference > pidThreshold) {
+            } else if (rpmDifference < pidThreshold) {
                 // Large speed increase needed - use full power
                 power = 1.0;
                 pidOutput = 1.0; // PID would output 1.0 but we're overriding
@@ -160,7 +162,7 @@ public class Shooter extends SubsystemBase {
                 power = 0.0;
                 pidOutput = 0.0; // PID would output negative but we're overriding
             }
-            PIDoutput = pidOutput;
+            PIDoutput = power;
             // Store values for telemetry/graphing
             currentMotorPower = power;
             currentPIDOutput = pidOutput;
