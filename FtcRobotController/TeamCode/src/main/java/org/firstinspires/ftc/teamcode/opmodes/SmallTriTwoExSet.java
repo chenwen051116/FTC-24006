@@ -3,23 +3,19 @@ package org.firstinspires.ftc.teamcode.opmodes; // make sure this aligns with cl
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import static android.os.SystemClock.sleep;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
-import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
-@Autonomous(name = "TestAuto")
-public class TestAuto extends OpMode {
+
+@Autonomous(name = "SmallTriTwoExSet")
+public class SmallTriTwoExSet extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
@@ -28,6 +24,8 @@ public class TestAuto extends OpMode {
     private int pathState =0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.406764);
+
+   // private final Pose ShootPose2 = new Pose(1);
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
 
     private final Pose FinishGather1 = new Pose(24.7910, -37.2588, -1.590508);
@@ -35,8 +33,15 @@ public class TestAuto extends OpMode {
     private final Pose PrepGather2 = new Pose(48.849, -17.19286, -1.590508);
 
     private final Pose FinishGather2 = new Pose(48.849, -37.2588, -1.590508);
+
+    private final Pose PrepGather3 = new Pose(72.907, -17.19286, -1.590508);
+
+    private final Pose FinishGather3 = new Pose(72.907, -37.2588, -1.590508);
+
+    private final Pose endPose = new Pose(4.64556,-44.66559,-1.5623);
+
     private boolean firstshooting = false;
-    private PathChain Shootpath1, Shootpath2, Shootpath3;
+    private PathChain Shootpath1, Shootpath2, Shootpath3, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2;
 
     public Intake intake;
@@ -74,10 +79,16 @@ public class TestAuto extends OpMode {
                 .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
                 .build();
         /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        lastOutPath = follower.pathBuilder()
+                .addPath(new BezierLine(ShootPose1, endPose))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), endPose.getHeading())
+                .build();
+
         Shootpath3 = follower.pathBuilder()
                 .addPath(new BezierLine(FinishGather2, ShootPose1))
                 .setLinearHeadingInterpolation(FinishGather2.getHeading(), ShootPose1.getHeading())
                 .build();
+
     }
 
     public void autonomousPathUpdate() {
@@ -196,11 +207,11 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 8:
-
-                follower.followPath(Shootpath3);
-                firstshooting = false;
-                setPathState(9);
-
+                if(!follower.isBusy()) {
+                    follower.followPath(Shootpath3);
+                    firstshooting = false;
+                    setPathState(9);
+                }
                 break;
             case 9:
                 if(!follower.isBusy()) {
@@ -225,7 +236,16 @@ public class TestAuto extends OpMode {
                     }
                     break;
                 }
-
+            case 10:
+                if(!follower.isBusy()) {
+                    follower.followPath(lastOutPath);
+                    setPathState(11);
+                }
+                break;
+            case 11:
+                if(!follower.isBusy()) {
+                    setPathState(12);
+                }
 
         }
     }
