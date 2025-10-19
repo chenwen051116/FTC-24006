@@ -263,6 +263,7 @@ public class TestAuto extends OpMode {
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.addData("timer", timer.getElapsedTimeSeconds());
         telemetry.addData("shooter state", shooter.shooterStatus);
+        telemetry.addData("intake state", intake.intakeCurrentState);
         telemetry.update();
     }
 

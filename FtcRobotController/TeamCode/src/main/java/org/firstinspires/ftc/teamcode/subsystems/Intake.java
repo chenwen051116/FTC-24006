@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
     private final Servo swingBar;
     private final DistanceSensor transferBreakBeam;
-    private IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
+    public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
     public boolean shooterauto = false;
     public boolean autotrans = false;
