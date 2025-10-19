@@ -151,7 +151,7 @@ public class Shooter extends SubsystemBase {
 
             if (abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
-                pidOutput = pidController.calculate(pidinput);
+                pidOutput = pidController.calculate(pidinput)+0.5;
                 power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
             } else if (rpmDifference < pidThreshold) {
                 // Large speed increase needed - use full power
@@ -258,7 +258,7 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Current RPM", getFlyWheelRPM());
         telemetry.addData("At Target", isAtTargetRPM());
         telemetry.addData("Motor Power", currentMotorPower);
-        telemetry.addData("PID Output", currentPIDOutput);
+        telemetry.addData("PID Output", PIDoutput);
         telemetry.addData("Kp", Kp);
         telemetry.addData("Ki", Ki);
         telemetry.addData("Kd", Kd);
