@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
     public static double Ki = 0.0; // Integral gain
     public static double Kd = 0.0;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
-    public static double tolerance = 30.0; // RPM tolerance for "at target" determination
+    public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
     public static double aimRPM = 0;
 
@@ -104,7 +104,9 @@ public class Shooter extends SubsystemBase {
     }
     public void setTargetRPM(double targetRPM) {
         this.targetRPM = targetRPM;
-        pidController.setSetPoint(targetRPM);
+        pidController.setSetPoint(0);
+
+
     }
     public double getTargetRPM() {
         return targetRPM;
@@ -141,12 +143,13 @@ public class Shooter extends SubsystemBase {
             double currentRPM = getFlyWheelRPM();
             double rpmDifference = targetRPM - currentRPM;
 
+            double pidinput = rpmDifference/100.0;
             double power;
             double pidOutput = 0.0;
 
             if (abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
-                pidOutput = pidController.calculate(currentRPM);
+                pidOutput = pidController.calculate(pidinput);
                 power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
             } else if (rpmDifference > pidThreshold) {
                 // Large speed increase needed - use full power
