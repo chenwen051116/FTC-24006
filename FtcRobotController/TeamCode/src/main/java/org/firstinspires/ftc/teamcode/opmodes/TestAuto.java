@@ -122,7 +122,7 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 3:
-                if(follower.getPose().getY()<-37){
+                if(follower.getPose().getY()<-34){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
@@ -180,7 +180,14 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 7:
-
+                if(follower.getPose().getY()<-34){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.periodic();
+                }
+                else if (follower.getPose().getY()< -25){
+                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                    intake.periodic();
+                }
                 if(!follower.isBusy()) {
                     setPathState(8);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
