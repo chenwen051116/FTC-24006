@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import static java.lang.Math.abs;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -140,7 +142,7 @@ public class Shooter extends SubsystemBase {
             double power;
             double pidOutput = 0.0;
 
-            if (Math.abs(rpmDifference) <= pidThreshold) {
+            if (abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
                 pidOutput = pidController.calculate(currentRPM);
                 power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
@@ -192,6 +194,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateAim() {
+        distance = abs(distance);
         if (distance > 3.25){
             setTargetRPM(3850);
         }
@@ -210,7 +213,7 @@ public class Shooter extends SubsystemBase {
             setTargetRPM(3500);
         }
         else if(automode&&!autoLonger){
-            setTargetRPM(3200);
+            setTargetRPM(3100);
         }
     }
 
