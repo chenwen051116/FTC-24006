@@ -38,6 +38,8 @@ public class Shooter extends SubsystemBase {
 
     public boolean autoLonger = true;
 
+    public double PIDoutput;
+
 
 
     public enum ShooterStatus {
@@ -155,7 +157,7 @@ public class Shooter extends SubsystemBase {
                 power = 0.0;
                 pidOutput = 0.0; // PID would output negative but we're overriding
             }
-
+            PIDoutput = pidOutput;
             // Store values for telemetry/graphing
             currentMotorPower = power;
             currentPIDOutput = pidOutput;

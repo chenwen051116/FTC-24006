@@ -51,6 +51,8 @@ public final class PIDveltest extends CommandOpMode {
         telemetry.addData("Target RPM (Dashboard)", targetRPM);
         telemetry.addData("Tolerance", tolerance);
         telemetry.addData("Error", targetRPM - shooter.getFlyWheelRPM());
+        telemetry.addData("PIDoutput", shooter.PIDoutput);
+
         
         // Control instructions
         telemetry.addLine();
