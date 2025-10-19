@@ -128,6 +128,7 @@ public class BohanTele extends CommandOpMode {
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
         telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
