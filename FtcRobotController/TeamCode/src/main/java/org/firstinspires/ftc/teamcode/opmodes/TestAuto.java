@@ -27,7 +27,7 @@ public class TestAuto extends OpMode {
 
     private int pathState =0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.446764);
+    private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.466764);
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
 
     private final Pose FinishGather1 = new Pose(24.7910, -37.2588, -1.590508);
@@ -150,7 +150,7 @@ public class TestAuto extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(2);
+                            setPathState(6);
                         }
                         if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
                             intake.setSwingBarPos(0);
@@ -198,7 +198,7 @@ public class TestAuto extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(2);
+                            setPathState(10);
                         }
                         if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
                             intake.setSwingBarPos(0);
@@ -270,6 +270,7 @@ public class TestAuto extends OpMode {
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+        intake.setSwingBarPos(0.4);
         buildPaths();
         follower.setStartingPose(startPose);
 
