@@ -118,7 +118,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + 50 && getTargetRPM() > getFlyWheelRPM() - 50);
+        return (getTargetRPM() < getFlyWheelRPM() + 60 && getTargetRPM() > getFlyWheelRPM() - 60)&&getFlyWheelRPM()>1000;
     }
 
     // Store current motor power for telemetry/graphing
@@ -143,6 +143,7 @@ public class Shooter extends SubsystemBase {
     public void updateFlywheelPID() {
         shooterLeft.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
         shooterRight.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
+
         shooterLeft.setVelocity(targetRPM*28/60);
         shooterRight.setVelocity(targetRPM*28/60);
 //        if (targetRPM > 0) {
@@ -213,8 +214,8 @@ public class Shooter extends SubsystemBase {
         if (distance > 3.25){
             setTargetRPM(3850);
         }
-        else if (distance < 1.5){
-            setTargetRPM(200*distance+2750);
+        else if (distance < 1.4){
+            setTargetRPM(100*distance+2750);
         }
         else{
             setTargetRPM(300*distance+2750);
@@ -225,7 +226,7 @@ public class Shooter extends SubsystemBase {
         }
 
         if(automode&&autoLonger){
-            setTargetRPM(3500);
+            setTargetRPM(3600);
         }
         else if(automode&&!autoLonger){
             setTargetRPM(3100);
