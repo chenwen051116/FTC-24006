@@ -12,11 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 @TeleOp(name = "PID Flywheel Tuning")
 public final class PIDveltest extends CommandOpMode {
     // Tunable parameters - can be adjusted via FTC Dashboard
-    public static double kp = 0.001;
-    public static double ki = 0.0001;
-    public static double kd = 0.0;
     public static double targetRPM = 1000;
-    public static double tolerance = 50.0;
 
     private Shooter shooter;
     @Override
