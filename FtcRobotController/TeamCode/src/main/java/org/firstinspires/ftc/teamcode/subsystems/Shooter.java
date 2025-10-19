@@ -106,7 +106,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + 150 && getTargetRPM() > getFlyWheelRPM());
+        return (getTargetRPM() < getFlyWheelRPM() + 150 && getTargetRPM() > getFlyWheelRPM() + 50);
     }
 
     // Store current motor power for telemetry/graphing
@@ -210,7 +210,7 @@ public class Shooter extends SubsystemBase {
             setTargetRPM(3500);
         }
         else if(automode&&!autoLonger){
-            setTargetRPM(3000);
+            setTargetRPM(3200);
         }
     }
 

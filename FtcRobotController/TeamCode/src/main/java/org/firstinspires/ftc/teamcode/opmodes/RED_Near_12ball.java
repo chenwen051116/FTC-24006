@@ -21,21 +21,21 @@ public class RED_Near_12ball extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
     //private final ElapsedTime timer  = new ElapsedTime();
 
-    private int pathState =0;
+    private int pathState = 0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(-52.702944, -5.8971, -0.71322);
-    private final Pose GatePose = new Pose(-61.10353, -44.8150, 0.02);
+    private final Pose GatePose = new Pose(-59.10353, -44.8150, 0.02);
     private final Pose PrepGather1 = new Pose(-50.4755, -21.3882, -1.583372);
 
     private final Pose FinishGather1 = new Pose(-50.4755, -37.8899, -1.583372);
 
-    private final Pose PrepGather2 = new Pose(-74.5229, -21.3882, -1.583372);
+    private final Pose PrepGather2 = new Pose(-72.5229, -21.3882, -1.583372);
 
-    private final Pose FinishGather2 = new Pose(-74.5229, -37.8899, -1.583372);
+    private final Pose FinishGather2 = new Pose(-72.5229, -37.8899, -1.583372);
 
-    private final Pose PrepGather3 = new Pose(-98.51537, -21.3882, -1.583372);
+    private final Pose PrepGather3 = new Pose(-96.51537, -19.3882, -1.583372);
 
-    private final Pose FinishGather3 = new Pose(-98.51537, -37.8899, -1.583372);
+    private final Pose FinishGather3 = new Pose(-96.51537, -37.8899, -1.583372);
 
     private final Pose GatePassby = new Pose(-50.4755, -21.3882, 0);
 
@@ -50,7 +50,6 @@ public class RED_Near_12ball extends OpMode {
     public Scheduler scheduler;
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = follower.pathBuilder()
@@ -112,7 +111,7 @@ public class RED_Near_12ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                shooter.autoLonger = true;
+                shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 follower.followPath(Shootpath1);
                 setPathState(1);
@@ -358,6 +357,7 @@ public class RED_Near_12ball extends OpMode {
         autonomousPathUpdate();
 
         // Feedback to Driver Hub for debugging
+        telemetry.addData("realRPM", shooter.getFlyWheelRPM());
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
