@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.006;  // Proportional gain
+    public static double Kp = 1;  // Proportional gain
     public static double Ki = 0.0; // Integral gain
     public static double Kd = 0.0;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
@@ -141,6 +141,8 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Idling;
     }
     public void updateFlywheelPID() {
+        shooterLeft.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
+        shooterRight.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
         shooterLeft.setVelocity(targetRPM*28/60);
         shooterRight.setVelocity(targetRPM*28/60);
 //        if (targetRPM > 0) {
