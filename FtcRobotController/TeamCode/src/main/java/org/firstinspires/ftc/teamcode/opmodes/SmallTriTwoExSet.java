@@ -94,6 +94,7 @@ public class SmallTriTwoExSet extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                shooter.autoLonger = true;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 follower.followPath(Shootpath1);
                 setPathState(1);

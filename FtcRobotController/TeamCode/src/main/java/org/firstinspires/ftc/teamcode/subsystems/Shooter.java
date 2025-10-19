@@ -34,6 +34,8 @@ public class Shooter extends SubsystemBase {
 
     public boolean automode = false;
 
+    public boolean autoLonger = true;
+
 
 
     public enum ShooterStatus {
@@ -204,8 +206,11 @@ public class Shooter extends SubsystemBase {
             setTargetRPM(3500);
         }
 
-        if(automode){
+        if(automode&&autoLonger){
             setTargetRPM(3500);
+        }
+        else if(automode&&!autoLonger){
+            setTargetRPM(3100);
         }
     }
 

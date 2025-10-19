@@ -110,6 +110,7 @@ public class SmallTriThreeExSet extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                shooter.autoLonger = true;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 follower.followPath(Shootpath1);
                 setPathState(1);
@@ -223,7 +224,7 @@ public class SmallTriThreeExSet extends OpMode {
                 }
                 break;
             case 8:
-
+                shooter.autoLonger = false;
                 follower.followPath(Shootpath3);
                 firstshooting = false;
                 setPathState(9);
