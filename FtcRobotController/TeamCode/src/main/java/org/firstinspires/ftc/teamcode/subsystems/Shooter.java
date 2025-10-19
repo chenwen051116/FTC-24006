@@ -141,8 +141,8 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Idling;
     }
     public void updateFlywheelPID() {
-        shooterLeft.setVelocity(targetRPM*60.0, AngleUnit.DEGREES);
-        shooterRight.setVelocity(targetRPM*60.0, AngleUnit.DEGREES);
+        shooterLeft.setVelocity(targetRPM*60.0/(2*Math.PI));
+        shooterRight.setVelocity(targetRPM*60.0/(2*Math.PI));
 //        if (targetRPM > 0) {
 //            // Update PID parameters and tolerance in case they were changed via dashboard
 //            pidController.setPID(Kp, Ki, Kd);
