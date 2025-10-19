@@ -58,18 +58,6 @@ public class TestAuto extends OpMode {
                 .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
-                .addParametricCallback(0.7, new Runnable() {
-                    @Override
-                    public void run() {
-                        intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-                    }
-                })
-                .addParametricCallback(0.78, new Runnable() {
-                    @Override
-                    public void run() {
-                        intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    }
-                })
                 .build();
 
 
@@ -134,6 +122,16 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 3:
+                if(follower.getPose().getY()<-37){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.periodic();
+                }
+                else if (follower.getPose().getY()< -25){
+                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                    intake.periodic();
+                }
+
+
                 if(!follower.isBusy()) {
                     setPathState(4);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -182,6 +180,7 @@ public class TestAuto extends OpMode {
                 }
                 break;
             case 7:
+
                 if(!follower.isBusy()) {
                     setPathState(8);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
