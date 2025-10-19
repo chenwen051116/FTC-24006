@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 
-@Autonomous(name = "RED_Far_12ball")
+@Autonomous(name = "RED_Near_12ball")
 public class RED_Near_12ball extends OpMode {
 
     private Follower follower;
@@ -37,7 +37,6 @@ public class RED_Near_12ball extends OpMode {
 
     private final Pose FinishGather3 = new Pose(-98.51537, -37.8899, -1.583372);
 
-
     private boolean firstshooting = false;
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
@@ -51,6 +50,62 @@ public class RED_Near_12ball extends OpMode {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        Shootpath1 = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, ShootPose1))
+                .setLinearHeadingInterpolation(startPose.getHeading(), ShootPose1.getHeading())
+                .build();
+
+        prepGatherPath1 = follower.pathBuilder()
+                .addPath(new BezierLine(ShootPose1, PrepGather1))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
+                .addPath(new BezierLine(PrepGather1, FinishGather1))
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .addPath(new BezierLine(FinishGather1, GatePose))
+                .setLinearHeadingInterpolation(FinishGather1.getHeading(), GatePose.getHeading())
+                .build();
+
+
+
+        Shootpath2 = follower.pathBuilder()
+                .addPath(new BezierLine(GatePose, PrepGather1))
+                .setLinearHeadingInterpolation(GatePose.getHeading(), PrepGather1.getHeading())
+                .addPath(new BezierLine(PrepGather1, ShootPose1))
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), ShootPose1.getHeading())
+                .build();
+
+        prepGatherPath2 = follower.pathBuilder()
+                .addPath(new BezierLine(ShootPose1, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .build();
+
+        Shootpath3 = follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather2, PrepGather2))
+                .setLinearHeadingInterpolation(FinishGather2.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, ShootPose1))
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), ShootPose1.getHeading())
+                .build();
+
+        prepGatherPath3 = follower.pathBuilder()
+                .addPath(new BezierLine(ShootPose1, PrepGather3))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
+                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .build();
+
+        Shootpath4 = follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather3, PrepGather3))
+                .setLinearHeadingInterpolation(FinishGather3.getHeading(), PrepGather3.getHeading())
+                .addPath(new BezierLine(PrepGather3, ShootPose1))
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), ShootPose1.getHeading())
+                .build();
+//
+//        lastOutPath = follower.pathBuilder()
+//                .addPath(new BezierLine(ShootPose1, endPose))
+//                .setLinearHeadingInterpolation(ShootPose1.getHeading(), endPose.getHeading())
+//                .build();
+
     }
 
     public void autonomousPathUpdate() {
@@ -61,6 +116,211 @@ public class RED_Near_12ball extends OpMode {
                 follower.followPath(Shootpath1);
                 setPathState(1);
                 break;
+            case 1:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setSwingBarPos(0.4);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(2);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
+
+                    }
+                    break;
+
+                }
+            case 2:
+                if(!follower.isBusy()) {
+
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath1);
+                    setPathState(3);
+                }
+                break;
+            case 3:
+                if(follower.getPose().getY()<-34){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.periodic();
+                }
+                else if (follower.getPose().getY()< -25){
+                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                    intake.periodic();
+                }
+
+
+                if(!follower.isBusy()) {
+                    setPathState(4);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                }
+                break;
+            case 4:
+
+                follower.followPath(Shootpath2);
+                firstshooting = false;
+                setPathState(5);
+
+                break;
+            case 5:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setSwingBarPos(0.4);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(6);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
+
+                    }
+                    break;
+                }
+            case 6:
+                if(!follower.isBusy()) {
+
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath2);
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if(follower.getPose().getY()<-34){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.periodic();
+                }
+                else if (follower.getPose().getY()< -25){
+                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                    intake.periodic();
+                }
+                if(!follower.isBusy()) {
+                    setPathState(8);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                }
+                break;
+            case 8:
+                shooter.autoLonger = false;
+                follower.followPath(Shootpath3);
+                firstshooting = false;
+                setPathState(9);
+
+                break;
+            case 9:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setSwingBarPos(0.4);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(10);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
+
+                    }
+                    break;
+                }
+            case 10:
+                if(!follower.isBusy()) {
+
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath3);
+                    setPathState(11);
+                }
+                break;
+            case 11:
+                if(follower.getPose().getY()<-34){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.periodic();
+                }
+                else if (follower.getPose().getY()< -25){
+                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+                    intake.periodic();
+                }
+                if(!follower.isBusy()) {
+                    setPathState(12);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                }
+                break;
+            case 12:
+
+                follower.followPath(Shootpath4);
+                firstshooting = false;
+                setPathState(13);
+
+                break;
+            case 13:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        timer.resetTimer();
+
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()> 4.2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setSwingBarPos(0.4);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(14);
+                        }
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
+
+                    }
+                    break;
+                }
+//            case 14:
+//                if(!follower.isBusy()) {
+//                    follower.followPath(lastOutPath);
+//                    setPathState(15);
+//                }
+//                break;
+//            case 15:
+//                if(!follower.isBusy()) {
+//                    setPathState(16);
+//                }
+
         }
     }
     private void sleep(long ms){
