@@ -126,13 +126,13 @@ public class RED_Near_12ball extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 4.2){
+                        if(timer.getElapsedTimeSeconds()> 3.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<3.5){
                             intake.setSwingBarPos(0);
                         }
 
@@ -185,13 +185,13 @@ public class RED_Near_12ball extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 4.2){
+                        if(timer.getElapsedTimeSeconds()> 3.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<3.5){
                             intake.setSwingBarPos(0);
                         }
 
@@ -241,13 +241,13 @@ public class RED_Near_12ball extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 4.2){
+                        if(timer.getElapsedTimeSeconds()> 3.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(10);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<3.5){
                             intake.setSwingBarPos(0);
                         }
 
@@ -297,13 +297,13 @@ public class RED_Near_12ball extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 4.2){
+                        if(timer.getElapsedTimeSeconds()> 3.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(14);
                         }
-                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<3.5){
                             intake.setSwingBarPos(0);
                         }
 
