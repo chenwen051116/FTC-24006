@@ -261,7 +261,7 @@ public class Shooter extends SubsystemBase {
             completeStop();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
-            setTargetRPM(3000);
+            setTargetRPM(2500);
         }
     }
     public void updateTelemetry() {
