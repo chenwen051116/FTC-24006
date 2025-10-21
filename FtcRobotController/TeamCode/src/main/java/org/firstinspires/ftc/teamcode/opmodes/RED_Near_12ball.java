@@ -22,22 +22,22 @@ public class RED_Near_12ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(-23.5944, -45.4630, -1.5799); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(-52.702944, -5.8971, -0.71322);
-    private final Pose GatePose = new Pose(-59.10353, -44.8150, 0.02);
-    private final Pose PrepGather1 = new Pose(-50.4755, -21.3882, -1.583372);
+    private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
+    private final Pose ShootPose1 = new Pose(-40.53817, -29.4827, 0.84604);
+    private final Pose GatePose = new Pose(-0.6099,-34.4572, 1.5647);
+    private final Pose PrepGather1 = new Pose(-23.0954, -27.4628, 0);
 
-    private final Pose FinishGather1 = new Pose(-50.4755, -37.8899, -1.583372);
+    private final Pose FinishGather1 = new Pose(-6.4513, -27.4628, 0);
 
-    private final Pose PrepGather2 = new Pose(-72.5229, -21.3882, -1.583372);
+    private final Pose PrepGather2 = new Pose(-23.0954, -51.0732, 0);
 
-    private final Pose FinishGather2 = new Pose(-72.5229, -37.8899, -1.583372);
+    private final Pose FinishGather2 = new Pose(-6.4513, -51.0732, 0);
 
-    private final Pose PrepGather3 = new Pose(-96.51537, -19.3882, -1.583372);
+    private final Pose PrepGather3 = new Pose(-23.0954, -75.1802, 0);
 
-    private final Pose FinishGather3 = new Pose(-96.51537, -37.8899, -1.583372);
+    private final Pose FinishGather3 = new Pose(-6.4513, -72.1802, 0);
 
-    private final Pose GatePassby = new Pose(-50.4755, -21.3882, 0);
+    private final Pose GatePassby = new Pose(-23.0954, -27.4628, 1.5647);
 
 
     private boolean firstshooting = false;
