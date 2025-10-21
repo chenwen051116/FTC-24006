@@ -94,6 +94,7 @@ public class RED_Near_12ball extends OpMode {
                 .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
                 .addPath(new BezierLine(PrepGather3, FinishGather3))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .setBrakingStrength(1.5)
                 .build();
 
         Shootpath4 = follower.pathBuilder()
@@ -152,11 +153,11 @@ public class RED_Near_12ball extends OpMode {
                 }
                 break;
             case 3:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getX()>-6){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getX() > -9){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }
@@ -210,14 +211,15 @@ public class RED_Near_12ball extends OpMode {
                 }
                 break;
             case 7:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getX()>-6){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getX() > -9){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }
+
                 if(!follower.isBusy()) {
                     setPathState(8);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -266,14 +268,15 @@ public class RED_Near_12ball extends OpMode {
                 }
                 break;
             case 11:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getX()>-6){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getX() > -9){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }
+
                 if(!follower.isBusy()) {
                     setPathState(12);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
