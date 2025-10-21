@@ -22,7 +22,7 @@ public class RED_Near_12ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
+    private final Pose startPose = new Pose(-23.5944, -45.4630, -1.5799); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(-52.702944, -5.8971, -0.71322);
     private final Pose GatePose = new Pose(-59.10353, -44.8150, 0.02);
     private final Pose PrepGather1 = new Pose(-50.4755, -21.3882, -1.583372);
