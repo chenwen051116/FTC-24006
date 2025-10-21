@@ -220,7 +220,7 @@ public class Shooter extends SubsystemBase {
             setTargetRPM(100*distance+2750);
         }
         else{
-            setTargetRPM(300*distance+2750);
+            setTargetRPM(200*distance+2750);
         }
 
         if (distance < 0.01){
