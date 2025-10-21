@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
 
     public double PIDoutput;
 
-    public static double RPMThresh = 60;
+    public static double RPMThresh = 120;
 
 
 
@@ -120,7 +120,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM() - 60)&&getFlyWheelRPM()>1000;
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM() - 60)&&getFlyWheelRPM()>2600;
     }
 
     // Store current motor power for telemetry/graphing
