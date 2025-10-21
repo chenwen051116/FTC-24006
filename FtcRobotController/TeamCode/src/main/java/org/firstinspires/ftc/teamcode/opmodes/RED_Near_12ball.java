@@ -54,14 +54,15 @@ public class RED_Near_12ball extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, ShootPose1))
-                //.setLinearHeadingInterpolation(startPose.getHeading(), ShootPose1.getHeading())
+                .setLinearHeadingInterpolation(startPose.getHeading(), ShootPose1.getHeading())
+
                 .build();
 
         prepGatherPath1 = follower.pathBuilder()
                 .addPath(new BezierLine(ShootPose1, PrepGather1))
-                //.setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
-                //.setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .addPath(new BezierLine(FinishGather1, GatePose))
                 .setLinearHeadingInterpolation(FinishGather1.getHeading(), GatePose.getHeading())
                 .build();
@@ -70,16 +71,16 @@ public class RED_Near_12ball extends OpMode {
 
         Shootpath2 = follower.pathBuilder()
                 .addPath(new BezierLine(GatePose, GatePassby))
-                //.setLinearHeadingInterpolation(GatePose.getHeading(), GatePassby.getHeading())
+                .setLinearHeadingInterpolation(GatePose.getHeading(), GatePassby.getHeading())
                 .addPath(new BezierLine(GatePassby, ShootPose1))
-                //.setLinearHeadingInterpolation(GatePassby.getHeading(), ShootPose1.getHeading())
+                .setLinearHeadingInterpolation(GatePassby.getHeading(), ShootPose1.getHeading())
                 .build();
 
         prepGatherPath2 = follower.pathBuilder()
                 .addPath(new BezierLine(ShootPose1, PrepGather2))
-                //.setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
                 .addPath(new BezierLine(PrepGather2, FinishGather2))
-                //.setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
                 .build();
 
         Shootpath3 = follower.pathBuilder()
@@ -90,15 +91,15 @@ public class RED_Near_12ball extends OpMode {
 
         prepGatherPath3 = follower.pathBuilder()
                 .addPath(new BezierLine(ShootPose1, PrepGather3))
-                //.setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
                 .addPath(new BezierLine(PrepGather3, FinishGather3))
-                //.setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
         Shootpath4 = follower.pathBuilder()
 
                 .addPath(new BezierLine(FinishGather3, ShootPose1))
-                //.setLinearHeadingInterpolation(PrepGather3.getHeading(), ShootPose1.getHeading())
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), ShootPose1.getHeading())
                 .build();
 //
 //        lastOutPath = follower.pathBuilder()
