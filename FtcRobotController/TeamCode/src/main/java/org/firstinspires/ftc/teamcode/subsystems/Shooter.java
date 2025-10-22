@@ -45,9 +45,9 @@ public class Shooter extends SubsystemBase {
 
     public double PIDoutput;
 
-    public static double RPMThresh = 120;
+    public static double RPMThresh = 110;
 
-    public static double Autoshort = 3100;
+    public static double Autoshort = 3050;
     public static double Autolong = 3500;
 
 
