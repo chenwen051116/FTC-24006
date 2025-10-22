@@ -2,30 +2,54 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import static java.lang.Math.abs;
+
+import android.health.connect.datatypes.units.Power;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+@Config
 public class Shooter extends SubsystemBase {
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
-    
+
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.006;  // Proportional gain
-    public static double Ki = 0.0; // Integral gain
-    public static double Kd = 0.0;    // Derivative gain
+    public static double Kp = 27;  // Proportional gain
+    public static double Ki = 0.01; // Integral gain
+    public static double Kd = -10;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
-    public static double tolerance = 30.0; // RPM tolerance for "at target" determination
+    public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
     public static double aimRPM = 0;
-    
+
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
 
-    private double distance = 0;
+    public double distance = 0;
+
+    public boolean idelOn = false;
+
+    public boolean focused = false;
+
+    public boolean automode = false;
+
+    public boolean autoLonger = true;
+
+    public double PIDoutput;
+
+    public static double RPMThresh = 110;
+
+    public static double Autoshort = 3040;
+    public static double Autolong = 3390;
+
 
     public enum ShooterStatus {
         Stop,Idling,Shooting
@@ -34,7 +58,6 @@ public class Shooter extends SubsystemBase {
 
 
     public ShooterStatus shooterStatus = ShooterStatus.Stop;
-    public Robot.Side side = Robot.Side.Red;
 
 
 
@@ -54,21 +77,31 @@ public class Shooter extends SubsystemBase {
 
         // Configure motor modes - only shooterLeft has encoder
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  // Has encoder
-        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // No encoder
 
         // Set PID tolerance (adjustable via static parameter)
         pidController.setTolerance(tolerance);
+
+        focused = false;
+
+        automode = false;
+
+        autoLonger = true;
     }
 
     /**
      * Get current flywheel velocity in rad/s
      * Uses shooterLeft (the motor with encoder) for velocity feedback
      */
+    public void updateFocused(boolean focus){
+        focused = focus;
+    }
     public void setShooterStatus(ShooterStatus status){
         shooterStatus = status;
     }
     public double getFlyWheelVelocity() {
         return shooterLeft.getVelocity() * (2.0 * Math.PI) / 60.0; // Convert RPM to rad/s
+
     }
 
     public void updateDis(double dis){
@@ -87,13 +120,15 @@ public class Shooter extends SubsystemBase {
     }
     public void setTargetRPM(double targetRPM) {
         this.targetRPM = targetRPM;
-        pidController.setSetPoint(targetRPM);
+        pidController.setSetPoint(0);
+
+
     }
     public double getTargetRPM() {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return pidController.atSetPoint();
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-10)&&getFlyWheelRPM()>2600;
     }
 
     // Store current motor power for telemetry/graphing
@@ -104,46 +139,63 @@ public class Shooter extends SubsystemBase {
      * Update PID controller and set motor powers
      * Call this method in main loop for continuous control
      */
+    public void settoShooting(){
+        shooterStatus = ShooterStatus.Shooting;
+    }
+    public void settoStop(){
+        shooterStatus = ShooterStatus.Stop;
+    }
+
+
+    public void settoIdle(){
+        shooterStatus = ShooterStatus.Idling;
+    }
     public void updateFlywheelPID() {
-        if (targetRPM > 0) {
-            // Update PID parameters and tolerance in case they were changed via dashboard
-            pidController.setPID(Kp, Ki, Kd);
-            pidController.setTolerance(tolerance);
+        shooterLeft.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
+        shooterRight.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
 
-            double currentRPM = getFlyWheelRPM();
-            double rpmDifference = targetRPM - currentRPM;
-
-            double power;
-            double pidOutput = 0.0;
-
-            if (Math.abs(rpmDifference) <= pidThreshold) {
-                // Use PID control for fine-tuning within ±pidThreshold RPM
-                pidOutput = pidController.calculate(currentRPM);
-                power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
-            } else if (rpmDifference > pidThreshold) {
-                // Large speed increase needed - use full power
-                power = 1.0;
-                pidOutput = 1.0; // PID would output 1.0 but we're overriding
-            } else {
-                // Large speed decrease needed - use no power (let inertia slow it down)
-                power = 0.0;
-                pidOutput = 0.0; // PID would output negative but we're overriding
-            }
-
-            // Store values for telemetry/graphing
-            currentMotorPower = power;
-            currentPIDOutput = pidOutput;
-
-            // Apply power to both motors
-            shooterLeft.setPower(power);
-            shooterRight.setPower(power);
-        } else {
-            // Stop motors if no target set
-            currentMotorPower = 0.0;
-            currentPIDOutput = 0.0;
-            shooterLeft.setPower(0);
-            shooterRight.setPower(0);
-        }
+        shooterLeft.setVelocity(targetRPM*28/60);
+        shooterRight.setVelocity(targetRPM*28/60);
+//        if (targetRPM > 0) {
+//            // Update PID parameters and tolerance in case they were changed via dashboard
+//            pidController.setPID(Kp, Ki, Kd);
+//            pidController.setTolerance(tolerance);
+//
+//            double currentRPM = getFlyWheelRPM();
+//            double rpmDifference = currentRPM - targetRPM;
+//
+//            double pidinput = rpmDifference/100.0;
+//            double power;
+//            double pidOutput = 0.0;
+//
+//            if (abs(rpmDifference) <= pidThreshold) {
+//                // Use PID control for fine-tuning within ±pidThreshold RPM
+//                pidOutput = pidController.calculate(pidinput)+0.5;
+//                power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
+//            } else if (rpmDifference < pidThreshold) {
+//                // Large speed increase needed - use full power
+//                power = 1.0;
+//                pidOutput = 1.0; // PID would output 1.0 but we're overriding
+//            } else {
+//                // Large speed decrease needed - use no power (let inertia slow it down)
+//                power = 0.0;
+//                pidOutput = 0.0; // PID would output negative but we're overriding
+//            }
+//            PIDoutput = power;
+//            // Store values for telemetry/graphing
+//            currentMotorPower = power;
+//            currentPIDOutput = pidOutput;
+//
+//            // Apply power to both motors
+//            shooterLeft.setPower(power);
+//            shooterRight.setPower(power);
+//        } else {
+//            // Stop motors if no target set
+//            currentMotorPower = 0.0;
+//            currentPIDOutput = 0.0;
+//            shooterLeft.setPower(0);
+//            shooterRight.setPower(0);
+//        }
     }
 
     /**
@@ -161,7 +213,38 @@ public class Shooter extends SubsystemBase {
         pidController.reset();
     }
 
-    public void toggleRPM() { setTargetRPM(aimRPM); }
+    public void toggleRPM() {
+        setTargetRPM(aimRPM);
+        shooterStatus = ShooterStatus.Shooting;
+
+    }
+
+    public void updateAim() {
+        distance = abs(distance);
+        if (distance > 3.25){
+            setTargetRPM(3850);
+        }
+        else if (distance < 1.4){
+            setTargetRPM(100*distance+2750);
+        }
+        else{
+            setTargetRPM(200*distance+2750);
+        }
+
+        if (distance < 0.01){
+            setTargetRPM(3500);
+        }
+
+        if(automode&&autoLonger){
+            setTargetRPM(Autolong);
+        }
+        else if(automode&&!autoLonger){
+            setTargetRPM(Autoshort);
+        }
+    }
+
+
+
 
     /**
      * Get current motor power (for graphing/telemetry)
@@ -178,23 +261,23 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-       updateFlywheelPID();
-       if(shooterStatus == ShooterStatus.Shooting){
-           toggleRPM();
-       }
-       else if(shooterStatus == ShooterStatus.Stop){
-           completeStop();
-       }
-       else if(shooterStatus == ShooterStatus.Idling) {
-           setTargetRPM(4000);
-       }
+        updateFlywheelPID();
+        if(shooterStatus == ShooterStatus.Shooting && focused){
+            updateAim();
+        }
+        else if(shooterStatus == ShooterStatus.Stop){
+            completeStop();
+        }
+        else if(shooterStatus == ShooterStatus.Idling) {
+            setTargetRPM(2200);
+        }
     }
     public void updateTelemetry() {
         telemetry.addData("Target RPM", targetRPM);
         telemetry.addData("Current RPM", getFlyWheelRPM());
         telemetry.addData("At Target", isAtTargetRPM());
         telemetry.addData("Motor Power", currentMotorPower);
-        telemetry.addData("PID Output", currentPIDOutput);
+        telemetry.addData("PID Output", PIDoutput);
         telemetry.addData("Kp", Kp);
         telemetry.addData("Ki", Ki);
         telemetry.addData("Kd", Kd);

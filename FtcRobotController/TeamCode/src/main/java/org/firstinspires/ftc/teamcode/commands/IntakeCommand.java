@@ -18,21 +18,14 @@ public class IntakeCommand extends CommandBase {
 
     public void execute() {
         if (gamepad1.right_trigger > 0.3 ){
-            intake.setTransferPower(0);
-            intake.setIntakePower(0.9);
-        }else if (gamepad1.left_trigger > 0.3){
-            intake.setTransferPower(0);
-            intake.setIntakePower(-0.7);
-        }else if (gamepad1.left_bumper) {
-            intake.setTransferPower(-1);
-            intake.setIntakePower(-0.7);
-        }else if (gamepad1.right_bumper) {
-            intake.setTransferPower(1);
-            intake.setIntakePower(1);
-        }else {
-            intake.setTransferPower(0);
-            intake.setIntakePower(0);
-        }
+        intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+    }else if (gamepad1.left_trigger > 0.3){
+            intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+    }else if (gamepad1.right_bumper) {
+            intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
+    }else {
+            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+    }
     }
 
     @Override

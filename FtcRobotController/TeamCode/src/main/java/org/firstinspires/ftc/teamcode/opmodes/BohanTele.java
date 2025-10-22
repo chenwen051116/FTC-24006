@@ -11,10 +11,9 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
@@ -26,68 +25,130 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 import java.util.List;
 
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class BohanTele extends LinearOpMode {
-    private Robot robot;
-    private final Robot.Side side = Robot.Side.Red;
+@TeleOp
+public class BohanTele extends CommandOpMode {
+    private Drivetrain drivetrain;
+    private Intake intake;
+    private Shooter shooter;
+    private MyLimelight limelight;
+
+    private boolean xjustpressed = false;
+    private boolean xholding = false;
+    private boolean yjustpressed = false;
+    private boolean yholding = false;
 
 
-        @Override
-        public void runOpMode() {
-            Robot robot = new Robot(hardwareMap,side);
-            robot.init();
-            telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-            GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
-            GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
-            ToggleButtonReader autoReader = new ToggleButtonReader(
-                   gamepadEx1, GamepadKeys.Button.X
-            );
-            waitForStart();
-            while (opModeIsActive()) {
-                robot.update();
-                robot.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.7*gamepad1.right_stick_x);
-                if (gamepad1.a) {
-                    robot.shooter.toggleRPM();
-                }
-                if(autoReader.getState()){
-                    robot.setDrivetrainStatus(Drivetrain.DriveStatus.Autofocusing);
-                }
-                else{
-                    robot.setDrivetrainStatus(Drivetrain.DriveStatus.Tele);
-                }
 
-                if (gamepad1.right_trigger > 0.3 ){
-                    robot.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                }else if (gamepad1.left_trigger > 0.3){
-                    robot.setIntakeState(Intake.IntakeTransferState.Split_Out);
-                }else if (gamepad1.right_bumper) {
-                    robot.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-                }else {
-                    robot.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                }
+    @Override
+    public void initialize() { //Init button on DriverHUB
+        //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-                telemetry.addData("Shooter Target RPM", robot.shooter.getTargetRPM());
-                telemetry.addData("Shooter Current RPM", robot.shooter.getFlyWheelRPM());
-                telemetry.addData("Shooter At Target", robot.shooter.isAtTargetRPM() ? "YES" : "NO");
-                telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
-                telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
-                telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
-                telemetry.addData("Apriltag dist", robot.limelight.getDis());
-                telemetry.addData("Apriltag X", robot.limelight.getX());
-                telemetry.addData("Apriltag(PoI) Tx", robot.limelight.getTx());
-                telemetry.addData("Apriltag ID", robot.limelight.getAprilTagID());
-                telemetry.addData("Pitch", robot.limelight.getPitch());
-                telemetry.addData("State", robot.drivetrain.llTx);
-                telemetry.addData("State2", robot.drivetrain.drivestatus);
-                telemetry.update();
+        GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
+        GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
+        //Subsystems
+        drivetrain = new Drivetrain(hardwareMap);
+        drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
+        intake = new Intake(hardwareMap);
+        intake.setSwingBarPos(0.4);
+        intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
+        shooter = new Shooter(hardwareMap);
+        limelight = new MyLimelight(hardwareMap);
+        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+
+
+        //Commands
+        LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
+        //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
+
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
+        //DRIVER TWO
+    }
+
+
+    @Override
+    public void run() {
+        CommandScheduler.getInstance().run();
+        shooter.periodic();
+        if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+            intake.updateAutoshoot(true);
+            intake.updateautotranse(shooter.isAtTargetRPM());
+            shooter.updateDis(limelight.getDis());
+            shooter.updateFocused(limelight.isFocused());
         }
-    }
+        else{
+            intake.updateAutoshoot(false);
+        }
 
-    }
+        if(gamepad1.x){
+            if(!xholding){
+                xjustpressed = true;
+                xholding = true;
+            }
+        }
+        else{
+            xholding = false;
+            xjustpressed = false;
+        }
 
+        if(gamepad1.y){
+            if(!yholding){
+                yjustpressed = true;
+                yholding = true;
+            }
+        }
+        else{
+            yholding = false;
+            yjustpressed = false;
+        }
+        if(yjustpressed&&shooter.shooterStatus != Shooter.ShooterStatus.Shooting){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
+                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+            }
+            else{
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+            yjustpressed = false;
+        }
+        if(xjustpressed){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+            else{
+                shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+            }
+            xjustpressed = false;
+
+        }
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
+        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
+        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
+        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
+        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
+        telemetry.addData("Apriltag dist", limelight.getDis());
+        telemetry.addData("Apriltag X", limelight.getX());
+        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
+        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
+        telemetry.addData("Pitch", limelight.getPitch());
+        telemetry.addData("Shooterdis", shooter.distance);
+
+
+//        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
+//        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
+//        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
+//        telemetry.addData("BR Power", drivetrain.getBackRightPower());
+        telemetry.update();
+    }
+}
 
