@@ -128,7 +128,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM() - 60)&&getFlyWheelRPM()>2600;
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-10)&&getFlyWheelRPM()>2600;
     }
 
     // Store current motor power for telemetry/graphing
@@ -269,7 +269,7 @@ public class Shooter extends SubsystemBase {
             completeStop();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
-            setTargetRPM(2500);
+            setTargetRPM(2200);
         }
     }
     public void updateTelemetry() {
