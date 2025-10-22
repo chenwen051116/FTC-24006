@@ -47,8 +47,8 @@ public class Shooter extends SubsystemBase {
 
     public static double RPMThresh = 110;
 
-    public static double Autoshort = 3050;
-    public static double Autolong = 3500;
+    public static double Autoshort = 3040;
+    public static double Autolong = 3390;
 
 
     public enum ShooterStatus {
