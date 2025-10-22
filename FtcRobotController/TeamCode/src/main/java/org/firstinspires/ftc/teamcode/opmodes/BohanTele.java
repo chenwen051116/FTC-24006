@@ -58,7 +58,8 @@ public class BohanTele extends CommandOpMode {
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
-
+        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         limelight.initRedPipeline(); //TEMPORARY
 
         //Commands
