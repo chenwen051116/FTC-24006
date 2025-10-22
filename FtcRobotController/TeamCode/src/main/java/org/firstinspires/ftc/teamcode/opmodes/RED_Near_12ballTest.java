@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 
 @Autonomous(name = "RED_Near_12ball")
-public class RED_Near_12ball extends OpMode {
+public class RED_Near_12ballTest extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
