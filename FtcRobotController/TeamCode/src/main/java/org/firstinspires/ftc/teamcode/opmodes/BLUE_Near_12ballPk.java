@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 
-@Autonomous(name = "RED_Near_12balltest")
-public class RED_Near_12ballTest extends OpMode {
+@Autonomous(name = "RED_Near_12ballPk")
+public class BLUE_Near_12ballPk extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
@@ -23,22 +23,22 @@ public class RED_Near_12ballTest extends OpMode {
 
     private int pathState = 0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(-40.53817, -29.4827, 0.83604);
-    private final Pose GatePose = new Pose(-0.6099,-34.4572, 1.600);
-    private final Pose PrepGather1 = new Pose(-23.0954, -27.4628, 0);
+    private final Pose ShootPose1 = new Pose(-40.53817, 29.4827, -0.83604);
+    private final Pose GatePose = new Pose(-0.6099,34.4572, -1.600);
+    private final Pose PrepGather1 = new Pose(-23.0954, 27.4628, 0);
 
-    private final Pose FinishGather1 = new Pose(-6.4513, -27.4628, 0);
+    private final Pose FinishGather1 = new Pose(-6.4513, 27.4628, 0);
 
-    private final Pose PrepGather2 = new Pose(-26.0954, -49.0732, 0);
+    private final Pose PrepGather2 = new Pose(-26.0954, 49.0732, 0);
 
-    private final Pose FinishGather2 = new Pose(-6.4513, -51.0732, 0);
+    private final Pose FinishGather2 = new Pose(-6.4513, 51.0732, 0);
 
-    private final Pose PrepGather3 = new Pose(-26.0954, -70.1802, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(-26.0954, 70.1802, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(-6.4513, -75.1802, 0);
+    private final Pose FinishGather3 = new Pose(-6.4513, 75.1802, 0);
 
-    private final Pose GatePassby = new Pose(-23.0954, -27.4628, 1.5647);
-    private final Pose Park = new Pose(-26.0954, -49.0732, 0.83604);
+    private final Pose GatePassby = new Pose(-23.0954, 27.4628, -1.5647);
+    private final Pose Park = new Pose(-26.0954, 49.0732, -0.83604);
 
 
     private boolean firstshooting = false;
@@ -328,11 +328,11 @@ public class RED_Near_12ballTest extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     setPathState(15);
                 }
-                break;
-            case 15:
-                if(!follower.isBusy()) {
-                    setPathState(16);
-                }
+//                break;
+//            case 15:
+//                if(!follower.isBusy()) {
+//                    setPathState(16);
+//                }
 
         }
     }
