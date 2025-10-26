@@ -29,7 +29,7 @@ public class BLUE_Near_12ballPk extends OpMode {
 
     private final Pose FinishGather1 = new Pose(-6.4513, 27.4628, 0);
 
-    private final Pose PrepGather2 = new Pose(-26.0954, 49.0732, 0);
+    private final Pose PrepGather2 = new Pose(-26.0954, 47.0732, 0);
 
     private final Pose FinishGather2 = new Pose(-6.4513, 51.0732, 0);
 
