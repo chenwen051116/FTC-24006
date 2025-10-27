@@ -222,7 +222,7 @@ public class Shooter extends SubsystemBase {
     public void updateAim() {
         distance = abs(distance);
         if (distance > 3.25){
-            setTargetRPM(3850);
+            setTargetRPM(3650);
         }
         else if (distance < 1.4){
             setTargetRPM(100*distance+2750);
@@ -232,7 +232,7 @@ public class Shooter extends SubsystemBase {
         }
 
         if (distance < 0.01){
-            setTargetRPM(3500);
+            setTargetRPM(3600);
         }
 
         if(automode&&autoLonger){
