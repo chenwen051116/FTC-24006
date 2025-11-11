@@ -128,7 +128,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-10)&&getFlyWheelRPM()>2600;
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-10)&&getFlyWheelRPM()>2600&&(focused||automode);
     }
 
     // Store current motor power for telemetry/graphing
@@ -209,7 +209,9 @@ public class Shooter extends SubsystemBase {
     }
 
     public void completeStop() {
+        setTargetRPM(0);
         setFlywheelPower(0);
+
         pidController.reset();
     }
 
@@ -262,7 +264,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
         updateFlywheelPID();
-        if(shooterStatus == ShooterStatus.Shooting && focused){
+        if(shooterStatus == ShooterStatus.Shooting){
             updateAim();
         }
         else if(shooterStatus == ShooterStatus.Stop){
