@@ -45,10 +45,10 @@ public class Shooter extends SubsystemBase {
 
     public double PIDoutput;
 
-    public static double RPMThresh = 110;
+    public static double RPMThresh = 100;
 
-    public static double Autoshort = 3040;
-    public static double Autolong = 3390;
+    public static double Autoshort = 2650;
+    public static double Autolong = 3200;
 
 
     public enum ShooterStatus {
@@ -128,7 +128,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-10)&&getFlyWheelRPM()>2600&&(focused||automode);
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
     }
 
     // Store current motor power for telemetry/graphing
@@ -223,19 +223,16 @@ public class Shooter extends SubsystemBase {
 
     public void updateAim() {
         distance = abs(distance);
-        if (distance > 3.25){
-            setTargetRPM(3650);
+        if (distance > 2.5){
+            setTargetRPM(327*distance+2194);
         }
         else if (distance < 1.4){
-            setTargetRPM(100*distance+2750);
+            setTargetRPM(2600);
         }
         else{
-            setTargetRPM(200*distance+2750);
+            setTargetRPM(508*distance+1842);
         }
 
-        if (distance < 0.01){
-            setTargetRPM(3600);
-        }
 
         if(automode&&autoLonger){
             setTargetRPM(Autolong);
@@ -243,6 +240,7 @@ public class Shooter extends SubsystemBase {
         else if(automode&&!autoLonger){
             setTargetRPM(Autoshort);
         }
+       // setTargetRPM(aimRPM);
     }
 
 
@@ -271,7 +269,7 @@ public class Shooter extends SubsystemBase {
             completeStop();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
-            setTargetRPM(2200);
+            setTargetRPM(2000);
         }
     }
     public void updateTelemetry() {

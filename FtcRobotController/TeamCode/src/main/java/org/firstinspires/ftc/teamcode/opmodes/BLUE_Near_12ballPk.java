@@ -23,7 +23,7 @@ public class BLUE_Near_12ballPk extends OpMode {
 
     private int pathState = 0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(-40.53817, 29.4827, -0.83604);
+    private final Pose ShootPose1 = new Pose(-40.53817, 29.4827, -0.81604);
     private final Pose GatePose = new Pose(-0.6099,34.4572, -1.600);
     private final Pose PrepGather1 = new Pose(-23.0954, 27.4628, 0);
 

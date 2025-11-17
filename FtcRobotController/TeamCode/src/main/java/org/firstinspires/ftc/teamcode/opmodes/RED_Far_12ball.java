@@ -25,7 +25,7 @@ public class RED_Far_12ball extends OpMode {
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(9.4033, 1.4877, -0.406764);
 
-     private final Pose ShootPose2 = new Pose(71.9996,-1.5216,-0.7225);
+     private final Pose ShootPose2 = new Pose(71.9996,-1.5216,-0.7525);
     private final Pose PrepGather1 = new Pose(24.7910, -17.19286, -1.590508);
 
     private final Pose FinishGather1 = new Pose(24.7910, -37.2588, -1.590508);
@@ -150,11 +150,11 @@ public class RED_Far_12ball extends OpMode {
                 }
                 break;
             case 3:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getY()<34){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getY()< 25){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }
@@ -208,11 +208,11 @@ public class RED_Far_12ball extends OpMode {
                 }
                 break;
             case 7:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getY()<34){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getY()< 25){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }
@@ -264,11 +264,11 @@ public class RED_Far_12ball extends OpMode {
                 }
                 break;
             case 11:
-                if(follower.getPose().getY()<-34){
+                if(follower.getPose().getY()<34){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
+                else if (follower.getPose().getY()< 25){
                     intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
                     intake.periodic();
                 }

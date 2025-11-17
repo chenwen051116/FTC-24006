@@ -23,9 +23,9 @@ public class BLUE_Far_12ball extends OpMode {
 
     private int pathState =0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(9.4033, -1.4877, 0.406764);
+    private final Pose ShootPose1 = new Pose(9.4033, -1.4877, 0.416764);
 
-    private final Pose ShootPose2 = new Pose(71.9996,1.5216,0.7225);
+    private final Pose ShootPose2 = new Pose(71.9996,1.5216,0.7425);
     private final Pose PrepGather1 = new Pose(24.7910, 17.19286, 1.590508);
 
     private final Pose FinishGather1 = new Pose(24.7910, 37.2588, 1.590508);

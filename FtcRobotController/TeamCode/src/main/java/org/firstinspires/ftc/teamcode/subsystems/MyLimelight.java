@@ -78,7 +78,7 @@ public class MyLimelight extends SubsystemBase {
     }
 
     public boolean isFocused(){
-        return abs(getTx()) < 0.1;
+        return abs(getTx()) < 3;
     }
     public double getDis() {
         // Fetch most recent vision result each scheduler loop
