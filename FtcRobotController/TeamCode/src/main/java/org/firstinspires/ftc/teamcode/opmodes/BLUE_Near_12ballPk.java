@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 
-@Autonomous(name = "BlUE_Near_12ball")
+@Autonomous(name = "BlUE_Near_12ball_old_version")
 public class BLUE_Near_12ballPk extends OpMode {
 
     private Follower follower;
