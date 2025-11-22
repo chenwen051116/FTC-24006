@@ -39,7 +39,7 @@ public class RED_Near_12ball extends OpMode {
 
     private final Pose GatePassby = new Pose(-23.0954, -27.4628, 1.5647);
 
-    private final Pose Park = new Pose(-26.0954, 49.0732, -0.83604);
+    private final Pose Park = new Pose(-26.0954, -49.0732, 0.83604);
     private boolean firstshooting = false;
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
