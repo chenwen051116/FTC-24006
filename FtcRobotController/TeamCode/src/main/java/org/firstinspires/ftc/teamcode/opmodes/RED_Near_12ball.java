@@ -39,7 +39,7 @@ public class RED_Near_12ball extends OpMode {
 
     private final Pose GatePassby = new Pose(-23.0954, -27.4628, 1.5647);
 
-
+    private final Pose Park = new Pose(-26.0954, 49.0732, -0.83604);
     private boolean firstshooting = false;
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
@@ -101,6 +101,11 @@ public class RED_Near_12ball extends OpMode {
 
                 .addPath(new BezierLine(FinishGather3, ShootPose1))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), ShootPose1.getHeading())
+                .build();
+        lastOutPath = follower.pathBuilder()
+
+                .addPath(new BezierLine(ShootPose1, Park))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), Park.getHeading())
                 .build();
 //
 //        lastOutPath = follower.pathBuilder()
@@ -314,11 +319,11 @@ public class RED_Near_12ball extends OpMode {
                     }
                     break;
                 }
-//            case 14:
-//                if(!follower.isBusy()) {
-//                    follower.followPath(lastOutPath);
-//                    setPathState(15);
-//                }
+            case 14:
+                if(!follower.isBusy()) {
+                    follower.followPath(lastOutPath);
+                    setPathState(15);
+                }
 //                break;
 //            case 15:
 //                if(!follower.isBusy()) {
