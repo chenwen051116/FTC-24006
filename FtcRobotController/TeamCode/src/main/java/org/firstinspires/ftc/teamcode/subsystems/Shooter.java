@@ -52,6 +52,7 @@ public class Shooter extends SubsystemBase {
 
 
     public enum ShooterStatus {
+        
         Stop,Idling,Shooting
     }
 
