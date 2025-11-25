@@ -219,7 +219,6 @@ public class Shooter extends SubsystemBase {
     public void toggleRPM() {
         setTargetRPM(aimRPM);
         shooterStatus = ShooterStatus.Shooting;
-
     }
 
     public void updateAim() {
