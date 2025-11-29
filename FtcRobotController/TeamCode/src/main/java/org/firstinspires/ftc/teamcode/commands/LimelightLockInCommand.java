@@ -13,7 +13,7 @@ public class LimelightLockInCommand extends CommandBase {
     Drivetrain drivetrain;
     MyLimelight limelight;
     Gamepad gamepad1;
-    public static double Kp = 0.018;
+    public static double Kp = 0.03;
 
     public LimelightLockInCommand(Drivetrain drivetrain, MyLimelight limelight, Gamepad gamepad1) { //()里传参
         this.drivetrain = drivetrain; //this. = instance variable(上面的), 右面的 = ()里的

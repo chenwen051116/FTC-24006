@@ -20,7 +20,7 @@ public class DriveInTeleOpCommand extends CommandBase {
 
     @Override
     public void execute() { //scheduler periodically calls the function
-            drivetrain.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.7*gamepad1.right_stick_x);
+            drivetrain.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.9*gamepad1.right_stick_x);
     }
 
     @Override
