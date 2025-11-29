@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class BohanTele extends CommandOpMode {
     private Intake intake;
     private Shooter shooter;
     private MyLimelight limelight;
+    private Turret turret;
 
     private boolean xjustpressed = false;
     private boolean xholding = false;
@@ -60,13 +62,15 @@ public class BohanTele extends CommandOpMode {
         limelight = new MyLimelight(hardwareMap);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+        turret = new Turret(hardwareMap);
+
 
 
         //Commands
-        LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
+        //LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
+        //gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
@@ -79,14 +83,26 @@ public class BohanTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
         shooter.periodic();
+        turret.periodic();
+        limelight.periodic();
+        intake.periodic();
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
+            if(shooter.reverIntake){
+                intake.updateAutoshoot(false);
+                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+            }
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
-            shooter.updateFocused(limelight.isFocused());
+            //shooter.updateFocused(limelight.isFocused());
+            shooter.updateFocused(true);
+            turret.updateAutoShoot(true);
+            turret.tx = limelight.getTx();
+
         }
         else{
             intake.updateAutoshoot(false);
+            turret.updateAutoShoot(false);
         }
 
         if(gamepad1.x){
@@ -131,7 +147,7 @@ public class BohanTele extends CommandOpMode {
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
+        telemetry.addData("PIDoutput", turret.turretpidOut);
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
         telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
@@ -142,6 +158,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Apriltag ID", limelight.getAprilTagID());
         telemetry.addData("Pitch", limelight.getPitch());
         telemetry.addData("Shooterdis", shooter.distance);
+        telemetry.addData("Limelightpipe", limelight.getpipeline());
 
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());

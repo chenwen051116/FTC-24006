@@ -7,10 +7,12 @@ import static java.lang.Math.abs;
 import android.health.connect.datatypes.units.Power;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.util.Timer;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,9 +24,9 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 27;  // Proportional gain
+    public static double Kp = 20;  // Proportional gain
     public static double Ki = 0.01; // Integral gain
-    public static double Kd = -10;    // Derivative gain
+    public static double Kd = 5;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -42,6 +44,7 @@ public class Shooter extends SubsystemBase {
     public boolean automode = false;
 
     public boolean autoLonger = true;
+    public static double shootInterval = 0;
 
     public double PIDoutput;
 
@@ -49,6 +52,20 @@ public class Shooter extends SubsystemBase {
 
     public static double Autoshort = 2650;
     public static double Autolong = 3200;
+
+    public static double shootLowbar = 200;
+
+    public double rpmdiff = 0;
+
+    public static double rpmdiffthresh = 50;
+
+    public double realtargetRPM = 0;
+
+    public static double lowerrpmDiffThresh = -100;
+
+    public double lastrpm = 0;
+    public boolean reverIntake = false;
+    public Timer shootTimer;
 
 
     public enum ShooterStatus {
@@ -65,20 +82,21 @@ public class Shooter extends SubsystemBase {
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
-
+        shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
 
         // Configure motors
-        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+       shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        shooterLeft.setDirection(DcMotor.Direction.FORWARD);
-        shooterRight.setDirection(DcMotor.Direction.REVERSE);
+       shooterLeft.setDirection(DcMotor.Direction.FORWARD);
+        shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  // Has encoder
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // No encoder
+
 
         // Set PID tolerance (adjustable via static parameter)
         pidController.setTolerance(tolerance);
@@ -100,10 +118,10 @@ public class Shooter extends SubsystemBase {
     public void setShooterStatus(ShooterStatus status){
         shooterStatus = status;
     }
-    public double getFlyWheelVelocity() {
-        return shooterLeft.getVelocity() * (2.0 * Math.PI) / 60.0; // Convert RPM to rad/s
-
-    }
+//    public double getFlyWheelVelocity() {
+//        return shooterLeft.getVelocity() * (2.0 * Math.PI) / 60.0; // Convert RPM to rad/s
+//
+//    }
 
     public void updateDis(double dis){
         distance = dis;
@@ -129,7 +147,21 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
+        //return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
+        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
+        if(isDeccel()){
+            shootTimer.resetTimer();
+            return false;
+        }
+        else{
+
+            return shootTimer.getElapsedTimeSeconds() > shootInterval && abs(rpmdiff)<rpmdiffthresh&&getFlyWheelRPM()>1000&&(focused||automode);
+        }
+
+    }
+
+    public boolean isDeccel(){
+        return rpmdiff<lowerrpmDiffThresh;
     }
 
     // Store current motor power for telemetry/graphing
@@ -152,11 +184,17 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Idling;
     }
     public void updateFlywheelPID() {
+
         shooterLeft.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
         shooterRight.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
 
         shooterLeft.setVelocity(targetRPM*28/60);
-        shooterRight.setVelocity(targetRPM*28/60);
+        shooterRight.setVelocity(-targetRPM*28/60);
+        rpmdiff = lastrpm-getFlyWheelRPM();
+        lastrpm = getFlyWheelRPM();
+        if(rpmdiff < rpmdiffthresh){
+            realtargetRPM = getFlyWheelRPM();
+        }
 //        if (targetRPM > 0) {
 //            // Update PID parameters and tolerance in case they were changed via dashboard
 //            pidController.setPID(Kp, Ki, Kd);
@@ -222,25 +260,25 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateAim() {
-        distance = abs(distance);
-        if (distance > 2.5){
-            setTargetRPM(327*distance+2244);
-        }
-        else if (distance < 1.4){
-            setTargetRPM(2600);
-        }
-        else{
-            setTargetRPM(508*distance+1842);
-        }
-
-
-        if(automode&&autoLonger){
-            setTargetRPM(Autolong);
-        }
-        else if(automode&&!autoLonger){
-            setTargetRPM(Autoshort);
-        }
-       // setTargetRPM(aimRPM);
+//        distance = abs(distance);
+//        if (distance > 2.5){
+//            setTargetRPM(327*distance+2244);
+//        }
+//        else if (distance < 1.4){
+//            setTargetRPM(2600);
+//        }
+//        else{
+//            setTargetRPM(508*distance+1842);
+//        }
+//
+//
+//        if(automode&&autoLonger){
+//            setTargetRPM(Autolong);
+//        }
+//        else if(automode&&!autoLonger){
+//            setTargetRPM(Autoshort);
+//        }
+        setTargetRPM(aimRPM);
     }
 
 

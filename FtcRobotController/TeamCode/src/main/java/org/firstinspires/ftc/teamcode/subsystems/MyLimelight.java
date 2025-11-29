@@ -20,22 +20,24 @@ public class MyLimelight extends SubsystemBase {
     private final Limelight3A limelight;
     private LLResult aprilTagLatestResult;
     private final ElapsedTime timer = new ElapsedTime();
-    private boolean llenable = false;
+    private boolean llenable = true;
 
     public MyLimelight(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // fast updates
-
+        limelight.pipelineSwitch(0);
     }
 
 
-
+public int getpipeline(){
+        return limelight.getStatus().getPipelineIndex();
+}
     public void initBluePipeline(){
-        limelight.pipelineSwitch(7);
+        limelight.pipelineSwitch(1);
         limelight.start();
     }
     public void initRedPipeline(){
-        limelight.pipelineSwitch(8);
+        limelight.pipelineSwitch(0);
         limelight.start();
     }
     public void initPatternPipeline(){
@@ -114,7 +116,7 @@ public class MyLimelight extends SubsystemBase {
     @Override
     public void periodic() {
         // This is called automatically by FTCLib’s scheduler every cycle
-        if (llenable) {
+        if (llenable&&limelight.getLatestResult() != null&&limelight.getLatestResult().isValid()) {
             aprilTagLatestResult = limelight.getLatestResult();
         }
     }
