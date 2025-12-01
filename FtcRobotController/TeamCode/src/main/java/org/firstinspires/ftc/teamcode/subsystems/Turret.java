@@ -39,6 +39,7 @@ public class Turret extends SubsystemBase {
     public static int targetpos = 0;
 
     public int currentpos = 0;
+    public double aimangle = 0;
 
     public double tx =0;
     public double turretpidOut;
@@ -46,6 +47,8 @@ public class Turret extends SubsystemBase {
     private final PIDController pidController;
 
     public static double tolerance = 1;
+
+    public static double arctoDegree = 162.42;
 
 
     // Constructor for intake motors
@@ -72,6 +75,17 @@ public class Turret extends SubsystemBase {
 
     public int getPos(){
         return turretMotor.getCurrentPosition();
+    }
+
+    public void settoangle(double arcangle){
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+            turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        turretMotor.setPower(1);
+        turretMotor.setTargetPosition((int) floor(arcangle*arctoDegree));
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     public void focusMode(){
@@ -120,7 +134,9 @@ public class Turret extends SubsystemBase {
         turretMotor.setPower(0.6);
         targetpos = 0;
         turretMotor.setTargetPosition(targetpos);
-        turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     // Standardization of the two functions
@@ -135,7 +151,8 @@ public class Turret extends SubsystemBase {
         if(shooterAuto || autoForce) {
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
-            focusMode();
+            //focusMode();
+            settoangle(aimangle);
         }
         else{
             centering();

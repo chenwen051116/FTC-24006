@@ -133,7 +133,6 @@ public class BLUE_Near_12ballgate extends OpMode {
                         shooter.updateFocused(true);
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
-
                         firstshooting = true;
                     }
                     else{

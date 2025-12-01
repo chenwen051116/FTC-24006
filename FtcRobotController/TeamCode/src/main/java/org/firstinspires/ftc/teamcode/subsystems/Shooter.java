@@ -14,19 +14,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @Config
 public class Shooter extends SubsystemBase {
+    private final Servo shootLimit;
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 20;  // Proportional gain
-    public static double Ki = 0.01; // Integral gain
-    public static double Kd = 5;    // Derivative gain
+    public static double Kp = 10;  // Proportional gain
+    public static double Ki = 0; // Integral gain
+    public static double Kd = 0;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -67,6 +69,8 @@ public class Shooter extends SubsystemBase {
     public boolean reverIntake = false;
     public Timer shootTimer;
 
+    public static double shootlimitpos = 0;
+
 
     public enum ShooterStatus {
         
@@ -82,6 +86,7 @@ public class Shooter extends SubsystemBase {
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
+        shootLimit = hardwareMap.get(Servo.class,"shootLimit");
         shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
@@ -100,6 +105,7 @@ public class Shooter extends SubsystemBase {
 
         // Set PID tolerance (adjustable via static parameter)
         pidController.setTolerance(tolerance);
+        shootbarOn();
 
         focused = false;
 
@@ -147,16 +153,16 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        //return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
-        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
-        if(isDeccel()){
-            shootTimer.resetTimer();
-            return false;
-        }
-        else{
-
-            return shootTimer.getElapsedTimeSeconds() > shootInterval && abs(rpmdiff)<rpmdiffthresh&&getFlyWheelRPM()>1000&&(focused||automode);
-        }
+        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
+//        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
+//        if(isDeccel()){
+//            shootTimer.resetTimer();
+//            return false;
+//        }
+//        else{
+//
+//            return shootTimer.getElapsedTimeSeconds() > shootInterval && abs(rpmdiff)<rpmdiffthresh&&getFlyWheelRPM()>1000&&(focused||automode);
+//        }
 
     }
 
@@ -164,6 +170,13 @@ public class Shooter extends SubsystemBase {
         return rpmdiff<lowerrpmDiffThresh;
     }
 
+    public void shootbarOn(){
+        shootLimit.setPosition(0.65);
+    }
+
+    public void shootbarOff(){
+        shootLimit.setPosition(1);
+    }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
     private double currentPIDOutput = 0.0;
@@ -299,15 +312,19 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
+        //shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
             updateAim();
+                shootbarOff();
         }
         else if(shooterStatus == ShooterStatus.Stop){
             completeStop();
+            shootbarOn();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             setTargetRPM(2000);
+            shootbarOn();
         }
     }
     public void updateTelemetry() {

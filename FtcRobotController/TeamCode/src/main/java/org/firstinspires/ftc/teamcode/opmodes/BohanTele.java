@@ -17,6 +17,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.DriveInTeleOpCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
@@ -98,6 +99,7 @@ public class BohanTele extends CommandOpMode {
             shooter.updateFocused(true);
             turret.updateAutoShoot(true);
             turret.tx = limelight.getTx();
+            turret.aimangle = drivetrain.getturretangle();
 
         }
         else{
@@ -158,7 +160,10 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Apriltag ID", limelight.getAprilTagID());
         telemetry.addData("Pitch", limelight.getPitch());
         telemetry.addData("Shooterdis", shooter.distance);
-        telemetry.addData("Limelightpipe", limelight.getpipeline());
+        telemetry.addData("tuaimanglex", turret.aimangle);
+        telemetry.addData("x", drivetrain.pin.getPosition().getX(DistanceUnit.MM));
+        telemetry.addData("y", drivetrain.pin.getPosition().getY(DistanceUnit.MM));
+        telemetry.addData("h", drivetrain.pin.getHeading(AngleUnit.RADIANS));
 
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());

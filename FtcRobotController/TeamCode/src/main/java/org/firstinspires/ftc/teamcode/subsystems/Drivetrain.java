@@ -1,14 +1,42 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static java.lang.Math.abs;
+
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.bylazar.configurables.PanelsConfigurables;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
 public class Drivetrain extends SubsystemBase {
+
     //declare motors.. 声明，赋值...
     private final DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
+
+    private MecanumDrive drive;
+
+    //public Follower follower;
+
+    public GoBildaPinpointDriver pin;
+
+    public Pose bluenearAimPos = new Pose(418.15,703,0);
+
+    public Pose rednearAimPos = new Pose(418.15,-753,0);
+    public Pose aimPos = bluenearAimPos;
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -16,7 +44,15 @@ public class Drivetrain extends SubsystemBase {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRight");
+       // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
+//        follower = Constants.createFollower(hardwareMap);
+//        PanelsConfigurables.INSTANCE.refreshClass(this);
+//        follower.startTeleopDrive();
+//        follower.update();
+//        follower.setStartingPose(new Pose(0,0,0));
+        pin = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
+        pin.setPosition(new Pose2D(DistanceUnit.MM,0,0, AngleUnit.RADIANS,0));
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -30,11 +66,11 @@ public class Drivetrain extends SubsystemBase {
         double y = frontBackVelocity;
         double x = strafeVelocity;
         double rx = turnVelocity;
-
+        //follower.update();
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1);
         double frontLeftPower = (y + x + rx) / denominator;
         double backLeftPower = (y - x + rx) / denominator;
         double frontRightPower = (y - x - rx) / denominator;
@@ -44,6 +80,7 @@ public class Drivetrain extends SubsystemBase {
         frontRightMotor.setPower(frontRightPower);
         backLeftMotor.setPower(backLeftPower);
         backRightMotor.setPower(backRightPower);
+        pin.update();
     }
     // 在 Drivetrain getter
     public double getFrontLeftPower() {
@@ -61,6 +98,19 @@ public class Drivetrain extends SubsystemBase {
     public double getBackRightPower() {
         return backRightMotor.getPower();
     }
+
+    public double getturretangle(){
+        double x = pin.getPosition().getX(DistanceUnit.MM)-aimPos.getX();
+        double y = pin.getPosition().getY(DistanceUnit.MM)-aimPos.getY();
+        double h = pin.getHeading(AngleUnit.RADIANS);
+        if(y>0){
+            return 1*h-Math.atan(abs(y)/abs(x));
+        }
+        else{
+            return 1*h+Math.atan(abs(y)/abs(x));
+        }
+    }
+
 
 
 }

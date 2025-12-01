@@ -15,6 +15,8 @@ import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -31,7 +33,7 @@ import java.util.List;
 
 @TeleOp
 public class Shootertest extends CommandOpMode {
-    private Shooter shooter;
+    private DcMotorEx motor;
 
 
 
@@ -43,9 +45,7 @@ public class Shootertest extends CommandOpMode {
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
-        shooter = new Shooter(hardwareMap);
-        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-
+        motor = hardwareMap.get(DcMotorEx.class,"turret");
 
     }
 
@@ -53,14 +53,12 @@ public class Shootertest extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-        shooter.updateFlywheelPID();
-        shooter.toggleRPM();
 
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
-        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
-
+        telemetry.addData("pos", motor.getCurrentPosition() );
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
+//        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
+//
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
