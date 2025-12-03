@@ -72,6 +72,8 @@ public class Shooter extends SubsystemBase {
     public static double shootlimitpos = 0;
 
     public boolean rpmreached = false;
+
+    public boolean forceShooting = false;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting
@@ -156,7 +158,7 @@ public class Shooter extends SubsystemBase {
         if(getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh){
             rpmreached = true;
         }
-        return (rpmreached&&getFlyWheelRPM()>1800&&(focused||automode));
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode))||(forceShooting&&rpmreached);
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
 //        if(isDeccel()){
 //            shootTimer.resetTimer();
@@ -201,16 +203,29 @@ public class Shooter extends SubsystemBase {
     }
     public void updateFlywheelPID() {
 
-        shooterLeft.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
-        shooterRight.setVelocityPIDFCoefficients(Kp,Ki,Kd,0);
-
-        shooterLeft.setVelocity(targetRPM*28/60);
-        shooterRight.setVelocity(-targetRPM*28/60);
-        rpmdiff = lastrpm-getFlyWheelRPM();
-        lastrpm = getFlyWheelRPM();
-        if(rpmdiff < rpmdiffthresh){
-            realtargetRPM = getFlyWheelRPM();
+        if(forceShooting){
+            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+            shooterLeft.setPower(1);
+            shooterRight.setPower(-1);
         }
+        else {
+            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
+                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, 0);
+            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, 0);
+
+            shooterLeft.setVelocity(targetRPM * 28 / 60);
+            shooterRight.setVelocity(-targetRPM * 28 / 60);
+            rpmdiff = lastrpm - getFlyWheelRPM();
+            lastrpm = getFlyWheelRPM();
+            if (rpmdiff < rpmdiffthresh) {
+                realtargetRPM = getFlyWheelRPM();
+            }
 //        if (targetRPM > 0) {
 //            // Update PID parameters and tolerance in case they were changed via dashboard
 //            pidController.setPID(Kp, Ki, Kd);
@@ -251,6 +266,7 @@ public class Shooter extends SubsystemBase {
 //            shooterLeft.setPower(0);
 //            shooterRight.setPower(0);
 //        }
+        }
     }
 
     /**

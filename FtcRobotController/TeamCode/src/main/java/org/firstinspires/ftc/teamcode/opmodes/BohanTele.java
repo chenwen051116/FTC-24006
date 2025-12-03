@@ -106,7 +106,7 @@ public class BohanTele extends CommandOpMode {
             intake.updateAutoshoot(false);
             turret.updateAutoShoot(false);
         }
-
+        shooter.forceShooting = gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting;
         if(gamepad1.x){
             if(!xholding){
                 xjustpressed = true;
@@ -147,6 +147,8 @@ public class BohanTele extends CommandOpMode {
             xjustpressed = false;
 
         }
+
+
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("PIDoutput", turret.turretpidOut);
