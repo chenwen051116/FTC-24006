@@ -27,8 +27,8 @@ public class Shooter extends SubsystemBase {
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
     public static double Kp = 10;  // Proportional gain
-    public static double Ki = 0; // Integral gain
-    public static double Kd = 0;    // Derivative gain
+    public static double Ki = 3.4; // Integral gain
+    public static double Kd = 60;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
     public double PIDoutput;
 
-    public static double RPMThresh = 100;
+    public static double RPMThresh = 40;
 
     public static double Autoshort = 2650;
     public static double Autolong = 3200;
@@ -71,7 +71,7 @@ public class Shooter extends SubsystemBase {
 
     public static double shootlimitpos = 0;
 
-
+    public boolean rpmreached = false;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting
@@ -153,7 +153,10 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode);
+        if(getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh){
+            rpmreached = true;
+        }
+        return (rpmreached&&getFlyWheelRPM()>1800&&(focused||automode));
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
 //        if(isDeccel()){
 //            shootTimer.resetTimer();
@@ -319,10 +322,12 @@ public class Shooter extends SubsystemBase {
                 shootbarOff();
         }
         else if(shooterStatus == ShooterStatus.Stop){
+            rpmreached = false;
             completeStop();
             shootbarOn();
         }
         else if(shooterStatus == ShooterStatus.Idling) {
+            rpmreached = false;
             setTargetRPM(2000);
             shootbarOn();
         }
