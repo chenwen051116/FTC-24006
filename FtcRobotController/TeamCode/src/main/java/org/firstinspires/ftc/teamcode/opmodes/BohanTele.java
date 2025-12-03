@@ -163,9 +163,9 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Pitch", limelight.getPitch());
         telemetry.addData("Shooterdis", shooter.distance);
         telemetry.addData("tuaimanglex", turret.aimangle);
-        telemetry.addData("x", drivetrain.pin.getPosition().getX(DistanceUnit.MM));
-        telemetry.addData("y", drivetrain.pin.getPosition().getY(DistanceUnit.MM));
-        telemetry.addData("h", drivetrain.pin.getHeading(AngleUnit.RADIANS));
+        telemetry.addData("x", drivetrain.follower.getPose().getX());
+        telemetry.addData("y", drivetrain.follower.getPose().getY());
+        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
 
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());

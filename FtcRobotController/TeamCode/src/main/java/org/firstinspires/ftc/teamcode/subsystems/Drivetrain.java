@@ -104,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
     public double getturretangle(){
         double x = follower.getPose().getX()-aimPos.getX();
         double y = follower.getPose().getY()-aimPos.getY();
-        double h = follower.getHeading();
+        double h = follower.getPose().getHeading();
         if(y>0){
             return 1*h-Math.atan(abs(y)/abs(x));
         }
