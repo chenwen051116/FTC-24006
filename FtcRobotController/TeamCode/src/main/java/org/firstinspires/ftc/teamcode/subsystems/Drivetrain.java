@@ -66,8 +66,8 @@ public class Drivetrain extends SubsystemBase {
     public void teleDrive(double frontBackVelocity, double strafeVelocity, double turnVelocity) {
         // What the follower *effectively* sees – include your sign flips here:
         double y  = frontBackVelocity;
-        double x  = -strafeVelocity;
-        double rx = -turnVelocity;
+        double x  = strafeVelocity;
+        double rx = turnVelocity;
 
         // Recreate mecanum mixing
         double fl = y + x + rx;

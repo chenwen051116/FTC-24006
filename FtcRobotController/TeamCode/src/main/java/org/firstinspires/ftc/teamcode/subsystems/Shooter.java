@@ -7,6 +7,8 @@ import static java.lang.Math.abs;
 import android.health.connect.datatypes.units.Power;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.pedropathing.util.Timer;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -29,6 +31,13 @@ public class Shooter extends SubsystemBase {
     public static double Kp = 10;  // Proportional gain
     public static double Ki = 3.4; // Integral gain
     public static double Kd = 60;    // Derivative gain
+
+    public static double Kf = 0;    // Derivative gain
+
+    public static double kS = 3.4; // Integral gain
+    public static double kV = 60;    // Derivative gain
+
+    public static double kA = 0;    // Derivative gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -80,6 +89,9 @@ public class Shooter extends SubsystemBase {
     }
 
 
+    // Create a new SimpleMotorFeedforward with gains kS, kV, and kA
+    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
+
 
     public ShooterStatus shooterStatus = ShooterStatus.Stop;
 
@@ -88,6 +100,8 @@ public class Shooter extends SubsystemBase {
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
+
+
         shootLimit = hardwareMap.get(Servo.class,"shootLimit");
         shootTimer = new Timer();
         // Initialize PID controller
@@ -216,8 +230,9 @@ public class Shooter extends SubsystemBase {
                 shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, 0);
-            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, 0);
+
+            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
+            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
 
             shooterLeft.setVelocity(targetRPM * 28 / 60);
             shooterRight.setVelocity(-targetRPM * 28 / 60);
