@@ -76,6 +76,8 @@ public class BohanTele extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.blueinit());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.redinit());
         //DRIVER TWO
     }
 
@@ -95,8 +97,8 @@ public class BohanTele extends CommandOpMode {
             }
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
-            //shooter.updateFocused(limelight.isFocused());
-            shooter.updateFocused(true);
+            shooter.updateFocused(limelight.isFocused());
+            //shooter.updateFocused(true);
             turret.updateAutoShoot(true);
             turret.tx = limelight.getTx();
             turret.aimangle = drivetrain.getturretangle();
@@ -106,7 +108,7 @@ public class BohanTele extends CommandOpMode {
             intake.updateAutoshoot(false);
             turret.updateAutoShoot(false);
         }
-        shooter.forceShooting = gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting;
+        shooter.forceShooting = (gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
         if(gamepad1.x){
             if(!xholding){
                 xjustpressed = true;
@@ -166,7 +168,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("x", drivetrain.follower.getPose().getX());
         telemetry.addData("y", drivetrain.follower.getPose().getY());
         telemetry.addData("h", drivetrain.follower.getPose().getHeading());
-
+        telemetry.addData("dis", drivetrain.getdis());
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());

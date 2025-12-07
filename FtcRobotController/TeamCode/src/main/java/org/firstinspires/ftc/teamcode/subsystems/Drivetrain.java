@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -21,6 +23,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
+@Config
 public class Drivetrain extends SubsystemBase {
 
     //declare motors.. 声明，赋值...
@@ -33,9 +36,13 @@ public class Drivetrain extends SubsystemBase {
 
     public GoBildaPinpointDriver pin;
 
-    public Pose bluenearAimPos = new Pose(418.15,703,0);
+    public static double xpos = 15.46;
+    public static double ypos = -25.67;
 
-    public Pose rednearAimPos = new Pose(418.15,-753,0);
+    public Pose bluenearAimPos = new Pose(15.46,-25.67,0);
+
+
+    public Pose rednearAimPos = new Pose(15.46,25.67,0);
     public Pose aimPos = bluenearAimPos;
 
     //servos
@@ -133,16 +140,34 @@ public class Drivetrain extends SubsystemBase {
 //        return backRightMotor.getPower();
 //    }
 
+
+    public double getdis(){
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        return sqrt(x*x+y*y);
+    }
     public double getturretangle(){
-        double x = follower.getPose().getX()-aimPos.getX();
-        double y = follower.getPose().getY()-aimPos.getY();
+//        double x = follower.getPose().getX()-aimPos.getX();
+//        double y = follower.getPose().getY()-aimPos.getY();
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
         double h = follower.getPose().getHeading();
-        if(y>0){
+        if(y<0){
             return 1*h-Math.atan(abs(y)/abs(x));
         }
         else{
             return 1*h+Math.atan(abs(y)/abs(x));
         }
+    }
+
+    public void redinit(){
+        xpos = rednearAimPos.getX();
+        ypos = rednearAimPos.getY();
+    }
+
+    public void blueinit(){
+        xpos = bluenearAimPos.getX();
+        ypos = bluenearAimPos.getY();
     }
 
 

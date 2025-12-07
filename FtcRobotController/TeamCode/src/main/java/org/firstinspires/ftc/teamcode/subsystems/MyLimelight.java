@@ -80,7 +80,7 @@ public int getpipeline(){
     }
 
     public boolean isFocused(){
-        return abs(getTx()) < 3;
+        return abs(getTx()) < 5;
     }
     public double getDis() {
         // Fetch most recent vision result each scheduler loop

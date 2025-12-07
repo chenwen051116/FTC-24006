@@ -26,13 +26,13 @@ public class Turret extends SubsystemBase {
     public boolean shooterAuto = false;
 
     public boolean autoForce = false;
-    public static double pidDiff = 0.1;
+    public static double pidDiff = 0;
 
-    public static double kp = -0.012;
+    public static double kp = -0.015;
     public static double kd = 0.0000;
-    public static double ki = 0.0000;
+    public static double ki = 0.001;
 
-    public static double kf = 100000000;
+    public static double kf = 0;
     public static double highkp = -2;
     public static double txbar = 5;
 
@@ -49,6 +49,8 @@ public class Turret extends SubsystemBase {
     public static double tolerance = 1;
 
     public static double arctoDegree = 162.42;
+
+    public static double llbar = 8;
 
 
     // Constructor for intake motors
@@ -78,6 +80,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void settoangle(double arcangle){
+
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
             turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
@@ -89,6 +92,8 @@ public class Turret extends SubsystemBase {
     }
 
     public void focusMode(){
+
+
         pidController.setPIDF(kp,ki,kd,kf);
         pidController.setTolerance(tolerance);
         pidController.setSetPoint(0);
@@ -128,15 +133,18 @@ public class Turret extends SubsystemBase {
     }
 
     public void centering(){
-        if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
-            turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-        turretMotor.setPower(0.6);
-        targetpos = 0;
-        turretMotor.setTargetPosition(targetpos);
-        if(turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
+
+            if (turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            turretMotor.setPower(0.6);
+            targetpos = 0;
+            turretMotor.setTargetPosition(targetpos);
+            if (turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+
     }
 
     // Standardization of the two functions
@@ -152,7 +160,13 @@ public class Turret extends SubsystemBase {
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             //focusMode();
-            settoangle(aimangle);
+            if(tx>llbar||tx<-llbar||abs(tx)<0.01) {
+                settoangle(aimangle);
+            }
+            else{
+                focusMode();
+            }
+
         }
         else{
             centering();
