@@ -28,11 +28,11 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 1500;  // Proportional gain
-    public static double Ki = 0.8; // Integral gain
+    public static double Kp = 900;  // Proportional gain
+    public static double Ki = 1; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
-    public static double Kf = 3.5;    // Derivative gain
+    public static double Kf = 1.8;    // Derivative gain
 
     public static double kS = 3.4; // Integral gain
     public static double kV = 60;    // Derivative gain
@@ -169,15 +169,16 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        if(getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh){
+        if(getTargetRPM() < getFlyWheelRPM()&& targetRPM>2200){
             rpmreached = true;
         }
+        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
+        if(isDeccel()){
+            shootTimer.resetTimer();
+            return false;
+        }
         return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode))||(forceShooting&&rpmreached);
-//        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
-//        if(isDeccel()){
-//            shootTimer.resetTimer();
-//            return false;
-//        }
+
 //        else{
 //
 //            return shootTimer.getElapsedTimeSeconds() > shootInterval && abs(rpmdiff)<rpmdiffthresh&&getFlyWheelRPM()>1000&&(focused||automode);
