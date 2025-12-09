@@ -34,10 +34,7 @@ public class Shooter extends SubsystemBase {
 
     public static double Kf = 1.8;    // Derivative gain
 
-    public static double kS = 3.4; // Integral gain
-    public static double kV = 60;    // Derivative gain
-
-    public static double kA = 0;    // Derivative gain
+    public static double kS = 0; // Integral gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -90,9 +87,6 @@ public class Shooter extends SubsystemBase {
 
 
     // Create a new SimpleMotorFeedforward with gains kS, kV, and kA
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
-
-
     public ShooterStatus shooterStatus = ShooterStatus.Stop;
 
 
@@ -115,8 +109,8 @@ public class Shooter extends SubsystemBase {
         shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
-        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);  // Has encoder
-        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // No encoder
+        shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // Has encoder
+        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
 
 
         // Set PID tolerance (adjustable via static parameter)
@@ -227,61 +221,61 @@ public class Shooter extends SubsystemBase {
             shooterRight.setPower(-1);
         }
         else {
-            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
-                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-
-            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
-            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
-
-            shooterLeft.setVelocity(targetRPM * 28 / 60);
-            shooterRight.setVelocity(-targetRPM * 28 / 60);
+//            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
+//                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            }
+//
+//            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
+//            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
+//
+//            shooterLeft.setVelocity(targetRPM * 28 / 60);
+//            shooterRight.setVelocity(-targetRPM * 28 / 60);
             rpmdiff = lastrpm - getFlyWheelRPM();
             lastrpm = getFlyWheelRPM();
             if (rpmdiff < rpmdiffthresh) {
                 realtargetRPM = getFlyWheelRPM();
             }
-//        if (targetRPM > 0) {
-//            // Update PID parameters and tolerance in case they were changed via dashboard
-//            pidController.setPID(Kp, Ki, Kd);
-//            pidController.setTolerance(tolerance);
-//
-//            double currentRPM = getFlyWheelRPM();
-//            double rpmDifference = currentRPM - targetRPM;
-//
-//            double pidinput = rpmDifference/100.0;
-//            double power;
-//            double pidOutput = 0.0;
-//
-//            if (abs(rpmDifference) <= pidThreshold) {
-//                // Use PID control for fine-tuning within ±pidThreshold RPM
-//                pidOutput = pidController.calculate(pidinput)+0.5;
-//                power = Math.max(0.0, Math.min(1.0, pidOutput)); //smart brahhh
-//            } else if (rpmDifference < pidThreshold) {
-//                // Large speed increase needed - use full power
-//                power = 1.0;
-//                pidOutput = 1.0; // PID would output 1.0 but we're overriding
-//            } else {
-//                // Large speed decrease needed - use no power (let inertia slow it down)
-//                power = 0.0;
-//                pidOutput = 0.0; // PID would output negative but we're overriding
-//            }
-//            PIDoutput = power;
-//            // Store values for telemetry/graphing
-//            currentMotorPower = power;
-//            currentPIDOutput = pidOutput;
-//
-//            // Apply power to both motors
-//            shooterLeft.setPower(power);
-//            shooterRight.setPower(power);
-//        } else {
-//            // Stop motors if no target set
-//            currentMotorPower = 0.0;
-//            currentPIDOutput = 0.0;
-//            shooterLeft.setPower(0);
-//            shooterRight.setPower(0);
-//        }
+        if (targetRPM > 0) {
+            // Update PID parameters and tolerance in case they were changed via dashboard
+            pidController.setPID(Kp, Ki, Kd);
+            pidController.setTolerance(tolerance);
+
+            double currentRPM = getFlyWheelRPM();
+            double rpmDifference = currentRPM - targetRPM;
+
+            double pidinput = rpmDifference/100.0;
+            double power;
+            double pidOutput = 0.0;
+
+            if (abs(rpmDifference) <= pidThreshold) {
+                // Use PID control for fine-tuning within ±pidThreshold RPM
+                pidOutput = pidController.calculate(pidinput)+kS*targetRPM;
+                power = Math.max(-1.0, Math.min(1.0, pidOutput)); //smart brahhh
+            } else if (rpmDifference < pidThreshold) {
+                // Large speed increase needed - use full power
+                power = 1.0;
+                pidOutput = 1.0; // PID would output 1.0 but we're overriding
+            } else {
+                // Large speed decrease needed - use no power (let inertia slow it down)
+                power = 0.0;
+                pidOutput = 0.0; // PID would output negative but we're overriding
+            }
+            PIDoutput = power;
+            // Store values for telemetry/graphing
+            currentMotorPower = power;
+            currentPIDOutput = pidOutput;
+
+            // Apply power to both motors
+            shooterLeft.setPower(power);
+            shooterRight.setPower(-power);
+        } else {
+            // Stop motors if no target set
+            currentMotorPower = 0.0;
+            currentPIDOutput = 0.0;
+            shooterLeft.setPower(0);
+            shooterRight.setPower(0);
+        }
         }
     }
 
