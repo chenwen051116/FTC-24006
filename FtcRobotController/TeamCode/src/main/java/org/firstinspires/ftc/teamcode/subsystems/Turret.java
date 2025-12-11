@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -52,11 +53,19 @@ public class Turret extends SubsystemBase {
 
     public static double llbar = 8;
 
+    public DigitalChannel magLim;
+
+    public boolean isManeulCentering = false;
+
+    public boolean centeringDir = false;
 
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
         turretMotor = hardwareMap.get(DcMotor.class, "turret");
+        magLim = hardwareMap.get(DigitalChannel.class,"maglim");
+        magLim.setMode(DigitalChannel.Mode.INPUT);
+
         // We do not have distance sensor thus the following object should be removed
         // in future updates
         // The intake does not need to necessarily move at steady
@@ -77,6 +86,10 @@ public class Turret extends SubsystemBase {
 
     public int getPos(){
         return turretMotor.getCurrentPosition();
+    }
+
+    public boolean isCentered(){
+        return !magLim.getState();
     }
 
     public void settoangle(double arcangle){
@@ -147,6 +160,29 @@ public class Turret extends SubsystemBase {
 
     }
 
+    public void manuelCenter(){
+        if(centeringDir){
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+            turretMotor.setPower(0.4);
+            if(isCentered()){
+                turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                isManeulCentering = false;
+            }
+        }
+        else{
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+            turretMotor.setPower(-0.4);
+            if(isCentered()){
+                turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                isManeulCentering = false;
+            }
+        }
+    }
+
     // Standardization of the two functions
     public void updateAutoShoot(boolean auto){
         shooterAuto = auto;
@@ -156,7 +192,10 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() { // FTC 0.001s cycle
         currentpos = turretMotor.getCurrentPosition();
-        if(shooterAuto || autoForce) {
+        if(isManeulCentering){
+            manuelCenter();
+        }
+        else if(shooterAuto || autoForce) {
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             //focusMode();
