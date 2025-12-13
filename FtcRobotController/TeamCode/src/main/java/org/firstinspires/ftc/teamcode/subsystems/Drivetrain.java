@@ -36,15 +36,15 @@ public class Drivetrain extends SubsystemBase {
 
     public GoBildaPinpointDriver pin;
 
-    public static double xpos = -126.67;
-    public static double ypos = 129.01;
+    public static double xpos = 126.67;
+    public static double ypos = -129.01;
 
-    public static double angle = -1.5707963;
+    public static double angle = 0;
 
-    public Pose bluenearAimPos = new Pose(15.46,-25.67,angle);
+    public Pose bluenearAimPos = new Pose(xpos,ypos,angle);
 
 
-    public Pose rednearAimPos = new Pose(15.46,25.67,angle);
+    public Pose rednearAimPos = new Pose(xpos,-ypos,angle);
     public Pose aimPos = bluenearAimPos;
 
     //servos
