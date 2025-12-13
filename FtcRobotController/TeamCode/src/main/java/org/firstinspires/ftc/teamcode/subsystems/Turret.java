@@ -59,6 +59,8 @@ public class Turret extends SubsystemBase {
 
     public boolean centeringDir = false;
 
+    private boolean maneulCenteringFlag = false;
+
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
@@ -176,9 +178,17 @@ public class Turret extends SubsystemBase {
                 turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             turretMotor.setPower(-0.4);
-            if(isCentered()){
-                turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                isManeulCentering = false;
+            if(isCentered()||maneulCenteringFlag){
+                if(!maneulCenteringFlag) {
+                    turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    turretMotor.setTargetPosition(-25);
+                }
+                maneulCenteringFlag = true;
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if(!turretMotor.isBusy()) {
+                    maneulCenteringFlag = false;
+                    isManeulCentering = false;
+                }
             }
         }
     }

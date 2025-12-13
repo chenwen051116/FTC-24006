@@ -36,13 +36,15 @@ public class Drivetrain extends SubsystemBase {
 
     public GoBildaPinpointDriver pin;
 
-    public static double xpos = 15.46;
-    public static double ypos = -25.67;
+    public static double xpos = -126.67;
+    public static double ypos = 129.01;
 
-    public Pose bluenearAimPos = new Pose(15.46,-25.67,0);
+    public static double angle = -1.5707963;
+
+    public Pose bluenearAimPos = new Pose(15.46,-25.67,angle);
 
 
-    public Pose rednearAimPos = new Pose(15.46,25.67,0);
+    public Pose rednearAimPos = new Pose(15.46,25.67,angle);
     public Pose aimPos = bluenearAimPos;
 
     //servos
@@ -151,7 +153,7 @@ public class Drivetrain extends SubsystemBase {
 //        double y = follower.getPose().getY()-aimPos.getY();
         double x = follower.getPose().getX()-xpos;
         double y = follower.getPose().getY()-ypos;
-        double h = follower.getPose().getHeading();
+        double h = follower.getPose().getHeading()+angle;
         if(y<0){
             return 1*h-Math.atan(abs(y)/abs(x));
         }
