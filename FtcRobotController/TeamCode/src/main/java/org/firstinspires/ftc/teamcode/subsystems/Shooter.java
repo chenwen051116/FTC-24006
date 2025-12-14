@@ -205,15 +205,15 @@ public class Shooter extends SubsystemBase {
     }
     public void updateFlywheelPID() {
 
-        if(forceShooting){
-            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER){
-                shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-            shooterLeft.setPower(1);
-            shooterRight.setPower(-1);
-        }
-        else {
+//        if(forceShooting){
+//            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+//                shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            }
+//            shooterLeft.setPower(1);
+//            shooterRight.setPower(-1);
+//        }
+//        else {
 //            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
 //                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -269,7 +269,7 @@ public class Shooter extends SubsystemBase {
             shooterLeft.setPower(0);
             shooterRight.setPower(0);
         }
-        }
+//        }
     }
 
     /**
