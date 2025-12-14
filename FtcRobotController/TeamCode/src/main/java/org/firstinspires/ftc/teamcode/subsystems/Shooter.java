@@ -156,7 +156,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        if(getTargetRPM() < getFlyWheelRPM()&& targetRPM>2200){
+        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM>2200){
             rpmreached = true;
         }
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
