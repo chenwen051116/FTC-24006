@@ -116,7 +116,7 @@ public int getpipeline(){
     @Override
     public void periodic() {
         // This is called automatically by FTCLib’s scheduler every cycle
-        if (llenable&&limelight.getLatestResult() != null&&limelight.getLatestResult().isValid()) {
+        if (llenable) {
             aprilTagLatestResult = limelight.getLatestResult();
         }
     }
