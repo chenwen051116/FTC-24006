@@ -87,6 +87,15 @@ public class BohanTele extends CommandOpMode {
         turret.periodic();
         limelight.periodic();
         intake.periodic();
+        if(gamepad1.dpad_left){
+            drivetrain.TredFblue = true;
+        }
+        if(gamepad1.dpad_right){
+            drivetrain.TredFblue = false;
+        }
+        if(gamepad1.dpad_up){
+            drivetrain.originInit();
+        }
         if(gamepad1.a&&gamepad1.left_bumper){
             turret.isManeulCentering = true;
             turret.centeringDir = false;

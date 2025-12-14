@@ -47,6 +47,11 @@ public class Drivetrain extends SubsystemBase {
     public Pose rednearAimPos = new Pose(xpos,-ypos,angle);
     public Pose aimPos = bluenearAimPos;
 
+    public Pose blueInitpose = new Pose(0.3524,-0.4717,3.141);
+    public Pose redInitpose = new Pose(-0.02583,-0.09087,3.141);
+
+    public static boolean TredFblue = false;
+
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -145,6 +150,19 @@ public class Drivetrain extends SubsystemBase {
 //        return backRightMotor.getPower();
 //    }
 
+    public void localizerInit(double x, double y, double heading){
+        follower.setPose(new Pose(x,y,heading));
+    }
+
+
+    public void originInit(){
+        if(TredFblue){
+            localizerInit(redInitpose.getX(),redInitpose.getY(),redInitpose.getHeading());
+        }
+        else{
+            localizerInit(blueInitpose.getX(),blueInitpose.getY(),blueInitpose.getHeading());
+        }
+    }
 
     public double getdis(){
         double x = follower.getPose().getX()-xpos;
