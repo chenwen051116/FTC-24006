@@ -61,7 +61,7 @@ public class Turret extends SubsystemBase {
     public boolean centeringDir = false;
 
     private boolean maneulCenteringFlag = false;
-    public static double centerVel = 10;
+    public static double centerVel = 80;
 
     // Constructor for intake motors
 
