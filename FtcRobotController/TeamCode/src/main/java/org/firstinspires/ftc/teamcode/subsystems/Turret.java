@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -22,7 +23,7 @@ public class Turret extends SubsystemBase {
     // battery is not yet installed and configured
     // shooter is not yet installed and configured
 
-    private final DcMotor turretMotor;
+    private final DcMotorEx turretMotor;
 
     public boolean shooterAuto = false;
 
@@ -60,11 +61,12 @@ public class Turret extends SubsystemBase {
     public boolean centeringDir = false;
 
     private boolean maneulCenteringFlag = false;
+    public static double centerVel = 10;
 
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
-        turretMotor = hardwareMap.get(DcMotor.class, "turret");
+        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         magLim = hardwareMap.get(DigitalChannel.class,"maglim");
         magLim.setMode(DigitalChannel.Mode.INPUT);
 
@@ -164,20 +166,20 @@ public class Turret extends SubsystemBase {
 
     public void manuelCenter(){
         if(centeringDir){
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-            turretMotor.setPower(0.4);
+            turretMotor.setVelocity(centerVel);
             if(isCentered()){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 isManeulCentering = false;
             }
         }
         else{
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-            turretMotor.setPower(-0.4);
+            turretMotor.setVelocity(-centerVel);
             if(isCentered()){
                 maneulCenteringFlag = true;
             }
