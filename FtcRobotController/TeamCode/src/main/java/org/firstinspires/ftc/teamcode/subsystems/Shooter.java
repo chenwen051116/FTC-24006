@@ -214,16 +214,16 @@ public class Shooter extends SubsystemBase {
 //            shooterRight.setPower(-1);
 //        }
 //        else {
-//            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
-//                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            }
-//
-//            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
-//            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
-//
-//            shooterLeft.setVelocity(targetRPM * 28 / 60);
-//            shooterRight.setVelocity(-targetRPM * 28 / 60);
+            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_USING_ENCODER){
+                shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+
+            shooterLeft.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
+            shooterRight.setVelocityPIDFCoefficients(Kp, Ki, Kd, Kf);
+
+            shooterLeft.setVelocity(targetRPM * 28 / 60);
+            shooterRight.setVelocity(-targetRPM * 28 / 60);
             rpmdiff = lastrpm - getFlyWheelRPM();
             lastrpm = getFlyWheelRPM();
             if (rpmdiff < rpmdiffthresh) {
