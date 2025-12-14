@@ -78,6 +78,9 @@ public class Drivetrain extends SubsystemBase {
         double x  = strafeVelocity;
         double rx = turnVelocity;
 
+        if(abs(rx)<0.1){
+            rx = 0;
+        }
         // Recreate mecanum mixing
         double fl = y + x + rx;
         double bl = y - x + rx;
