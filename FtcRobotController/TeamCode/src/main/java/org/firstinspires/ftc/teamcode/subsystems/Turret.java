@@ -178,17 +178,13 @@ public class Turret extends SubsystemBase {
                 turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             turretMotor.setPower(-0.4);
-            if(isCentered()||maneulCenteringFlag){
-                if(!maneulCenteringFlag) {
-                    turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    turretMotor.setTargetPosition(-25);
-                }
+            if(isCentered()){
                 maneulCenteringFlag = true;
-                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                if(!turretMotor.isBusy()) {
-                    maneulCenteringFlag = false;
-                    isManeulCentering = false;
-                }
+            }
+            if(!isCentered()&&maneulCenteringFlag){
+                turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                isManeulCentering = false;
+                maneulCenteringFlag = false;
             }
         }
     }
