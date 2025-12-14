@@ -159,11 +159,11 @@ public class Shooter extends SubsystemBase {
         if(getTargetRPM() < getFlyWheelRPM()&& targetRPM>2200){
             rpmreached = true;
         }
-        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
-        if(isDeccel()){
-            shootTimer.resetTimer();
-            return false;
-        }
+//        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
+//        if(isDeccel()){
+//            shootTimer.resetTimer();
+//            return false;
+//        }
         return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode))||(forceShooting&&rpmreached);
 
 //        else{

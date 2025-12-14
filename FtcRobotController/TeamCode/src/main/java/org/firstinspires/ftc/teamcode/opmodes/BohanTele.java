@@ -106,10 +106,10 @@ public class BohanTele extends CommandOpMode {
         }
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
-            if(shooter.reverIntake){
-                intake.updateAutoshoot(false);
-                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
-            }
+//            if(shooter.reverIntake){
+//                intake.updateAutoshoot(false);
+//                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+//            }
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
             shooter.updateFocused(limelight.isFocused());
