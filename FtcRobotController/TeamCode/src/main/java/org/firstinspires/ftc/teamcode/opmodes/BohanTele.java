@@ -128,7 +128,7 @@ public class BohanTele extends CommandOpMode {
             if(!xholding){
                 xjustpressed = true;
                 xholding = true;
-            }
+          }
         }
         else{
             xholding = false;
@@ -184,6 +184,10 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("y", drivetrain.follower.getPose().getY());
         telemetry.addData("h", drivetrain.follower.getPose().getHeading());
         telemetry.addData("dis", drivetrain.getdis());
+        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
+        telemetry.addData("ShotterForce?", shooter.forceShooting);
+        telemetry.addData("Rpm_Range", shooter.rpmreached);
+
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());

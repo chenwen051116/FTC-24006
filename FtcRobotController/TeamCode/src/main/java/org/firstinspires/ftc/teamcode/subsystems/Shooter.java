@@ -178,11 +178,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(1);
+        shootLimit.setPosition(0.94);
     }
 
     public void shootbarOff(){
-        shootLimit.setPosition(0.62);
+        shootLimit.setPosition(0.395);
     }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
@@ -334,7 +334,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-        //shootLimit.setPosition(shootlimitpos);
+//        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
             updateAim();
