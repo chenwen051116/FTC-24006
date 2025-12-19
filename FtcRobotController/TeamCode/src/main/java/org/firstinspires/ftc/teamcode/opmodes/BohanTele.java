@@ -116,6 +116,7 @@ public class BohanTele extends CommandOpMode {
             //shooter.updateFocused(true);
 
 
+
         }
         else{
             intake.updateAutoshoot(false);
@@ -123,6 +124,7 @@ public class BohanTele extends CommandOpMode {
         }
 
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
+            shooter.ododis = drivetrain.getdis();
             turret.updateAutoShoot(true);
             turret.tx = limelight.getTx();
             turret.aimangle = drivetrain.getturretangle();
