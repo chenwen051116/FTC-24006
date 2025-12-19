@@ -21,13 +21,13 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.13;  // Proportional gain
+    public static double Kp = 0.15;  // Proportional gain
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
     public static double Kf = 1.8;    // Friction gain
 
-    public static double kv = 0.00020; // FeedForward velocity gain
+    public static double kv = 0.000205; // FeedForward velocity gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -69,6 +69,8 @@ public class Shooter extends SubsystemBase {
     public Timer shootTimer;
 
     public static double shootlimitpos = 0;
+
+    public double ododis = 0;
 
     public boolean rpmreached = false;
 
@@ -295,24 +297,21 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateAim() {
-//        distance = abs(distance);
-//        if (distance > 2.5){
-//            setTargetRPM(327*distance+2244);
-//        }
-//        else if (distance < 1.4){
-//            setTargetRPM(2600);
-//        }
-//        else{
-//            setTargetRPM(508*distance+1842);
-//        }
-//
-//
-//        if(automode&&autoLonger){
-//            setTargetRPM(Autolong);
-//        }
-//        else if(automode&&!autoLonger){
-//            setTargetRPM(Autoshort);
-//        }
+        double dis = abs(ododis);
+        if (dis > 60){
+            setTargetRPM(7.3743*dis+2148.4);
+        }
+        else if (dis <= 60){
+            setTargetRPM(-7.3743*dis+3049);
+        }
+
+
+        if(automode&&autoLonger){
+            setTargetRPM(Autolong);
+        }
+        else if(automode&&!autoLonger){
+            setTargetRPM(Autoshort);
+        }
         setTargetRPM(aimRPM);
     }
 

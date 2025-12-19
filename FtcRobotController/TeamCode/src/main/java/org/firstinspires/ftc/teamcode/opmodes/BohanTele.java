@@ -114,13 +114,20 @@ public class BohanTele extends CommandOpMode {
             shooter.updateDis(limelight.getDis());
             shooter.updateFocused(limelight.isFocused());
             //shooter.updateFocused(true);
-            turret.updateAutoShoot(true);
-            turret.tx = limelight.getTx();
-            turret.aimangle = drivetrain.getturretangle();
+
 
         }
         else{
             intake.updateAutoshoot(false);
+
+        }
+
+        if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
+            turret.updateAutoShoot(true);
+            turret.tx = limelight.getTx();
+            turret.aimangle = drivetrain.getturretangle();
+        }
+        else{
             turret.updateAutoShoot(false);
         }
         shooter.forceShooting = (gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
