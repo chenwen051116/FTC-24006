@@ -180,11 +180,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(0.94);
+        shootLimit.setPosition(0.97);
     }
 
     public void shootbarOff(){
-        shootLimit.setPosition(0.395);
+        shootLimit.setPosition(0.725);
     }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
