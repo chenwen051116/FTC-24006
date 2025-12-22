@@ -266,6 +266,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.gatepos = true;
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     follower.followPath(GatePath);
                     firstshooting = false;
                     setPathState(9);
