@@ -32,10 +32,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
     private int pathState = 0;
     private final Pose startPose = new Pose(81.21237, 0.2738, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(81.21, -8.7571,0);
-    private final Pose PrepGather1 = new Pose(91.9908, -28.6053, 0);
+    private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, -52.0297, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, -52.0297+3, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, -59.2147, 0);
@@ -67,14 +67,14 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 2;
-    public static double shoottime = 3;
+    public static double stoptime = 1.5;
+    public static double shoottime = 2;
     public static double xpos = 126.67;
     public static double ypos = -129.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.5;
+    public static double waittime = 0.7;
 
 
     public  PathChain simplePath(Pose a, Pose b){
