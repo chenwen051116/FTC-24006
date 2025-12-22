@@ -171,7 +171,9 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 follower.followPath(Shootpath1,true);
+                shooter.autoLonger = true;
                 setPathState(1);
+
                 break;
             case 1:
                 if(!follower.isBusy()) {
@@ -288,6 +290,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath3);
+                    shooter.autoLonger = false;
                     setPathState(11);
                 }
                 break;
@@ -386,6 +389,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath5);
                     setPathState(19);
+                    shooter.autoLonger = true;
                 }
                 break;
             case 19:
@@ -526,7 +530,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
-        //shooter.automode = true;
+        shooter.automode = true;
         limelight = new MyLimelight(hardwareMap);
         limelight.initRedPipeline();
         limelight.startDetect();
