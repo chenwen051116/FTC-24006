@@ -42,7 +42,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
     private final Pose GatePose = new Pose(117.5,-59.2147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, -75.80 ,0);
 
-    private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
+    private final Pose Shoot2passby = new Pose(95.7309,-59.2147,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
 
