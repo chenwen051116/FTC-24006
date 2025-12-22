@@ -27,11 +27,11 @@ public class Intake extends SubsystemBase {
 
     public boolean autoForce = false;
 
-    public static double servoDiff = 0;
+    public double servoDiff = 0;
 
-    public static double servoTestpos = 0.2;
+    public double servoTestpos = 0.2;
 
-    public static double testmode = 0;
+    public double testmode = 0;
 
 
 

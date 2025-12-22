@@ -30,15 +30,15 @@ public class Turret extends SubsystemBase {
     public boolean autoForce = false;
     public static double pidDiff = 0;
 
-    public static double kp = -0.015;
-    public static double kd = 0.0000;
-    public static double ki = 0.001;
+    public double kp = -0.015;
+    public double kd = 0.0000;
+    public double ki = 0.001;
 
-    public static double kf = 0;
-    public static double highkp = -2;
-    public static double txbar = 5;
+    public double kf = 0;
+    public double highkp = -2;
+    public double txbar = 5;
 
-    public static int targetpos = 0;
+    public int targetpos = 0;
 
     public int currentpos = 0;
     public double aimangle = 0;
@@ -48,11 +48,11 @@ public class Turret extends SubsystemBase {
 
     private final PIDController pidController;
 
-    public static double tolerance = 1;
+    public double tolerance = 1;
 
-    public static double arctoDegree = 162.42;
+    public double arctoDegree = 162.42;
 
-    public static double llbar = 8;
+    public double llbar = 8;
 
     public DigitalChannel magLim;
 
@@ -61,7 +61,7 @@ public class Turret extends SubsystemBase {
     public boolean centeringDir = false;
 
     private boolean maneulCenteringFlag = false;
-    public static double centerVel = 80;
+    public double centerVel = 80;
 
     public boolean automode = false;
 
