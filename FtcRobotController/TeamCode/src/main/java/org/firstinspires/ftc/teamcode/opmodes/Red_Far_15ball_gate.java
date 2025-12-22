@@ -433,7 +433,7 @@ public class Red_Far_15ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = follower.getPose();
-                    Drivetrain.TredFblue = false;
+                    Drivetrain.TredFblue = true;
                     break;
                 }
                 break;
