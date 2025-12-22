@@ -67,7 +67,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1;
+    public static double stoptime = 2;
     public static double shoottime = 2;
     public static double xpos = 126.67;
     public static double ypos = -129.01;
@@ -86,15 +86,30 @@ public class BlUE_Far_15ball_gate extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = simplePath(startPose,ShootPose1);
 
-        prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
+        //prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
 
-        finishGatherPath1 = simplePath(PrepGather1,FinishGather1);
+        //finishGatherPath1 = simplePath(PrepGather1,FinishGather1);
+
+        prepGatherPath1 = follower.pathBuilder()
+
+                .addPath(new BezierLine(ShootPose1, PrepGather1))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
+                .addPath(new BezierLine(PrepGather1, FinishGather1))
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .build();
 
         Shootpath2 = simplePath(FinishGather1,ShootPose1);
+//
+//        prepGatherPath2 = simplePath(ShootPose1,PrepGather2);
+//
+//        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
+        prepGatherPath2 = follower.pathBuilder()
 
-        prepGatherPath2 = simplePath(ShootPose1,PrepGather2);
-
-        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
+                .addPath(new BezierLine(ShootPose1, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .build();
 
         GatePath = follower.pathBuilder()
 
@@ -113,15 +128,29 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
                 .build();
 
-        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
+//        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
+//
+//        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
+        prepGatherPath3 = follower.pathBuilder()
 
-        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
+                .addPath(new BezierLine(ShootPose2, PrepGather3))
+                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather3.getHeading())
+                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .build();
 
         Shootpath4 = simplePath(GatePose,ShootPose2);
 
-        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
+//        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
+//
+//        finishGatherPath4 = simplePath(PrepGather4,FinishGather4);
+        prepGatherPath4 = follower.pathBuilder()
 
-        finishGatherPath4 = simplePath(PrepGather4,FinishGather4);
+                .addPath(new BezierLine(ShootPose2, PrepGather4))
+                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather4.getHeading())
+                .addPath(new BezierLine(PrepGather4, FinishGather4))
+                .setLinearHeadingInterpolation(PrepGather4.getHeading(), FinishGather4.getHeading())
+                .build();
 
         Shootpath5 = simplePath(FinishGather4,ShootPose1);
 
@@ -218,7 +247,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 7:
                 if(!follower.isBusy()) {
-                    follower.followPath(finishGatherPath2);
+                    //follower.followPath(finishGatherPath2);
                     setPathState(8);
                 }
                 break;
@@ -286,7 +315,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 13:
                 if(!follower.isBusy()) {
-                    follower.followPath(finishGatherPath3);
+                    //follower.followPath(finishGatherPath3);
                     setPathState(14);
                 }
                 break;
@@ -329,7 +358,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 17:
                 if(!follower.isBusy()) {
-                    follower.followPath(finishGatherPath4);
+                    //follower.followPath(finishGatherPath4);
                     setPathState(18);
                 }
                 break;
@@ -402,6 +431,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
         turret.periodic();
         limelight.periodic();
         intake.periodic();
+        shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
 //            if(shooter.reverIntake){
