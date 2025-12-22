@@ -74,7 +74,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     public static double angle = 0;
 
-    public static double waittime = 1;
+    public static double waittime = 0.5;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -309,7 +309,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(13);
+                            setPathState(12);
                         }
 
                     }
