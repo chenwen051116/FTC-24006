@@ -465,9 +465,11 @@ public class BlUE_Far_15ball_gate extends OpMode {
         shooter.forceShooting = true;
         if(shooter.autoLonger){
             turretMotor.setTargetPosition(191);
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         else{
             turretMotor.setTargetPosition(130);
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
