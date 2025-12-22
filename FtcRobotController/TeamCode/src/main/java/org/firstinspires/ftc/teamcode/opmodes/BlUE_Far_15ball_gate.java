@@ -204,7 +204,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 3:
                 if(!follower.isBusy()) {
-                    follower.followPath(finishGatherPath1);
+//                    follower.followPath(finishGatherPath1);
                     setPathState(4);
                 }
                 break;
