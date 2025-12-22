@@ -63,6 +63,10 @@ public class Turret extends SubsystemBase {
     private boolean maneulCenteringFlag = false;
     public static double centerVel = 80;
 
+    public boolean automode = false;
+
+    public int autopos = 0;
+
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
@@ -79,6 +83,7 @@ public class Turret extends SubsystemBase {
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         pidController = new PIDController(kp,ki,kd);
+        automode = false;
         //intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
@@ -163,6 +168,17 @@ public class Turret extends SubsystemBase {
 
 
     }
+    public void settopos(int pos){
+        if (turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        turretMotor.setPower(1);
+        targetpos = pos;
+        turretMotor.setTargetPosition(targetpos);
+        if (turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+    }
 
     public void manuelCenter(){
         if(centeringDir){
@@ -199,24 +215,28 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void periodic() { // FTC 0.001s cycle
-        currentpos = turretMotor.getCurrentPosition();
-        if(isManeulCentering){
-            manuelCenter();
-        }
-        else if(shooterAuto || autoForce) {
-            // at shooterAuto or autoForce, the power of the DC motors are set separately
-            // thus you will need to make sure that the robot is not in these two states
-            //focusMode();
-            if(tx>llbar||tx<-llbar||abs(tx)<0.01) {
-                settoangle(aimangle);
-            }
-            else{
-                focusMode();
-            }
 
+        if(!automode) {
+            currentpos = turretMotor.getCurrentPosition();
+            if (isManeulCentering) {
+                manuelCenter();
+            } else if (shooterAuto || autoForce) {
+                // at shooterAuto or autoForce, the power of the DC motors are set separately
+                // thus you will need to make sure that the robot is not in these two states
+                //focusMode();
+                if (tx > llbar || tx < -llbar || abs(tx) < 0.01) {
+                    settoangle(aimangle);
+                } else {
+                    focusMode();
+                }
+
+            } else {
+                centering();
+            }
         }
         else{
-            centering();
+            settopos(autopos);
         }
+
     }
 }

@@ -458,6 +458,13 @@ public class BlUE_Far_15ball_gate extends OpMode {
         turret.periodic();
         limelight.periodic();
         intake.periodic();
+        turret.automode = true;
+        if(shooter.autoLonger){
+            turret.autopos = 191;
+        }
+        else{
+            turret.autopos = 130;
+        }
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
@@ -540,6 +547,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
         buildPaths();
         //follower.setStartingPose(startPose);
         follower.setPose(startPose);
+        turret.automode = true;
 
     }
 
