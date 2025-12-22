@@ -33,6 +33,8 @@ public class Intake extends SubsystemBase {
 
     public double testmode = 0;
 
+    public boolean gatepos = false;
+
 
 
 
@@ -97,8 +99,14 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
+
             intake.setPower(intakeCurrentState.intakePower);
-            setServoPos(intakeCurrentState.transServer);
+            if(!gatepos) {
+                setServoPos(intakeCurrentState.transServer);
+            }
+            else{
+                setServoPos(intakeCurrentState.transServer+0.2);
+            }
         }
         else{
             if(autoTrans){
@@ -159,5 +167,6 @@ public class Intake extends SubsystemBase {
         intakeCurrentState = IntakeTransferState.Intake_Steady;
         intake.setPower(0);
         setServoPos(intakeCurrentState.transServer);
+        gatepos = false;
     }
 }

@@ -266,6 +266,7 @@ public class Red_Far_15ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     follower.followPath(GatePath);
+                    intake.gatepos = true;
                     firstshooting = false;
                     setPathState(9);
                 }
@@ -279,7 +280,9 @@ public class Red_Far_15ball_gate extends OpMode {
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()> stoptime){
+                            intake.gatepos = false;
                             setPathState(10);
+
                             break;
                         }
 
