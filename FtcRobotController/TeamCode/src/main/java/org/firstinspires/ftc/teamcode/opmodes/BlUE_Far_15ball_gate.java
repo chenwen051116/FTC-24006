@@ -89,17 +89,17 @@ public class BlUE_Far_15ball_gate extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = simplePath(startPose,ShootPose1);
 
-        //prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
+        prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
 
-        //finishGatherPath1 = simplePath(PrepGather1,FinishGather1);
+        finishGatherPath1 = simplePath(PrepGather1,FinishGather1);
 
-        prepGatherPath1 = follower.pathBuilder()
-
-                .addPath(new BezierLine(ShootPose1, PrepGather4))
-                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather4.getHeading())
-                .addPath(new BezierLine(PrepGather4, FinishGather4))
-                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
-                .build();
+//        prepGatherPath1 = follower.pathBuilder()
+//
+//                .addPath(new BezierLine(ShootPose1, PrepGather4))
+//                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather4.getHeading())
+//                .addPath(new BezierLine(PrepGather4, FinishGather4))
+//                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+//                .build();
 
         Shootpath2 = simplePath(FinishGather4,ShootPose1);
 //
@@ -129,6 +129,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
                 .addPath(new BezierLine(Shoot2passby, ShootPose2))
                 .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
+
                 .build();
 
 //        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
@@ -212,7 +213,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 3:
                 if(!follower.isBusy()) {
-                    //follower.followPath(finishGatherPath1);
+                    follower.followPath(finishGatherPath1);
                     setPathState(4);
                 }
                 break;
