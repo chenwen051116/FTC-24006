@@ -583,21 +583,13 @@ public class BlUE_Far_15ball_gate extends OpMode {
      */
     private void resetSubsystemsForTeleop() {
         if (turret != null) {
-            turret.automode = false;
-            turret.updateAutoShoot(false);
-            turret.autoForce = false;
+            turret.resetTeleop();
         }
         if (shooter != null) {
-            shooter.automode = false;
-            shooter.forceShooting = false;
-            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-            shooter.autoLonger = true;
+            shooter.resetTeleop();
         }
         if (intake != null) {
-            intake.updateAutoshoot(false);
-            intake.updateautotranse(false);
-            intake.autoForce = false;
-            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+            intake.resetTeleop();
         }
     }
 }

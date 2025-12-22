@@ -239,4 +239,21 @@ public class Turret extends SubsystemBase {
         }
 
     }
+
+    /**
+     * Clear auto flags and stop the motor so TeleOp starts clean.
+     */
+    public void resetTeleop() {
+        automode = false;
+        shooterAuto = false;
+        autoForce = false;
+        isManeulCentering = false;
+        centeringDir = false;
+        maneulCenteringFlag = false;
+        turretpidOut = 0;
+        if (turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        turretMotor.setPower(0);
+    }
 }

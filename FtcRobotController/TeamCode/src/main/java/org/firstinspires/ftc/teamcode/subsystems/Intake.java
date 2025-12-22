@@ -148,4 +148,16 @@ public class Intake extends SubsystemBase {
             setServoPos(intakeCurrentState.transServer);
         }
     }
+
+    /**
+     * Clear auto flags and stop motors for a clean TeleOp start.
+     */
+    public void resetTeleop() {
+        shooterAuto = false;
+        autoTrans = false;
+        autoForce = false;
+        intakeCurrentState = IntakeTransferState.Intake_Steady;
+        intake.setPower(0);
+        setServoPos(intakeCurrentState.transServer);
+    }
 }

@@ -50,6 +50,7 @@ public class BohanTele extends CommandOpMode {
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        CommandScheduler.getInstance().reset(); // drop any stale commands from previous opmode
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
@@ -63,19 +64,9 @@ public class BohanTele extends CommandOpMode {
         turret = new Turret(hardwareMap);
 
         // Clear any leftover autonomous state that might still be latched on hardware
-        shooter.automode = false;
-        shooter.forceShooting = false;
-        shooter.autoLonger = true;
-        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-
-        intake.updateAutoshoot(false);
-        intake.updateautotranse(false);
-        intake.autoForce = false;
-        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-
-        turret.automode = false;
-        turret.updateAutoShoot(false);
-        turret.autoForce = false;
+        shooter.resetTeleop();
+        intake.resetTeleop();
+        turret.resetTeleop();
 
         if(Drivetrain.TredFblue){
             limelight.initRedPipeline();
