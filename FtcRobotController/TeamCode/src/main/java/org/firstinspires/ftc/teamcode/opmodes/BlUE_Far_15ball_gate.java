@@ -479,6 +479,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+        turret = new Turret(hardwareMap);
         buildPaths();
         //follower.setStartingPose(startPose);
         follower.setPose(startPose);
