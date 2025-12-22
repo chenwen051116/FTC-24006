@@ -431,13 +431,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 22:
                 if(!follower.isBusy()){
-                    turret.automode = false;
-                    shooter.automode = false;
-                    shooter.forceShooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    intake.updateAutoshoot(false);
-                    turret.updateAutoShoot(false);
+                    resetSubsystemsForTeleop();
                     Drivetrain.lastPose = follower.getPose();
                     Drivetrain.TredFblue = false;
                     break;
@@ -580,5 +574,30 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     /** We do not use this because everything should automatically disable **/
     @Override
-    public void stop() {}
+    public void stop() {
+        resetSubsystemsForTeleop();
+    }
+
+    /**
+     * Ensure all auto-only flags/powers are cleared so TeleOp does not fight leftover commands.
+     */
+    private void resetSubsystemsForTeleop() {
+        if (turret != null) {
+            turret.automode = false;
+            turret.updateAutoShoot(false);
+            turret.autoForce = false;
+        }
+        if (shooter != null) {
+            shooter.automode = false;
+            shooter.forceShooting = false;
+            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+            shooter.autoLonger = true;
+        }
+        if (intake != null) {
+            intake.updateAutoshoot(false);
+            intake.updateautotranse(false);
+            intake.autoForce = false;
+            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+        }
+    }
 }

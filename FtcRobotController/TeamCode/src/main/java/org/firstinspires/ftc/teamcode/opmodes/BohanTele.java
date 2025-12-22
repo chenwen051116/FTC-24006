@@ -60,9 +60,22 @@ public class BohanTele extends CommandOpMode {
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
-        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         turret = new Turret(hardwareMap);
+
+        // Clear any leftover autonomous state that might still be latched on hardware
+        shooter.automode = false;
+        shooter.forceShooting = false;
+        shooter.autoLonger = true;
+        shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+
+        intake.updateAutoshoot(false);
+        intake.updateautotranse(false);
+        intake.autoForce = false;
+        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+
+        turret.automode = false;
+        turret.updateAutoShoot(false);
+        turret.autoForce = false;
 
         if(Drivetrain.TredFblue){
             limelight.initRedPipeline();
