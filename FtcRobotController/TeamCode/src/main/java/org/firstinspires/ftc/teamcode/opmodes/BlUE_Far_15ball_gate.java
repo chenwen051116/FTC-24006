@@ -40,7 +40,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, -59.2147, 0);
-    private final Pose GatePose = new Pose(117.5,-59.2147, 0);
+    private final Pose GatePose = new Pose(119.5,-59.2147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, -75.80 ,0);
 
     private final Pose Shoot2passby = new Pose(95.7309,-59.2147,0);
@@ -264,9 +264,9 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 8:
                 if(!follower.isBusy()){
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    intake.gatepos = true;
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+//                    intake.gatepos = true;
+//                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     follower.followPath(GatePath);
                     firstshooting = false;
                     setPathState(9);
