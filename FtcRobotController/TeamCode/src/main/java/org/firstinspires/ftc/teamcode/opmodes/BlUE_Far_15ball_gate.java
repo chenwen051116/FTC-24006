@@ -12,6 +12,9 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -26,6 +29,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Turret;
 public class BlUE_Far_15ball_gate extends OpMode {
 
     private Follower follower;
+    private DcMotorEx turretMotor;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
     //private final ElapsedTime timer  = new ElapsedTime();
 
@@ -455,10 +459,18 @@ public class BlUE_Far_15ball_gate extends OpMode {
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
         shooter.periodic();
-        turret.periodic();
+        //turret.periodic();
         limelight.periodic();
         intake.periodic();
         shooter.forceShooting = true;
+        if(shooter.autoLonger){
+            turretMotor.setTargetPosition(191);
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        else{
+            turretMotor.setTargetPosition(130);
+            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
 //            if(shooter.reverIntake){
@@ -470,8 +482,6 @@ public class BlUE_Far_15ball_gate extends OpMode {
             shooter.updateFocused(limelight.isFocused());
             //shooter.updateFocused(true);
 
-
-
         }
         else{
             intake.updateAutoshoot(false);
@@ -480,12 +490,12 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
             shooter.ododis = getdis();
-            turret.updateAutoShoot(true);
-            turret.tx = limelight.getTx();
-            turret.aimangle = getturretangle();
+            //turret.updateAutoShoot(true);
+            //turret.tx = limelight.getTx();
+            //turret.aimangle = getturretangle();
         }
         else{
-            turret.updateAutoShoot(false);
+            //turret.updateAutoShoot(false);
         }
         autonomousPathUpdate();
 
@@ -536,10 +546,20 @@ public class BlUE_Far_15ball_gate extends OpMode {
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-        turret = new Turret(hardwareMap);
+        //turret = new Turret(hardwareMap);
         buildPaths();
         //follower.setStartingPose(startPose);
         follower.setPose(startPose);
+        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
+
+        // We do not have distance sensor thus the following object should be removed
+        // in future updates
+        // The intake does not need to necessarily move at steady
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turretMotor.setTargetPosition(0);
+        turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     }
 
