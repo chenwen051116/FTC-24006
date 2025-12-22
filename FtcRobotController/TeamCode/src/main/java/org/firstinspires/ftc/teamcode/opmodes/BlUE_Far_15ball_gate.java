@@ -184,10 +184,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                        if(timer.getElapsedTimeSeconds()>(waittime+0.5)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> (shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
@@ -463,7 +463,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
             turret.autopos = 191;
         }
         else{
-            turret.autopos = 130;
+            turret.autopos = 140;
         }
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
