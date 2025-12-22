@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
 
     public double RPMThresh = 50;
 
-    public  double Autoshort = 2660;
+    public  double Autoshort = 2640;
     public  double Autolong = 3100;
 
     public  double shootLowbar = 200;
@@ -158,7 +158,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM>2200){
+        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM>2500){
             rpmreached = true;
         }
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
@@ -166,7 +166,7 @@ public class Shooter extends SubsystemBase {
 //            shootTimer.resetTimer();
 //            return false;
 //        }
-        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1800&&(focused||automode))||(forceShooting&&rpmreached);
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2500&&(focused||automode))||(forceShooting&&rpmreached);
 
 //        else{
 //
@@ -346,7 +346,7 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(2000);
+            setTargetRPM(2400);
             shootbarOn();
         }
     }
