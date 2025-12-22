@@ -93,7 +93,7 @@ public class BohanTele extends CommandOpMode {
         shooter.periodic();
         turret.periodic();
         limelight.periodic();
-        intake.periodic();
+//        intake.periodic();
         if(gamepad1.dpad_left){
             drivetrain.TredFblue = false;
         }
