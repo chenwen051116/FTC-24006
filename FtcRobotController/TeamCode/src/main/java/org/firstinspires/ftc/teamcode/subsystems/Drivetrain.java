@@ -52,14 +52,6 @@ public class Drivetrain extends SubsystemBase {
 
     public static boolean TredFblue = false;
 
-    // dashboard tunable
-    public static double turretTolDeg = 10.0;   // tolerance / deadband
-    public static double turretMaxStepDeg = 0; // 0 = no rate limit, else limit per call
-
-    private static boolean hasLastTurretCmd = false;
-    private static double lastTurretCmdRad = 0.0;
-
-
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -177,68 +169,20 @@ public class Drivetrain extends SubsystemBase {
         double y = follower.getPose().getY()-ypos;
         return sqrt(x*x+y*y);
     }
-    private static double wrapRad(double a) {
-        // wrap to (-pi, +pi]
-        while (a <= -Math.PI) a += 2.0 * Math.PI;
-        while (a >  Math.PI) a -= 2.0 * Math.PI;
-        return a;
+    public double getturretangle(){
+//        double x = follower.getPose().getX()-aimPos.getX();
+//        double y = follower.getPose().getY()-aimPos.getY();
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        double h = follower.getPose().getHeading()+angle;
+ //       if(!TredFblue) {
+            if (y < 0) {
+                return 1 * h - Math.atan(abs(y) / abs(x));
+            } else {
+                return 1 * h + Math.atan(abs(y) / abs(x));
+            }
+
     }
-
-    private static double unwrapToNearest(double wrappedTarget, double reference) {
-        // choose an equivalent angle (target + 2k*pi) closest to reference
-        double k = Math.round((reference - wrappedTarget) / (2.0 * Math.PI));
-        return wrappedTarget + k * (2.0 * Math.PI);
-    }
-
-    private static double clamp(double v, double lo, double hi) {
-        return Math.max(lo, Math.min(hi, v));
-    }
-
-    public double getturretangle() {
-        // Robot pose
-        double rx = follower.getPose().getX();
-        double ry = follower.getPose().getY();
-        double rh = follower.getPose().getHeading() + angle; // your extra offset
-
-        // Vector FROM robot TO target (important!)
-        double dx = xpos - rx;
-        double dy = ypos - ry;
-
-        // Global angle to target
-        double worldAim = Math.atan2(dy, dx); // [-pi, pi], robust in all quadrants
-
-        // Turret angle relative to robot front
-        double relWrapped = wrapRad(worldAim - rh); // [-pi, pi]
-
-        // First call init
-        if (!hasLastTurretCmd) {
-            hasLastTurretCmd = true;
-            lastTurretCmdRad = relWrapped;
-            return lastTurretCmdRad;
-        }
-
-        // Unwrap to the equivalent angle closest to last command (prevents 180 -> -180 spin)
-        double relUnwrapped = unwrapToNearest(relWrapped, lastTurretCmdRad);
-
-        // Deadband / tolerance to ignore tiny jitter near the wrap boundary
-        double tolRad = Math.toRadians(turretTolDeg);
-        double delta = relUnwrapped - lastTurretCmdRad;
-        if (Math.abs(delta) < tolRad) {
-            return lastTurretCmdRad;
-        }
-
-        // Optional rate limit (helps if pose heading is noisy)
-        if (turretMaxStepDeg > 0) {
-            double maxStep = Math.toRadians(turretMaxStepDeg);
-            double step = clamp(delta, -maxStep, +maxStep);
-            lastTurretCmdRad += step;
-        } else {
-            lastTurretCmdRad = relUnwrapped;
-        }
-
-        return lastTurretCmdRad;
-    }
-
 
     public void redinit(){
         xpos = rednearAimPos.getX();
