@@ -64,7 +64,14 @@ public class BohanTele extends CommandOpMode {
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         turret = new Turret(hardwareMap);
 
-
+        if(Drivetrain.TredFblue){
+            limelight.initRedPipeline();
+            drivetrain.redinit();
+        }
+        else{
+            limelight.initBluePipeline();
+            drivetrain.blueinit();
+        }
 
         //Commands
         //LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);

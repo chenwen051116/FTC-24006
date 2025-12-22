@@ -52,6 +52,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static boolean TredFblue = false;
 
+    public static Pose lastPose = new Pose(0,0,0);
+
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -66,6 +68,7 @@ public class Drivetrain extends SubsystemBase {
         follower.startTeleopDrive();
         follower.update();
         follower.setStartingPose(new Pose(0,0,0));
+        follower.setPose(lastPose);
 //        pin = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
 //        pin.setPosition(new Pose2D(DistanceUnit.MM,0,0, AngleUnit.RADIANS,0));
 //        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
