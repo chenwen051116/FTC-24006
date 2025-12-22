@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -407,6 +408,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+
                             setPathState(20);
                         }
 
@@ -429,6 +431,15 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 break;
             case 22:
                 if(!follower.isBusy()){
+                    turret.automode = false;
+                    shooter.automode = false;
+                    shooter.forceShooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    intake.updateAutoshoot(false);
+                    turret.updateAutoShoot(false);
+                    Drivetrain.lastPose = follower.getPose();
+                    Drivetrain.TredFblue = false;
                     break;
                 }
                 break;
