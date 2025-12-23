@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "Red_Far_15ball_gate")
+@Autonomous(name = "Red_Far_18ball_gate")
 
-public class Red_Far_15ball_gate extends OpMode {
+public class Red_Far_18ball_gate extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;

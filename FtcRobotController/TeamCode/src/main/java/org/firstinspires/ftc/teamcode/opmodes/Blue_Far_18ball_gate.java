@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "BlUE_Far_15ball_gate")
+@Autonomous(name = "Blue_Far_18ball_gate")
 
-public class BlUE_Far_15ball_gate extends OpMode {
+public class Blue_Far_18ball_gate extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer, timer;
@@ -36,7 +36,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
     private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, -52.0297+3, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, -52.0297-5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, -59.2147, 0);
@@ -45,7 +45,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     private final Pose Shoot2passby = new Pose(95.7309,-59.2147,0);
 
-    private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(91.9908, -75.8070+8, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
@@ -53,7 +53,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.42, 0.06455, 0);
 
-    private final Pose Park = GatePassby;
+    private final Pose Park = new Pose(121.21, -20.7571,0);;
 
 
     private boolean firstshooting = false;
@@ -68,14 +68,15 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1.5;
-    public static double shoottime = 2;
+    public static double stoptime = 0.75;
+    public static double shoottime = 1.65;
     public static double xpos = 126.67;
     public static double ypos = -129.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.7;
+    public static double waittime = 0.4;
+    public static double intaketime = 3;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -89,10 +90,8 @@ public class BlUE_Far_15ball_gate extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = simplePath(startPose,ShootPose1);
 
-        //prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
-
+        //prepGatherPath1 = simplePath(ShootPose1,PrepGather4);
         prepGatherPath1 = simplePath(startPose,PrepGather4);
-
         finishGatherPath1 = simplePath(PrepGather4,FinishGather4);
 
 //        prepGatherPath1 = follower.pathBuilder()
@@ -110,10 +109,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
 //        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
         prepGatherPath2 = follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose1, PrepGather2))
-                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
-                .addPath(new BezierLine(PrepGather2, FinishGather2))
-                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .addPath(new BezierLine(ShootPose1, PrepGather3))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
+                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
         GatePath = follower.pathBuilder()
@@ -124,28 +123,27 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
                 .build();
 
-       // Shootpath3 = simplePath(GatePose,ShootPose2);
+        Shootpath3 = simplePath(FinishGather3,ShootPose2);
 
-        Shootpath3 =     follower.pathBuilder()
-                .addPath(new BezierLine(GatePose, Shoot2passby))
-                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
-                .addPath(new BezierLine(Shoot2passby, ShootPose2))
-                .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
-
-                .build();
+//        Shootpath3 =     follower.pathBuilder()
+//                .addPath(new BezierLine(GatePose, Shoot2passby))
+//                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
+//                .addPath(new BezierLine(Shoot2passby, ShootPose2))
+//                .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
+//                .build();
 
 //        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
 //
 //        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
         prepGatherPath3 = follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose2, PrepGather3))
-                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather3.getHeading())
-                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .addPath(new BezierLine(ShootPose2, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
-        Shootpath4 = simplePath(FinishGather3,ShootPose2);
+        Shootpath4 = simplePath(FinishGather2,ShootPose2);
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
@@ -177,6 +175,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3125;
+                turret.autopos = 190;
                 setPathState(1);
 
                 break;
@@ -192,7 +191,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> (shoottime+0.5)){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
@@ -206,6 +205,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
+                    turret.autopos = 195;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -240,7 +240,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
@@ -251,9 +251,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
                 }
                 break;
-                //2nd shooting________________________________________________
+            //2nd shooting________________________________________________
             case 6:
                 if(!follower.isBusy()) {
+                    turret.autopos = 138;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
@@ -264,15 +265,16 @@ public class BlUE_Far_15ball_gate extends OpMode {
             case 7:
                 if(!follower.isBusy()) {
                     //follower.followPath(finishGatherPath2);
-                    setPathState(8);
+
+                    setPathState(10);
                 }
                 break;
             case 8:
                 if(!follower.isBusy()){
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    follower.followPath(GatePath);
 //                    intake.gatepos = true;
 //                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    follower.followPath(GatePath);
                     firstshooting = false;
                     setPathState(9);
                 }
@@ -287,7 +289,12 @@ public class BlUE_Far_15ball_gate extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
-                            setPathState(10);
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            follower.followPath(Shootpath4);
+                            firstshooting = false;
+                            setPathState(15);
+                            //setPathState(23);
+
                             break;
                         }
 
@@ -315,10 +322,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                        if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(12);
@@ -329,7 +336,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
                 }
                 break;
-                //3rd shooting________________________________________________
+            //3rd shooting________________________________________________
             case 12:
                 if(!follower.isBusy()) {
                     firstshooting = false;
@@ -337,7 +344,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(prepGatherPath3);
-                    setPathState(13);
+                    setPathState(8);
                 }
                 break;
             case 13:
@@ -365,7 +372,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(16);
@@ -376,9 +383,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
                 }
                 break;
-                //4th shooting________________________________________________
+            //4th shooting________________________________________________
             case 16:
                 if(!follower.isBusy()) {
+                    turret.autopos = 195;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -413,7 +421,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
 
@@ -425,10 +433,10 @@ public class BlUE_Far_15ball_gate extends OpMode {
 
                 }
                 break;
-                //5th shooting________________________________________________
+            //5th shooting________________________________________________
             case 20:
                 if(!follower.isBusy()) {
-                    follower.followPath(lastOutPath);
+//                    follower.followPath(lastOutPath);
                     setPathState(21);
                 }
                 break;
@@ -438,13 +446,99 @@ public class BlUE_Far_15ball_gate extends OpMode {
                 }
                 break;
             case 22:
+                if(!follower.isBusy()) {
+                    turret.autopos = 195;
+                    shooter.Autolong = 3100;
+                    firstshooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath1);
+                    //follower.breakFollowing();
+                    firstshooting = false;
+                    setPathState(23);
+                }
+                break;
+            case 23:
+
+                if (!firstshooting) {
+                    timer.resetTimer();
+                    firstshooting = true;
+                    break;
+                }
+                else{
+                    if(timer.getElapsedTimeSeconds()> intaketime){
+                        firstshooting = false;
+                        follower.breakFollowing();
+                        follower.followPath(finishGatherPath1);
+                        setPathState(24);
+
+                        break;
+                    }
+
+                }
+
+                if(!follower.isBusy()) {
+                    firstshooting = false;
+                    follower.followPath(finishGatherPath1);
+                    setPathState(24);
+                }
+                break;
+            case 24:
+                if(!follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    follower.followPath(Shootpath2);
+                    setPathState(25);
+                }
+                break;
+            case 25:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+
+                        timer.resetTimer();
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        }
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(26);
+                        }
+
+                    }
+                    break;
+
+                }
+                break;
+            //2nd shooting________________________________________________
+            case 26:
+                if(!follower.isBusy()) {
+                    turret.autopos = 138;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.periodic();
+                    follower.followPath(lastOutPath);
+                    resetSubsystemsForTeleop();
+                    setPathState(27);
+                }
+                break;
+            case 27:
+                Drivetrain.lastPose = follower.getPose();
+                Drivetrain.TredFblue = true;
                 if(!follower.isBusy()){
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = follower.getPose();
-                    Drivetrain.TredFblue = false;
+                    Drivetrain.TredFblue = true;
+                    //setPathState(28);
                     break;
+
                 }
                 break;
+
 
         }
     }
@@ -472,12 +566,12 @@ public class BlUE_Far_15ball_gate extends OpMode {
         limelight.periodic();
         intake.periodic();
         turret.automode = true;
-        if(shooter.autoLonger){
-            turret.autopos = 191;
-        }
-        else{
-            turret.autopos = 140;
-        }
+//        if(shooter.autoLonger){
+//            turret.autopos = -195;
+//        }
+//        else{
+//            turret.autopos = -138;
+//        }
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
