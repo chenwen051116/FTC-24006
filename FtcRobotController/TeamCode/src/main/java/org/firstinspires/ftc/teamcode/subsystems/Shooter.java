@@ -54,6 +54,8 @@ public class Shooter extends SubsystemBase {
     public  double Autoshort = 2640;
     public  double Autolong = 3100;
 
+    //public double AutoStartlong = 3125;
+
     public  double shootLowbar = 200;
 
     public double rpmdiff = 0;

@@ -89,9 +89,11 @@ public class BlUE_Far_15ball_gate extends OpMode {
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         Shootpath1 = simplePath(startPose,ShootPose1);
 
-        prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
+        //prepGatherPath1 = simplePath(ShootPose1,PrepGather1);
 
-        finishGatherPath1 = simplePath(PrepGather1,FinishGather1);
+        prepGatherPath1 = simplePath(startPose,PrepGather4);
+
+        finishGatherPath1 = simplePath(PrepGather4,FinishGather4);
 
 //        prepGatherPath1 = follower.pathBuilder()
 //
@@ -172,8 +174,9 @@ public class BlUE_Far_15ball_gate extends OpMode {
             case 0:
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                follower.followPath(Shootpath1,true);
+                //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
+                shooter.Autolong = 3125;
                 setPathState(1);
 
                 break;
@@ -186,7 +189,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>(waittime+0.5)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
+                        if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
                         if(timer.getElapsedTimeSeconds()> (shoottime+0.5)){
@@ -203,6 +206,7 @@ public class BlUE_Far_15ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
+                    shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
