@@ -36,7 +36,7 @@ public class Red_Far_15ball_gate extends OpMode {
     private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297-5, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
@@ -45,7 +45,7 @@ public class Red_Far_15ball_gate extends OpMode {
 
     private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
 
-    private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(91.9908, 75.8070-8, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
