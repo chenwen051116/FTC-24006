@@ -53,7 +53,7 @@ public class Red_Far_15ball_gate extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.42, -0.06455, 0);
 
-    private final Pose Park = new Pose(121.21, 28.7571,0);;
+    private final Pose Park = new Pose(121.21, 20.7571,0);;
 
 
     private boolean firstshooting = false;
@@ -68,14 +68,14 @@ public class Red_Far_15ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 0.7;
-    public static double shoottime = 1.8;
+    public static double stoptime = 0.75;
+    public static double shoottime = 1.65;
     public static double xpos = 126.67;
     public static double ypos = 129.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.5;
+    public static double waittime = 0.4;
     public static double intaketime = 2;
 
 
@@ -425,7 +425,7 @@ public class Red_Far_15ball_gate extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
 
-                            setPathState(2);
+                            setPathState(20);
                         }
 
                     }
