@@ -108,10 +108,10 @@ public class Red_Far_15ball_gate extends OpMode {
 //        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
         prepGatherPath2 = follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose1, PrepGather2))
-                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
-                .addPath(new BezierLine(PrepGather2, FinishGather2))
-                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
+                .addPath(new BezierLine(ShootPose1, PrepGather3))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
+                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
         GatePath = follower.pathBuilder()
@@ -122,27 +122,27 @@ public class Red_Far_15ball_gate extends OpMode {
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
                 .build();
 
-        // Shootpath3 = simplePath(GatePose,ShootPose2);
+         Shootpath3 = simplePath(FinishGather3,ShootPose2);
 
-        Shootpath3 =     follower.pathBuilder()
-                .addPath(new BezierLine(GatePose, Shoot2passby))
-                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
-                .addPath(new BezierLine(Shoot2passby, ShootPose2))
-                .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
-                .build();
+//        Shootpath3 =     follower.pathBuilder()
+//                .addPath(new BezierLine(GatePose, Shoot2passby))
+//                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
+//                .addPath(new BezierLine(Shoot2passby, ShootPose2))
+//                .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
+//                .build();
 
 //        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
 //
 //        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
         prepGatherPath3 = follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose2, PrepGather3))
-                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather3.getHeading())
-                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .addPath(new BezierLine(ShootPose2, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
-        Shootpath4 = simplePath(FinishGather3,ShootPose2);
+        Shootpath4 = simplePath(FinishGather2,ShootPose2);
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
@@ -265,7 +265,7 @@ public class Red_Far_15ball_gate extends OpMode {
                 if(!follower.isBusy()) {
                     //follower.followPath(finishGatherPath2);
 
-                    setPathState(8);
+                    setPathState(10);
                 }
                 break;
             case 8:
@@ -288,7 +288,7 @@ public class Red_Far_15ball_gate extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
-                            setPathState(10);
+                            setPathState(13);
 
                             break;
                         }
@@ -339,7 +339,7 @@ public class Red_Far_15ball_gate extends OpMode {
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(prepGatherPath3);
-                    setPathState(13);
+                    setPathState(8);
                 }
                 break;
             case 13:
