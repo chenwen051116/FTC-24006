@@ -76,7 +76,7 @@ public class Red_Far_15ball_gate extends OpMode {
     public static double angle = 0;
 
     public static double waittime = 0.4;
-    public static double intaketime = 2;
+    public static double intaketime = 3;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -469,6 +469,7 @@ public class Red_Far_15ball_gate extends OpMode {
                 else{
                     if(timer.getElapsedTimeSeconds()> intaketime){
                         firstshooting = false;
+                        follower.breakFollowing();
                         follower.followPath(finishGatherPath1);
                         setPathState(24);
 
