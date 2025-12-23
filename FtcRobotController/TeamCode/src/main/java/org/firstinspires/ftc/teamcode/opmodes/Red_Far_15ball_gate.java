@@ -291,8 +291,8 @@ public class Red_Far_15ball_gate extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             follower.followPath(Shootpath4);
                             firstshooting = false;
-                            //setPathState(15);
-                            setPathState(23);
+                            setPathState(15);
+                            //setPathState(23);
 
                             break;
                         }
