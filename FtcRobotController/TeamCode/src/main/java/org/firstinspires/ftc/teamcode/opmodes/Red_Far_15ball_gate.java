@@ -191,7 +191,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> (shoottime+0.5)){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
@@ -240,7 +240,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
@@ -325,7 +325,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> (shoottime)){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(12);
@@ -372,7 +372,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(16);
@@ -421,7 +421,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
 
@@ -503,7 +503,7 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(26);
