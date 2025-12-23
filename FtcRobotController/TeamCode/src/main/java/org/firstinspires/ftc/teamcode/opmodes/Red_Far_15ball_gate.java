@@ -76,6 +76,7 @@ public class Red_Far_15ball_gate extends OpMode {
     public static double angle = 0;
 
     public static double waittime = 0.5;
+    public static double intaketime = 2;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -453,11 +454,31 @@ public class Red_Far_15ball_gate extends OpMode {
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(prepGatherPath1);
+                    //follower.breakFollowing();
+                    firstshooting = false;
                     setPathState(23);
                 }
                 break;
             case 23:
+
+                if (!firstshooting) {
+                    timer.resetTimer();
+                    firstshooting = true;
+                    break;
+                }
+                else{
+                    if(timer.getElapsedTimeSeconds()> intaketime){
+                        firstshooting = false;
+                        follower.followPath(finishGatherPath1);
+                        setPathState(24);
+
+                        break;
+                    }
+
+                }
+
                 if(!follower.isBusy()) {
+                    firstshooting = false;
                     follower.followPath(finishGatherPath1);
                     setPathState(24);
                 }
