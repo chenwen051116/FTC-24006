@@ -290,8 +290,8 @@ public class Red_Far_15ball_gate extends OpMode {
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             follower.followPath(Shootpath4);
-                            setPathState(15);
-                            //setPathState(14);
+                            //setPathState(15);
+                            setPathState(23);
 
                             break;
                         }
@@ -449,6 +449,32 @@ public class Red_Far_15ball_gate extends OpMode {
                     Drivetrain.lastPose = follower.getPose();
                     Drivetrain.TredFblue = true;
                     break;
+                }
+                break;
+
+            case 23:
+                if(!follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+
+                        timer.resetTimer();
+                        firstshooting = true;
+                        break;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        }
+                        if(timer.getElapsedTimeSeconds()> shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(16);
+                        }
+                        break;
+
+                    }
+
+
                 }
                 break;
 
