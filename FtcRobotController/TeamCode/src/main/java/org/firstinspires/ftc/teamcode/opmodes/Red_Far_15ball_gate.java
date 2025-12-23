@@ -420,7 +420,7 @@ public class Red_Far_15ball_gate extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
 
-                            setPathState(20);
+                            setPathState(2);
                         }
 
                     }
