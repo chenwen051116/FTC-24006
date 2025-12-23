@@ -174,6 +174,7 @@ public class Red_Far_15ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3125;
+                turret.autopos = -190;
                 setPathState(1);
 
                 break;
@@ -203,6 +204,7 @@ public class Red_Far_15ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
+                    turret.autopos = -195;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -251,6 +253,7 @@ public class Red_Far_15ball_gate extends OpMode {
             //2nd shooting________________________________________________
             case 6:
                 if(!follower.isBusy()) {
+                    turret.autopos = -138;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
@@ -261,6 +264,7 @@ public class Red_Far_15ball_gate extends OpMode {
             case 7:
                 if(!follower.isBusy()) {
                     //follower.followPath(finishGatherPath2);
+
                     setPathState(8);
                 }
                 break;
@@ -377,6 +381,7 @@ public class Red_Far_15ball_gate extends OpMode {
             //4th shooting________________________________________________
             case 16:
                 if(!follower.isBusy()) {
+                    turret.autopos = -195;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -470,12 +475,12 @@ public class Red_Far_15ball_gate extends OpMode {
         limelight.periodic();
         intake.periodic();
         turret.automode = true;
-        if(shooter.autoLonger){
-            turret.autopos = -195;
-        }
-        else{
-            turret.autopos = -138;
-        }
+//        if(shooter.autoLonger){
+//            turret.autopos = -195;
+//        }
+//        else{
+//            turret.autopos = -138;
+//        }
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
