@@ -436,7 +436,7 @@ public class Red_Far_15ball_gate extends OpMode {
             //5th shooting________________________________________________
             case 20:
                 if(!follower.isBusy()) {
-                    follower.followPath(lastOutPath);
+//                    follower.followPath(lastOutPath);
                     setPathState(21);
                 }
                 break;
