@@ -288,7 +288,10 @@ public class Red_Far_15ball_gate extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
-                            setPathState(14);
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            follower.followPath(Shootpath4);
+                            setPathState(15);
+                            //setPathState(14);
 
                             break;
                         }
