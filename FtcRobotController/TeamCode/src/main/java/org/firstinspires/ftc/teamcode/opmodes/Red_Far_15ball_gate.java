@@ -53,7 +53,7 @@ public class Red_Far_15ball_gate extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.42, -0.06455, 0);
 
-    private final Pose Park = GatePassby;
+    private final Pose Park = new Pose(121.21, 28.7571,0);;
 
 
     private boolean firstshooting = false;
@@ -445,22 +445,37 @@ public class Red_Far_15ball_gate extends OpMode {
                 }
                 break;
             case 22:
-                if(!follower.isBusy()){
-                    resetSubsystemsForTeleop();
-                    Drivetrain.lastPose = follower.getPose();
-                    Drivetrain.TredFblue = true;
-                    break;
+                if(!follower.isBusy()) {
+                    turret.autopos = -195;
+                    shooter.Autolong = 3100;
+                    firstshooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    follower.followPath(prepGatherPath1);
+                    setPathState(23);
                 }
                 break;
-
             case 23:
+                if(!follower.isBusy()) {
+                    follower.followPath(finishGatherPath1);
+                    setPathState(24);
+                }
+                break;
+            case 24:
+                if(!follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    follower.followPath(Shootpath2);
+                    setPathState(25);
+                }
+                break;
+            case 25:
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
 
                         timer.resetTimer();
                         firstshooting = true;
-                        break;
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
@@ -469,15 +484,39 @@ public class Red_Far_15ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(16);
+                            setPathState(26);
                         }
-                        break;
 
                     }
-
+                    break;
 
                 }
                 break;
+            //2nd shooting________________________________________________
+            case 26:
+                if(!follower.isBusy()) {
+                    turret.autopos = -138;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.periodic();
+                    follower.followPath(lastOutPath);
+                    resetSubsystemsForTeleop();
+                    setPathState(27);
+                }
+                break;
+            case 27:
+                Drivetrain.lastPose = follower.getPose();
+                Drivetrain.TredFblue = true;
+                if(!follower.isBusy()){
+                    resetSubsystemsForTeleop();
+                    Drivetrain.lastPose = follower.getPose();
+                    Drivetrain.TredFblue = true;
+                    //setPathState(28);
+                    break;
+
+                }
+                break;
+
 
         }
     }
