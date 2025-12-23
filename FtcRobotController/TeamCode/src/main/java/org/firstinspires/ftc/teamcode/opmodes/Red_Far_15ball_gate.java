@@ -36,7 +36,7 @@ public class Red_Far_15ball_gate extends OpMode {
     private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297-3, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, 52.0297-5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
@@ -68,14 +68,14 @@ public class Red_Far_15ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1.5;
-    public static double shoottime = 2;
+    public static double stoptime = 0.7;
+    public static double shoottime = 1.8;
     public static double xpos = 126.67;
     public static double ypos = 129.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.7;
+    public static double waittime = 0.5;
 
 
     public  PathChain simplePath(Pose a, Pose b){
