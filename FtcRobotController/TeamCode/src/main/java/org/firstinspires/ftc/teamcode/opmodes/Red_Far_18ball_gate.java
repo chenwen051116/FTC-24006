@@ -76,7 +76,7 @@ public class Red_Far_18ball_gate extends OpMode {
     public static double angle = 0;
 
     public static double waittime = 0.5;
-    public static double intaketime = 3;
+    public static double intaketime = 2;
 
 
     public  PathChain simplePath(Pose a, Pose b){
