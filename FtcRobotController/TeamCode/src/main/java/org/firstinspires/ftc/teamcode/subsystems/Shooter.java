@@ -10,8 +10,11 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 public class Shooter extends SubsystemBase {
@@ -19,6 +22,8 @@ public class Shooter extends SubsystemBase {
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
+
+    private final DistanceSensor distanceSensor;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
     public static double Kp = 0.15;  // Proportional gain
@@ -91,8 +96,7 @@ public class Shooter extends SubsystemBase {
     public Shooter(HardwareMap hardwareMap) {
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
-
-
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
         shootLimit = hardwareMap.get(Servo.class,"shootLimit");
         shootTimer = new Timer();
         // Initialize PID controller
@@ -155,6 +159,10 @@ public class Shooter extends SubsystemBase {
         pidController.setSetPoint(0);
 
 
+    }
+
+    public double getTransDis(){
+        return distanceSensor.getDistance(DistanceUnit.CM);
     }
     public double getTargetRPM() {
         return targetRPM;

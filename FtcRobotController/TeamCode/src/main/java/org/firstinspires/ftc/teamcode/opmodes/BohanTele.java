@@ -207,7 +207,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
         telemetry.addData("ShotterForce?", shooter.forceShooting);
         telemetry.addData("Rpm_Range", shooter.rpmreached);
-
+        telemetry.addData("TransferDis", shooter.getTransDis());
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
