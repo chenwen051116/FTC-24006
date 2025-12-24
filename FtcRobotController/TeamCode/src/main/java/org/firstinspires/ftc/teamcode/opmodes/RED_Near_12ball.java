@@ -22,24 +22,29 @@ public class RED_Near_12ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(-40.53817, -29.4827, 0.83604);
-    private final Pose GatePose = new Pose(-0.6099,-34.4572, 1.600);
-    private final Pose PrepGather1 = new Pose(-23.0954, -27.4628, 0);
+    private final Pose startPose = new Pose(119.7571, 107.4503, 0); // Start Pose of our robot.
+    private final Pose ShootPoseFar = new Pose(81.21, 8.7571,0);
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
+    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
-    private final Pose FinishGather1 = new Pose(-6.4513, -27.4628, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
-    private final Pose PrepGather2 = new Pose(-26.0954, -49.0732, 0);
+    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
+    private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
+    private final Pose GatePickupPose = new Pose(121.8784,52.0519, 0.6185);
+    private final Pose ShootPoseNear = new Pose(84.1620, 75.80 ,0);
 
-    private final Pose FinishGather2 = new Pose(-6.4513, -51.0732, 0);
+    private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
 
-    private final Pose PrepGather3 = new Pose(-26.0954, -70.1802, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(-6.4513, -75.1802, 0);
+    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose GatePassby = new Pose(-23.0954, -27.4628, 1.5647);
+    private final Pose PrepGather4 = new Pose(119.5531, -0.06455, 0);//accounted for overshoot
 
-    private final Pose Park = new Pose(-26.0954, -49.0732, 0.83604);
+    private final Pose FinishGather4 = new Pose(123.42, -0.06455, 0);
+
+    private final Pose Park = new Pose(121.21, 20.7571,0);
     private boolean firstshooting = false;
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
