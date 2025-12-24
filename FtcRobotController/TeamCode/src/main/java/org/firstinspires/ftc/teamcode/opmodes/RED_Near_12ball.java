@@ -66,9 +66,9 @@ public class RED_Near_12ball extends OpMode {
     public static double angle = 0;
 
     public static double waittime = 0.5;
-    public static double intaketime = 2;
+    public static double intaketime = 1.5;
 
-    public static int cycle = 3;
+    public static int cycle = 2;
 
     public void buildPaths() {
 
