@@ -227,9 +227,9 @@ public class Drivetrain extends SubsystemBase {
         double h = follower.getPose().getHeading()+angle;
         //       if(!TredFblue) {
         if (y < 0) {
-            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
+            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*angularVel()*kPTurret;
         } else {
-            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
+            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*angularVel()*kPTurret;
         }
 
     }
