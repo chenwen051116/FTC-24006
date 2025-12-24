@@ -59,6 +59,10 @@ public class Drivetrain extends SubsystemBase {
 
     public double lastheading = 0;
 
+    public static double perfectSpeed = 0;
+
+    public static double predictFactor = 0;
+
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -190,6 +194,10 @@ public class Drivetrain extends SubsystemBase {
         double x = predictedPose.getX()-xpos;
         double y = predictedPose.getY()-ypos;
         return sqrt(x*x+y*y);
+    }
+
+    public double getallspeed(){
+        return follower.getVelocity().getMagnitude();
     }
     public double getturretangle(){
 //        double x = follower.getPose().getX()-aimPos.getX();
