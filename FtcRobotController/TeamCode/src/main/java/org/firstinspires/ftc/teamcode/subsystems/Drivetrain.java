@@ -4,10 +4,11 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Twist2d;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -38,6 +39,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static double xpos = 126.67;
     public static double ypos = -129.01;
+    public Pose2d predictedPose = new Pose2d();
+    public static double lookAheadTime = 0.2;
 
     public static double angle = 0;
 
@@ -172,6 +175,20 @@ public class Drivetrain extends SubsystemBase {
         double y = follower.getPose().getY()-ypos;
         return sqrt(x*x+y*y);
     }
+    public double getdis_TWO(){
+        predictedPose = lookaheadPoseTime(new Pose2d(
+                        follower.getPose().getX(),
+                        follower.getPose().getY(),
+                        new Rotation2d(follower.getPose().getHeading())),
+                follower.getVelocity().getXComponent(),
+                follower.getVelocity().getYComponent(),
+                follower.getAngularVelocity(),
+                lookAheadTime
+        );
+        double x = predictedPose.getX()-xpos;
+        double y = predictedPose.getY()-ypos;
+        return sqrt(x*x+y*y);
+    }
     public double getturretangle(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
@@ -186,6 +203,38 @@ public class Drivetrain extends SubsystemBase {
             }
 
     }
+    public double getturretangle_TWO(){
+//        double x = follower.getPose().getX()-aimPos.getX();
+//        double y = follower.getPose().getY()-aimPos.getY();
+         predictedPose = lookaheadPoseTime(new Pose2d(
+                        follower.getPose().getX(),
+                        follower.getPose().getY(),
+                        new Rotation2d(follower.getPose().getHeading())),
+                follower.getVelocity().getXComponent(),
+                follower.getVelocity().getYComponent(),
+                follower.getAngularVelocity(),
+                lookAheadTime
+        );
+        double x = predictedPose.getX()-xpos;
+        double y = predictedPose.getY()-ypos;
+        double h = predictedPose.getHeading()+angle; //rad
+        //       if(!TredFblue) {
+        if (y < 0) {
+            return 1 * h - Math.atan(abs(y) / abs(x));
+        } else {
+            return 1 * h + Math.atan(abs(y) / abs(x));
+        }
+
+    }
+
+    public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
+        double dx = vx * lookaheadTimeSec;      // meters
+        double dy = vy * lookaheadTimeSec;      // meters (left +)
+        double dtheta = omega * lookaheadTimeSec; // radians
+
+        Twist2d twist = new Twist2d(dx, dy, dtheta);
+        return current.exp(twist);
+    }
 
     public void redinit(){
         xpos = rednearAimPos.getX();
@@ -197,7 +246,8 @@ public class Drivetrain extends SubsystemBase {
         ypos = bluenearAimPos.getY();
     }
 
-
+//    public void periodic(){
+//    }
 
 }
 

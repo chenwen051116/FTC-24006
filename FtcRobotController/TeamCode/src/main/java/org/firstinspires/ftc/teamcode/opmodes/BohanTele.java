@@ -188,6 +188,10 @@ public class BohanTele extends CommandOpMode {
 
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addLine(String.format("predicted XY %6.1f %6.1f", drivetrain.predictedPose.getX(), drivetrain.predictedPose.getY() ));
+        telemetry.addData("x", drivetrain.follower.getPose().getX());
+        telemetry.addData("y", drivetrain.follower.getPose().getY());
+        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
         telemetry.addData("PIDoutput", turret.turretpidOut);
         telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
         telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
@@ -200,10 +204,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Pitch", limelight.getPitch());
         telemetry.addData("Shooterdis", shooter.distance);
         telemetry.addData("tuaimanglex", turret.aimangle);
-        telemetry.addData("x", drivetrain.follower.getPose().getX());
-        telemetry.addData("y", drivetrain.follower.getPose().getY());
-        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
-        telemetry.addData("dis", drivetrain.getdis());
+//        telemetry.addData("dis", drivetrain.getdis());
         telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
         telemetry.addData("ShotterForce?", shooter.forceShooting);
         telemetry.addData("Rpm_Range", shooter.rpmreached);
