@@ -149,7 +149,7 @@ public class RED_Near_12ball extends OpMode {
             case 0:
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                //follower.followPath(Shootpath1,true);
+                follower.followPath(Shootpath0,true);
                 shooter.autoLonger = false;
                 turret.autopos = -138;
                 setPathState(1);
