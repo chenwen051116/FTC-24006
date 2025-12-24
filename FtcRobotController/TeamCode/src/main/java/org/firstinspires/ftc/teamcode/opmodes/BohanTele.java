@@ -188,9 +188,9 @@ public class BohanTele extends CommandOpMode {
 
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addData("Omega", drivetrain.angularvel());
+        telemetry.addData("Omega", drivetrain.angularVel());
         telemetry.addData("speed over all",drivetrain.getallspeed());
-        telemetry.addLine(String.format("predicted XYH %6.1f %6.1f %6.1f", drivetrain.predictedPose.getX(), drivetrain.predictedPose.getY(), drivetrain.predictedPose.getHeading()));
+        telemetry.addData("speed towards",drivetrain.forwardvel());
         telemetry.addData("x", drivetrain.follower.getPose().getX());
         telemetry.addData("y", drivetrain.follower.getPose().getY());
         telemetry.addData("h", drivetrain.follower.getPose().getHeading());

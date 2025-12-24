@@ -61,9 +61,9 @@ public class Drivetrain extends SubsystemBase {
 
     public double lastheading = 0;
 
-    public static double perfectSpeed = 0;
+    public static double kPTurret = 0;
 
-    public static double predictFactor = 0;
+    public static double kPShooter= 0;
 
     public static double testspeed = 0.2;
 
@@ -186,18 +186,9 @@ public class Drivetrain extends SubsystemBase {
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
-        predictedPose = lookaheadPoseTime(new Pose2d(
-                        follower.getPose().getX(),
-                        follower.getPose().getY(),
-                        new Rotation2d(follower.getPose().getHeading())),
-                follower.getVelocity().getXComponent(),
-                follower.getVelocity().getYComponent(),
-                0,
-                lookAheadTimeShooter
-        );
-        double x = predictedPose.getX()-xpos;
-        double y = predictedPose.getY()-ypos;
-        return sqrt(x*x+y*y);
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        return sqrt(x*x+y*y)+kPShooter*forwardvel();
     }
 
     public double getallspeed(){
@@ -220,31 +211,46 @@ public class Drivetrain extends SubsystemBase {
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
-         predictedPose = lookaheadPoseTime(new Pose2d(
-                        follower.getPose().getX(),
-                        follower.getPose().getY(),
-                        new Rotation2d(follower.getPose().getHeading())),
-                follower.getVelocity().getXComponent(),
-                follower.getVelocity().getYComponent(),
-                0,
-                lookAheadTime
-        );
-        double x = predictedPose.getX()-xpos;
-        double y = predictedPose.getY()-ypos;
-        double h = follower.getPose().getHeading()+angle; //rad
+//         predictedPose = lookaheadPoseTime(new Pose2d(
+//                        follower.getPose().getX(),
+//                        follower.getPose().getY(),
+//                        new Rotation2d(follower.getPose().getHeading())),
+//                follower.getVelocity().getXComponent(),
+//                follower.getVelocity().getYComponent(),
+//                0,
+//                lookAheadTime
+//        );
+//        double x = predictedPose.getX()-xpos;
+//        double y = predictedPose.getY()-ypos;
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        double h = follower.getPose().getHeading()+angle;
         //       if(!TredFblue) {
         if (y < 0) {
-            return 1 * h - Math.atan(abs(y) / abs(x));
+            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
         } else {
-            return 1 * h + Math.atan(abs(y) / abs(x));
+            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
         }
 
     }
 
-    public double angularvel(){
-        double vel = follower.getHeading()-lastheading;
-        lastheading = follower.getHeading();
-        return vel;
+    public double angularVel(){
+        double dx = follower.getPose().getX() - xpos;
+        double dy = follower.getPose().getY() - ypos;
+
+        double omega =
+                (dx * follower.getVelocity().getYComponent() - dy * follower.getVelocity().getXComponent()) / (dx*dx + dy*dy);
+
+        return omega;
+    }
+
+    public double forwardvel(){
+        double dx = follower.getPose().getX() - xpos;
+        double dy = follower.getPose().getY() - ypos;
+
+        double dist = Math.sqrt(dx*dx + dy*dy);
+
+        return -(dx * follower.getVelocity().getXComponent() + dy * follower.getVelocity().getYComponent())/dist;
     }
 
     public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
