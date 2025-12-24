@@ -219,7 +219,7 @@ public class Drivetrain extends SubsystemBase {
         );
         double x = predictedPose.getX()-xpos;
         double y = predictedPose.getY()-ypos;
-        double h = predictedPose.getHeading()+angle; //rad
+        double h = follower.getPose().getHeading()+angle; //rad
         //       if(!TredFblue) {
         if (y < 0) {
             return 1 * h - Math.atan(abs(y) / abs(x));
