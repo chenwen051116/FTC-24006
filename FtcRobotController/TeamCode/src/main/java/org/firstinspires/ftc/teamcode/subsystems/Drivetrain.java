@@ -57,6 +57,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static Pose lastPose = new Pose(0,0,0);
 
+    public double lastheading = 0;
+
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
@@ -182,7 +184,7 @@ public class Drivetrain extends SubsystemBase {
                         new Rotation2d(follower.getPose().getHeading())),
                 follower.getVelocity().getXComponent(),
                 follower.getVelocity().getYComponent(),
-                follower.getAngularVelocity(),
+                0,
                 lookAheadTime
         );
         double x = predictedPose.getX()-xpos;
@@ -212,7 +214,7 @@ public class Drivetrain extends SubsystemBase {
                         new Rotation2d(follower.getPose().getHeading())),
                 follower.getVelocity().getXComponent(),
                 follower.getVelocity().getYComponent(),
-                follower.getAngularVelocity(),
+                0,
                 lookAheadTime
         );
         double x = predictedPose.getX()-xpos;
@@ -225,6 +227,12 @@ public class Drivetrain extends SubsystemBase {
             return 1 * h + Math.atan(abs(y) / abs(x));
         }
 
+    }
+
+    public double angularvel(){
+        double vel = follower.getHeading()-lastheading;
+        lastheading = follower.getHeading();
+        return vel;
     }
 
     public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
