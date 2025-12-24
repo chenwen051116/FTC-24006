@@ -135,10 +135,10 @@ public class BohanTele extends CommandOpMode {
         }
 
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
-            shooter.ododis = drivetrain.getdis();
+            shooter.ododis = drivetrain.getdis_TWO();
             turret.updateAutoShoot(true);
             turret.tx = limelight.getTx();
-            turret.aimangle = drivetrain.getturretangle();
+            turret.aimangle = drivetrain.getturretangle_TWO();
         }
         else{
             turret.updateAutoShoot(false);
@@ -188,7 +188,8 @@ public class BohanTele extends CommandOpMode {
 
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addLine(String.format("predicted XY %6.1f %6.1f", drivetrain.predictedPose.getX(), drivetrain.predictedPose.getY() ));
+        telemetry.addData("Omega", drivetrain.follower.getAngularVelocity());
+        telemetry.addLine(String.format("predicted XYH %6.1f %6.1f %6.1f", drivetrain.predictedPose.getX(), drivetrain.predictedPose.getY(), drivetrain.predictedPose.getHeading()));
         telemetry.addData("x", drivetrain.follower.getPose().getX());
         telemetry.addData("y", drivetrain.follower.getPose().getY());
         telemetry.addData("h", drivetrain.follower.getPose().getHeading());
