@@ -211,25 +211,25 @@ public class Drivetrain extends SubsystemBase {
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
-//         predictedPose = lookaheadPoseTime(new Pose2d(
-//                        follower.getPose().getX(),
-//                        follower.getPose().getY(),
-//                        new Rotation2d(follower.getPose().getHeading())),
-//                follower.getVelocity().getXComponent(),
-//                follower.getVelocity().getYComponent(),
-//                0,
-//                lookAheadTime
-//        );
-//        double x = predictedPose.getX()-xpos;
-//        double y = predictedPose.getY()-ypos;
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
+         predictedPose = lookaheadPoseTime(new Pose2d(
+                        follower.getPose().getX(),
+                        follower.getPose().getY(),
+                        new Rotation2d(follower.getPose().getHeading())),
+                follower.getVelocity().getXComponent(),
+                follower.getVelocity().getYComponent(),
+                0,
+                lookAheadTime
+        );
+        double x = predictedPose.getX()-xpos;
+        double y = predictedPose.getY()-ypos;
+//        double x = follower.getPose().getX()-xpos;
+//        double y = follower.getPose().getY()-ypos;
         double h = follower.getPose().getHeading()+angle;
         //       if(!TredFblue) {
         if (y < 0) {
-            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*angularVel()*kPTurret;
+            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
         } else {
-            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*angularVel()*kPTurret;
+            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
         }
 
     }
