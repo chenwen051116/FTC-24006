@@ -42,6 +42,8 @@ public class Drivetrain extends SubsystemBase {
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.2;
 
+    public static double lookAheadTimeShooter = 0.2;
+
     public static double angle = 0;
 
     public Pose bluenearAimPos = new Pose(xpos,ypos,angle);
@@ -191,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
                 follower.getVelocity().getXComponent(),
                 follower.getVelocity().getYComponent(),
                 0,
-                lookAheadTime
+                lookAheadTimeShooter
         );
         double x = predictedPose.getX()-xpos;
         double y = predictedPose.getY()-ypos;
