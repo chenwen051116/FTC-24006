@@ -19,8 +19,15 @@ public class DriveInTeleOpCommand extends CommandBase {
     public void initialize() {}
 
     @Override
-    public void execute() { //scheduler periodically calls the function
-            drivetrain.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.7*gamepad1.right_stick_x);
+    public void execute() {
+        //scheduler periodically calls the function
+        if(!gamepad1.b) {
+            drivetrain.teleDrive(-0.9 * gamepad1.left_stick_y, 0.9 * gamepad1.left_stick_x, 0.7 * gamepad1.right_stick_x);
+
+        }
+        else{
+            drivetrain.teleDrive(Drivetrain.testspeed, 0, 0);
+        }
     }
 
     @Override

@@ -63,6 +63,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static double predictFactor = 0;
 
+    public static double testspeed = 0.2;
+
     //servos
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
