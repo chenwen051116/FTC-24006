@@ -27,7 +27,7 @@ public class Light extends SubsystemBase {
     }
 
     public enum Color{
-        Red(0.277),
+        Red(0.29),
         Yellow(0.388),
         Green(0.500),
         Blue(0.611),

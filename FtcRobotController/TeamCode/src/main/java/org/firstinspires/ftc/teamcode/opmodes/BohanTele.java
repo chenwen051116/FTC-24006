@@ -115,7 +115,8 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(()->shooter.changeoffset(-10));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(()->light.setLight(Light.Color.Red, Light.Color.Red));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(()->light.setLight(Light.Color.Blue, Light.Color.Blue));
-
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
     }
     public void updateMovingshooting(boolean flag){
         MovingshootingMode = flag;
