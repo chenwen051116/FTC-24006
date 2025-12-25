@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.geometry.Twist2d;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -70,6 +71,7 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedrx = 0.2;
 
     //servos
+    public Timer looptimer;
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
 //        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -93,6 +95,7 @@ public class Drivetrain extends SubsystemBase {
 //
 //        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 //        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        looptimer = new Timer();
     }
 
     public void teleDrive(double frontBackVelocity, double strafeVelocity, double turnVelocity) {
@@ -182,11 +185,11 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-    public double getdis(){
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
-        return sqrt(x*x+y*y);
-    }
+//    public double getdis(){
+//        double x = follower.getPose().getX()-xpos;
+//        double y = follower.getPose().getY()-ypos;
+//        return sqrt(x*x+y*y);
+//    }
     public double getdis_TWO(){
         double x = follower.getPose().getX()-xpos;
         double y = follower.getPose().getY()-ypos;
@@ -196,20 +199,20 @@ public class Drivetrain extends SubsystemBase {
     public double getallspeed(){
         return follower.getVelocity().getMagnitude();
     }
-    public double getturretangle(){
-//        double x = follower.getPose().getX()-aimPos.getX();
-//        double y = follower.getPose().getY()-aimPos.getY();
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
-        double h = follower.getPose().getHeading()+angle;
- //       if(!TredFblue) {
-            if (y < 0) {
-                return 1 * h - Math.atan(abs(y) / abs(x));
-            } else {
-                return 1 * h + Math.atan(abs(y) / abs(x));
-            }
-
-    }
+//    public double getturretangle(){
+////        double x = follower.getPose().getX()-aimPos.getX();
+////        double y = follower.getPose().getY()-aimPos.getY();
+//        double x = follower.getPose().getX()-xpos;
+//        double y = follower.getPose().getY()-ypos;
+//        double h = follower.getPose().getHeading()+angle;
+// //       if(!TredFblue) {
+//            if (y < 0) {
+//                return 1 * h - Math.atan(abs(y) / abs(x));
+//            } else {
+//                return 1 * h + Math.atan(abs(y) / abs(x));
+//            }
+//
+//    }
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
@@ -228,14 +231,16 @@ public class Drivetrain extends SubsystemBase {
 //        double y = follower.getPose().getY()-ypos;
         double h = follower.getPose().getHeading()+angle;
         //       if(!TredFblue) {
-        if (y < 0) {
-            return 1 * h - Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
-        } else {
-            return 1 * h + Math.atan(abs(y) / abs(x))+angularVel()*kPTurret;
+        return h + Math.atan2(y, x)+angularVel()*kPTurret;
+
+
         }
 
-    }
-
+        public double looptime(){
+            double t = looptimer.getElapsedTime();
+            looptimer.resetTimer();
+            return t;
+        }
     public double angularVel(){
         double dx = follower.getPose().getX() - xpos;
         double dy = follower.getPose().getY() - ypos;
