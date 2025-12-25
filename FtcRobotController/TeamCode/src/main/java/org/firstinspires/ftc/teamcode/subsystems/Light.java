@@ -32,6 +32,7 @@ public class Light extends SubsystemBase {
         Green(0.500),
         Blue(0.611),
         Violet(0.722),
+        Orange(0.333),
         Off(0);
         private final double value;
         Color(double value){

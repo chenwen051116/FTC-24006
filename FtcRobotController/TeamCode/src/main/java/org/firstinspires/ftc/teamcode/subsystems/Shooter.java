@@ -84,6 +84,8 @@ public class Shooter extends SubsystemBase {
     public boolean forceShooting = false;
 
     public boolean Movingshooting = false;
+
+    public double offset = 0;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting
@@ -311,10 +313,10 @@ public class Shooter extends SubsystemBase {
     public void updateAim() {
         double dis = abs(ododis);
         if (dis > 60){
-            setTargetRPM(7.3743*dis+2148.4);
+            setTargetRPM(7.3743*dis+2148.4+offset);
         }
         else if (dis <= 60){
-            setTargetRPM(-7.3743*dis+3049);
+            setTargetRPM(-7.3743*dis+3049+offset);
         }
 
 
@@ -333,6 +335,9 @@ public class Shooter extends SubsystemBase {
     /**
      * Get current motor power (for graphing/telemetry)
      */
+    public void changeoffset(double change){
+        offset += change;
+    }
     public double getCurrentMotorPower() {
         return currentMotorPower;
     }
