@@ -110,6 +110,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
+        drivetrain.period();
         shooter.periodic();
         turret.periodic();
         limelight.periodic();

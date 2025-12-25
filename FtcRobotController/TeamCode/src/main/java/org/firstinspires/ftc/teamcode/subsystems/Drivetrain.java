@@ -241,9 +241,9 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public double looptime(){
-            double t = looptimer.getElapsedTime();
-            looptimer.resetTimer();
-            return t;
+            return looptimer.getElapsedTime();
+
+
         }
     public double angularVel(){
         double dx = follower.getPose().getX() - xpos;
@@ -265,6 +265,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
+//        lookaheadTimeSec = lookaheadTimeSec/looptime();
         double dx = vx * lookaheadTimeSec;      // meters
         double dy = vy * lookaheadTimeSec;      // meters (left +)
         double dtheta = omega * lookaheadTimeSec; // radians
@@ -283,8 +284,9 @@ public class Drivetrain extends SubsystemBase {
         ypos = bluenearAimPos.getY();
     }
 
-//    public void periodic(){
-//    }
+    public void period(){
+        looptimer.resetTimer();
+    }
 
 }
 
