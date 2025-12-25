@@ -48,6 +48,9 @@ public class BohanTele extends CommandOpMode {
     private boolean yjustpressed = false;
     private boolean yholding = false;
 
+    private boolean y2justpressed = false;
+    private boolean y2holding = false;
+
     private boolean MovingshootingMode = false;
 
 
@@ -106,8 +109,9 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(()->updateMovingshooting(true));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()->updateMovingshooting(false));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()->light.setLight(Light.Color.Off, Light.Color.Off));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(()->updateMovingshooting(false));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(()->light.setLight(Light.Color.Off, Light.Color.Off));
+
 
     }
     public void updateMovingshooting(boolean flag){
@@ -200,6 +204,17 @@ public class BohanTele extends CommandOpMode {
             yholding = false;
             yjustpressed = false;
         }
+
+        if(gamepad2.y){
+            if(!y2holding){
+                y2justpressed = true;
+                y2holding = true;
+            }
+        }
+        else{
+            y2holding = false;
+            y2justpressed = false;
+        }
         if(yjustpressed&&shooter.shooterStatus != Shooter.ShooterStatus.Shooting){
             if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -220,6 +235,15 @@ public class BohanTele extends CommandOpMode {
 
         }
 
+        if(y2justpressed&&shooter.shooterStatus != Shooter.ShooterStatus.Shooting){
+            if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
+                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+            }
+            else{
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+            }
+            y2justpressed = false;
+        }
 
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
 //        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
