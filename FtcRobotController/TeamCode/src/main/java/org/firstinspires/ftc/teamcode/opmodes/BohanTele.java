@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Light;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
@@ -39,10 +41,14 @@ public class BohanTele extends CommandOpMode {
     private MyLimelight limelight;
     private Turret turret;
 
+    private Light light;
+
     private boolean xjustpressed = false;
     private boolean xholding = false;
     private boolean yjustpressed = false;
     private boolean yholding = false;
+
+
 
 
 
@@ -62,6 +68,7 @@ public class BohanTele extends CommandOpMode {
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
         turret = new Turret(hardwareMap);
+        light = new Light(hardwareMap);
 
         // Clear any leftover autonomous state that might still be latched on hardware
         shooter.resetTeleop();
@@ -82,12 +89,16 @@ public class BohanTele extends CommandOpMode {
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
         //gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
-
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.blueinit());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.redinit());
         //DRIVER TWO
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(()->turret.changeOffset(0.08));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(()->turret.changeOffset(-0.08));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(()->light.setLight(Light.Color.Off, Light.Color.Blue));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Blue, Light.Color.Off));
+
     }
 
 

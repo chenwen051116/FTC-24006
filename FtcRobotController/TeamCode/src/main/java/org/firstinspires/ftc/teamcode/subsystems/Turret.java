@@ -69,6 +69,8 @@ public class Turret extends SubsystemBase {
 
     public int autopos = 0;
 
+    public double offset = 0;
+
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
@@ -214,6 +216,9 @@ public class Turret extends SubsystemBase {
         shooterAuto = auto;
     }
 
+    public void changeOffset(double change){
+        offset+=change;
+    }
 
     @Override
     public void periodic() { // FTC 0.001s cycle
@@ -227,7 +232,7 @@ public class Turret extends SubsystemBase {
                 // thus you will need to make sure that the robot is not in these two states
                 //focusMode();
                 if (tx > llbar || tx < -llbar || abs(tx) < 0.01) {
-                    settoangle(aimangle);
+                    settoangle(aimangle+offset);
                 } else {
                     focusMode();
                 }

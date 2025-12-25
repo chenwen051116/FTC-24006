@@ -517,7 +517,7 @@ public class Red_Far_18ball_gate extends OpMode {
             //2nd shooting________________________________________________
             case 26:
                 if(!follower.isBusy()) {
-                    turret.autopos = -138;
+                    turret.autopos = 0;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     shooter.periodic();
