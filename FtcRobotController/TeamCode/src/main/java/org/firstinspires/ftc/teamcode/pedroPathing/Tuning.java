@@ -126,8 +126,12 @@ public class Tuning extends SelectableOpMode {
  * @version 1.0, 5/6/2024
  */
 class LocalizationTest extends OpMode {
+
+    private Timer timer;
     @Override
-    public void init() {}
+    public void init() {
+
+    }
 
     /** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */
     @Override
@@ -141,6 +145,7 @@ class LocalizationTest extends OpMode {
 
     @Override
     public void start() {
+        timer = new Timer();
         follower.startTeleopDrive();
         follower.update();
         follower.setStartingPose(new Pose(0,0,0));
@@ -154,12 +159,13 @@ class LocalizationTest extends OpMode {
     public void loop() {
         follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
         follower.update();
-
+        telemetryM.debug("looptime" + timer.getElapsedTime());
         telemetryM.debug("x:" + follower.getPose().getX());
         telemetryM.debug("y:" + follower.getPose().getY());
         telemetryM.debug("heading:" + follower.getPose().getHeading());
         telemetryM.debug("total heading:" + follower.getTotalHeading());
         telemetryM.update(telemetry);
+        timer.resetTimer();
 
         draw();
     }
