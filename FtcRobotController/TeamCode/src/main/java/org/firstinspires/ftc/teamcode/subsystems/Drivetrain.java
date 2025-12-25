@@ -65,7 +65,9 @@ public class Drivetrain extends SubsystemBase {
 
     public static double kPShooter= -0.15;
 
-    public static double testspeed = 0.2;
+    public static double testspeedx = 0.2;
+    public static double testspeedy= 0.2;
+    public static double testspeedrx = 0.2;
 
     //servos
 

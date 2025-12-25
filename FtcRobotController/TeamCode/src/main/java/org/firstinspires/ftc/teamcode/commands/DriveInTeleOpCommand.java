@@ -26,7 +26,7 @@ public class DriveInTeleOpCommand extends CommandBase {
 
         }
         else{
-            drivetrain.teleDrive(Drivetrain.testspeed, 0, 0);
+            drivetrain.teleDrive(Drivetrain.testspeedy, Drivetrain.testspeedx, Drivetrain.testspeedrx);
         }
     }
 
