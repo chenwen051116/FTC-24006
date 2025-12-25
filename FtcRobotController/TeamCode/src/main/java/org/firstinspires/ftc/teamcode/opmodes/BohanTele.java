@@ -110,7 +110,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-        drivetrain.period();
+
         shooter.periodic();
         turret.periodic();
         limelight.periodic();
@@ -228,13 +228,15 @@ public class BohanTele extends CommandOpMode {
 //        telemetry.addData("ShotterForce?", shooter.forceShooting);
 //        telemetry.addData("Rpm_Range", shooter.rpmreached);
 //        telemetry.addData("TransferDis", shooter.getTransDis());
-        telemetry.addData("Looptime", drivetrain.looptime());
+
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
 //        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
 //        telemetry.addData("BR Power", drivetrain.getBackRightPower());
+        telemetry.addData("Looptime", drivetrain.looptime());
         telemetry.update();
+        drivetrain.period();
     }
 }
 
