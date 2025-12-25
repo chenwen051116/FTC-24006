@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -22,11 +24,23 @@ public class DriveInTeleOpCommand extends CommandBase {
     public void execute() {
         //scheduler periodically calls the function
         if(!gamepad1.b) {
-            drivetrain.teleDrive(-0.9 * gamepad1.left_stick_y, 0.9 * gamepad1.left_stick_x, 0.7 * gamepad1.right_stick_x);
+            drivetrain.teleDrive(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ));
 
         }
         else{
-            drivetrain.teleDrive(Drivetrain.testspeedy, Drivetrain.testspeedx, Drivetrain.testspeedrx);
+            drivetrain.teleDrive(new PoseVelocity2d(
+                    new Vector2d(
+                            -Drivetrain.testspeedy,
+                            -Drivetrain.testspeedx
+                    ),
+                    -Drivetrain.testspeedrx
+            ));
         }
     }
 
