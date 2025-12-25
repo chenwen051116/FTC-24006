@@ -532,7 +532,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = follower.getPose();
-                    Drivetrain.TredFblue = true;
+                    Drivetrain.TredFblue = false;
                     //setPathState(28);
                     break;
 
@@ -678,6 +678,8 @@ public class Blue_Far_18ball_gate extends OpMode {
     @Override
     public void stop() {
         resetSubsystemsForTeleop();
+        Drivetrain.lastPose = follower.getPose();
+        Drivetrain.TredFblue = false;
     }
 
     /**

@@ -678,6 +678,9 @@ public class Red_Far_18ball_gate extends OpMode {
     @Override
     public void stop() {
         resetSubsystemsForTeleop();
+        Drivetrain.lastPose = follower.getPose();
+        Drivetrain.TredFblue = true;
+        //setPathState(28);
     }
 
     /**
