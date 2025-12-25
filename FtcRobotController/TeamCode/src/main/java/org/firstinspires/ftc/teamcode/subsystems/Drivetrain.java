@@ -33,6 +33,7 @@ public class Drivetrain extends SubsystemBase {
     //private final DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
 
+    private MecanumDrive drive;
 
     public Follower follower;
 
@@ -70,8 +71,6 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedy= 0.2;
     public static double testspeedrx = 0.2;
 
-    public MecanumDrive basedrive;
-
     //servos
     public Timer looptimer;
 
@@ -81,7 +80,7 @@ public class Drivetrain extends SubsystemBase {
 //        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
 //        backRightMotor = hardwareMap.get(DcMotor.class, "backRight");
        // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        basedrive = new MecanumDrive(hardwareMap, new com.acmerobotics.roadrunner.Pose2d(lastPose.getX(), lastPose.getY(), lastPose.getHeading()));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new com.acmerobotics.roadrunner.Pose2d(lastPose.getX(), lastPose.getY(), lastPose.getHeading()));
 //        follower = Constants.createFollower(hardwareMap);
         //PanelsConfigurables.INSTANCE.refreshClass(this);
 //        follower.startTeleopDrive();
@@ -132,7 +131,7 @@ public class Drivetrain extends SubsystemBase {
 //        follower.update();
 //        // undo the sign changes we baked into x, rx
 //        follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
-        basedrive.setDrivePowers(vel);
+        drive.setDrivePowers(vel);
     }
 
 
@@ -175,7 +174,7 @@ public class Drivetrain extends SubsystemBase {
 //    }
 
     public void localizerInit(double x, double y, double heading){
-        basedrive.localizer.setPose(new com.acmerobotics.roadrunner.Pose2d(x,y,heading));
+        drive.localizer.setPose(new com.acmerobotics.roadrunner.Pose2d(x,y,heading));
     }
 
 
@@ -194,8 +193,8 @@ public class Drivetrain extends SubsystemBase {
 //        return sqrt(x*x+y*y);
 //    }
     public double getdis_TWO(){
-        double x = basedrive.localizer.getPose().position.x-xpos;
-        double y = basedrive.localizer.getPose().position.y-ypos;
+        double x = drive.localizer.getPose().position.x-xpos;
+        double y = drive.localizer.getPose().position.y-ypos;
         return sqrt(x*x+y*y)+kPShooter*forwardvel();
     }
 
@@ -203,10 +202,10 @@ public class Drivetrain extends SubsystemBase {
         return 0;
     }
     public double getxspeed(){
-        return (basedrive.localizer.getPose().position.x-lastPose.getX())/looptime();
+        return (drive.localizer.getPose().position.x-lastPose.getX())/looptime();
     }
     public double getyspeed(){
-        return (basedrive.localizer.getPose().position.y-lastPose.getY())/looptime();
+        return (drive.localizer.getPose().position.y-lastPose.getY())/looptime();
     }
 //    public double getturretangle(){
 ////        double x = follower.getPose().getX()-aimPos.getX();
@@ -226,9 +225,9 @@ public class Drivetrain extends SubsystemBase {
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
          predictedPose = lookaheadPoseTime(new Pose2d(
-                         basedrive.localizer.getPose().position.x,
-                         basedrive.localizer.getPose().position.y,
-                        new Rotation2d(basedrive.localizer.getPose().heading.toDouble())),
+                         drive.localizer.getPose().position.x,
+                         drive.localizer.getPose().position.y,
+                        new Rotation2d(drive.localizer.getPose().heading.toDouble())),
                 getxspeed(),
                 getyspeed(),
                 0,
@@ -238,7 +237,7 @@ public class Drivetrain extends SubsystemBase {
         double y = predictedPose.getY()-ypos;
 //        double x = follower.getPose().getX()-xpos;
 //        double y = follower.getPose().getY()-ypos;
-        double h = basedrive.localizer.getPose().heading.toDouble()+angle;
+        double h = drive.localizer.getPose().heading.toDouble()+angle;
         //       if(!TredFblue) {
         if (y < 0) {
             return 1 * h - Math.atan(abs(y) / abs(x));
@@ -255,8 +254,8 @@ public class Drivetrain extends SubsystemBase {
             return t;
         }
     public double angularVel(){
-        double dx = basedrive.localizer.getPose().position.x - xpos;
-        double dy = basedrive.localizer.getPose().position.y - ypos;
+        double dx = drive.localizer.getPose().position.x - xpos;
+        double dy = drive.localizer.getPose().position.y - ypos;
 
         double omega =
                 (dx * getyspeed() - dy * getxspeed()) / (dx*dx + dy*dy);
@@ -265,8 +264,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double forwardvel(){
-        double dx = basedrive.localizer.getPose().position.x- xpos;
-        double dy = basedrive.localizer.getPose().position.y - ypos;
+        double dx = drive.localizer.getPose().position.x- xpos;
+        double dy = drive.localizer.getPose().position.y - ypos;
 
         double dist = Math.sqrt(dx*dx + dy*dy);
 
@@ -292,10 +291,9 @@ public class Drivetrain extends SubsystemBase {
         ypos = bluenearAimPos.getY();
     }
 
-
-    public void period() {
-        lastPose = new Pose(basedrive.localizer.getPose().position.x,basedrive.localizer.getPose().position.y,basedrive.localizer.getPose().heading.toDouble());
-        basedrive.updatePoseEstimate();
+    @Override
+    public void periodic() {
+        lastPose = new Pose(drive.localizer.getPose().position.x,drive.localizer.getPose().position.y,drive.localizer.getPose().heading.toDouble());
     }
 //    public void periodic(){
 //    }
