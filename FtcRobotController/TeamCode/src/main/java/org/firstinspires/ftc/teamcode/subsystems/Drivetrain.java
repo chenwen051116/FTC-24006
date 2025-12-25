@@ -4,7 +4,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -80,13 +79,13 @@ public class Drivetrain extends SubsystemBase {
 //        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
 //        backRightMotor = hardwareMap.get(DcMotor.class, "backRight");
        // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new com.acmerobotics.roadrunner.Pose2d(lastPose.getX(), lastPose.getY(), lastPose.getHeading()));
-//        follower = Constants.createFollower(hardwareMap);
-        //PanelsConfigurables.INSTANCE.refreshClass(this);
-//        follower.startTeleopDrive();
-//        follower.update();
-//        follower.setStartingPose(new Pose(0,0,0));
-//        follower.setPose(lastPose);
+
+        follower = Constants.createFollower(hardwareMap);
+        PanelsConfigurables.INSTANCE.refreshClass(this);
+        follower.startTeleopDrive();
+        follower.update();
+        follower.setStartingPose(new Pose(0,0,0));
+        follower.setPose(lastPose);
 //        pin = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
 //        pin.setPosition(new Pose2D(DistanceUnit.MM,0,0, AngleUnit.RADIANS,0));
 //        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -99,39 +98,38 @@ public class Drivetrain extends SubsystemBase {
         looptimer = new Timer();
     }
 
-    public void teleDrive(PoseVelocity2d vel) {
-//        // What the follower *effectively* sees – include your sign flips here:
-//        double y  = frontBackVelocity;
-//        double x  = strafeVelocity;
-//        double rx = turnVelocity;
-//
-//        if(abs(rx)<0.1){
-//            rx = 0;
-//        }
-//        // Recreate mecanum mixing
-//        double fl = y + x + rx;
-//        double bl = y - x + rx;
-//        double fr = y - x - rx;
-//        double br = y + x - rx;
-//
-//        double maxMag = Math.max(
-//                Math.max(Math.abs(fl), Math.abs(fr)),
-//                Math.max(Math.abs(bl), Math.abs(br))
-//        );
-//
-//        double scale = 1.0;
-//        if (maxMag > 1.0) {
-//            scale = 1.0 / maxMag;
-//        }
-//
-//        double yScaled  = y  * scale;
-//        double xScaled  = x  * scale;
-//        double rxScaled = rx * scale;
-//
-//        follower.update();
-//        // undo the sign changes we baked into x, rx
-//        follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
-        drive.setDrivePowers(vel);
+    public void teleDrive(double frontBackVelocity, double strafeVelocity, double turnVelocity) {
+        // What the follower *effectively* sees – include your sign flips here:
+        double y  = frontBackVelocity;
+        double x  = strafeVelocity;
+        double rx = turnVelocity;
+
+        if(abs(rx)<0.1){
+            rx = 0;
+        }
+        // Recreate mecanum mixing
+        double fl = y + x + rx;
+        double bl = y - x + rx;
+        double fr = y - x - rx;
+        double br = y + x - rx;
+
+        double maxMag = Math.max(
+                Math.max(Math.abs(fl), Math.abs(fr)),
+                Math.max(Math.abs(bl), Math.abs(br))
+        );
+
+        double scale = 1.0;
+        if (maxMag > 1.0) {
+            scale = 1.0 / maxMag;
+        }
+
+        double yScaled  = y  * scale;
+        double xScaled  = x  * scale;
+        double rxScaled = rx * scale;
+
+        follower.update();
+        // undo the sign changes we baked into x, rx
+        follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
     }
 
 
@@ -174,7 +172,7 @@ public class Drivetrain extends SubsystemBase {
 //    }
 
     public void localizerInit(double x, double y, double heading){
-        drive.localizer.setPose(new com.acmerobotics.roadrunner.Pose2d(x,y,heading));
+        follower.setPose(new Pose(x,y,heading));
     }
 
 
@@ -193,19 +191,13 @@ public class Drivetrain extends SubsystemBase {
 //        return sqrt(x*x+y*y);
 //    }
     public double getdis_TWO(){
-        double x = drive.localizer.getPose().position.x-xpos;
-        double y = drive.localizer.getPose().position.y-ypos;
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
         return sqrt(x*x+y*y)+kPShooter*forwardvel();
     }
 
     public double getallspeed(){
-        return 0;
-    }
-    public double getxspeed(){
-        return (drive.localizer.getPose().position.x-lastPose.getX())/looptime();
-    }
-    public double getyspeed(){
-        return (drive.localizer.getPose().position.y-lastPose.getY())/looptime();
+        return follower.getVelocity().getMagnitude();
     }
 //    public double getturretangle(){
 ////        double x = follower.getPose().getX()-aimPos.getX();
@@ -225,11 +217,11 @@ public class Drivetrain extends SubsystemBase {
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
          predictedPose = lookaheadPoseTime(new Pose2d(
-                         drive.localizer.getPose().position.x,
-                         drive.localizer.getPose().position.y,
-                        new Rotation2d(drive.localizer.getPose().heading.toDouble())),
-                getxspeed(),
-                getyspeed(),
+                        follower.getPose().getX(),
+                        follower.getPose().getY(),
+                        new Rotation2d(follower.getPose().getHeading())),
+                follower.getVelocity().getXComponent(),
+                follower.getVelocity().getYComponent(),
                 0,
                 lookAheadTime
         );
@@ -237,7 +229,7 @@ public class Drivetrain extends SubsystemBase {
         double y = predictedPose.getY()-ypos;
 //        double x = follower.getPose().getX()-xpos;
 //        double y = follower.getPose().getY()-ypos;
-        double h = drive.localizer.getPose().heading.toDouble()+angle;
+        double h = follower.getPose().getHeading()+angle;
         //       if(!TredFblue) {
         if (y < 0) {
             return 1 * h - Math.atan(abs(y) / abs(x));
@@ -254,22 +246,22 @@ public class Drivetrain extends SubsystemBase {
             return t;
         }
     public double angularVel(){
-        double dx = drive.localizer.getPose().position.x - xpos;
-        double dy = drive.localizer.getPose().position.y - ypos;
+        double dx = follower.getPose().getX() - xpos;
+        double dy = follower.getPose().getY() - ypos;
 
         double omega =
-                (dx * getyspeed() - dy * getxspeed()) / (dx*dx + dy*dy);
+                (dx * follower.getVelocity().getYComponent() - dy * follower.getVelocity().getXComponent()) / (dx*dx + dy*dy);
 
         return omega;
     }
 
     public double forwardvel(){
-        double dx = drive.localizer.getPose().position.x- xpos;
-        double dy = drive.localizer.getPose().position.y - ypos;
+        double dx = follower.getPose().getX() - xpos;
+        double dy = follower.getPose().getY() - ypos;
 
         double dist = Math.sqrt(dx*dx + dy*dy);
 
-        return -(dx * getxspeed() + dy * getyspeed())/dist;
+        return -(dx * follower.getVelocity().getXComponent() + dy * follower.getVelocity().getYComponent())/dist;
     }
 
     public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
@@ -291,10 +283,6 @@ public class Drivetrain extends SubsystemBase {
         ypos = bluenearAimPos.getY();
     }
 
-    @Override
-    public void periodic() {
-        lastPose = new Pose(drive.localizer.getPose().position.x,drive.localizer.getPose().position.y,drive.localizer.getPose().heading.toDouble());
-    }
 //    public void periodic(){
 //    }
 

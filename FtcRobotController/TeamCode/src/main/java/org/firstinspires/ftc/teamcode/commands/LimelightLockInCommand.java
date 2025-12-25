@@ -30,8 +30,8 @@ public class LimelightLockInCommand extends CommandBase {
 
     @Override
     public void execute() { // scheduler periodically calls the function
-//        drivetrain.teleDrive(-0.9 * gamepad1.left_stick_y, 0.9 * gamepad1.left_stick_x,
-//                Kp * limelight.getTx());
+        drivetrain.teleDrive(-0.9 * gamepad1.left_stick_y, 0.9 * gamepad1.left_stick_x,
+                Kp * limelight.getTx());
 
     }
 
