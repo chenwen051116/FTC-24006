@@ -198,31 +198,31 @@ public class BohanTele extends CommandOpMode {
         }
 
 
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addData("Omega", drivetrain.angularVel());
-        telemetry.addData("speed over all",drivetrain.getallspeed());
-        telemetry.addData("speed towards",drivetrain.forwardvel());
-        telemetry.addData("x", drivetrain.follower.getPose().getX());
-        telemetry.addData("y", drivetrain.follower.getPose().getY());
-        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
-        telemetry.addData("PIDoutput", turret.turretpidOut);
-        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
-        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
-        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
-        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
-        telemetry.addData("Apriltag dist", limelight.getDis());
-        telemetry.addData("Apriltag X", limelight.getX());
-        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
-        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
-        telemetry.addData("Pitch", limelight.getPitch());
-        telemetry.addData("Shooterdis", shooter.distance);
-        telemetry.addData("tuaimanglex", turret.aimangle);
+//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//        telemetry.addData("Omega", drivetrain.angularVel());
+//        telemetry.addData("speed over all",drivetrain.getallspeed());
+//        telemetry.addData("speed towards",drivetrain.forwardvel());
+//        telemetry.addData("x", drivetrain.follower.getPose().getX());
+//        telemetry.addData("y", drivetrain.follower.getPose().getY());
+//        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
+//        telemetry.addData("PIDoutput", turret.turretpidOut);
+//        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
+//        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
+//        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
+//        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
+//        telemetry.addData("Apriltag dist", limelight.getDis());
+//        telemetry.addData("Apriltag X", limelight.getX());
+//        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
+//        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
+//        telemetry.addData("Pitch", limelight.getPitch());
+//        telemetry.addData("Shooterdis", shooter.distance);
+//        telemetry.addData("tuaimanglex", turret.aimangle);
 //        telemetry.addData("dis", drivetrain.getdis());
-        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
-        telemetry.addData("ShotterForce?", shooter.forceShooting);
-        telemetry.addData("Rpm_Range", shooter.rpmreached);
-        telemetry.addData("TransferDis", shooter.getTransDis());
+//        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
+//        telemetry.addData("ShotterForce?", shooter.forceShooting);
+//        telemetry.addData("Rpm_Range", shooter.rpmreached);
+//        telemetry.addData("TransferDis", shooter.getTransDis());
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
 //        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
