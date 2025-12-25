@@ -185,11 +185,11 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-//    public double getdis(){
-//        double x = follower.getPose().getX()-xpos;
-//        double y = follower.getPose().getY()-ypos;
-//        return sqrt(x*x+y*y);
-//    }
+    public double getdis(){
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        return sqrt(x*x+y*y);
+    }
     public double getdis_TWO(){
         double x = follower.getPose().getX()-xpos;
         double y = follower.getPose().getY()-ypos;
@@ -199,20 +199,20 @@ public class Drivetrain extends SubsystemBase {
     public double getallspeed(){
         return follower.getVelocity().getMagnitude();
     }
-//    public double getturretangle(){
-////        double x = follower.getPose().getX()-aimPos.getX();
-////        double y = follower.getPose().getY()-aimPos.getY();
-//        double x = follower.getPose().getX()-xpos;
-//        double y = follower.getPose().getY()-ypos;
-//        double h = follower.getPose().getHeading()+angle;
-// //       if(!TredFblue) {
-//            if (y < 0) {
-//                return 1 * h - Math.atan(abs(y) / abs(x));
-//            } else {
-//                return 1 * h + Math.atan(abs(y) / abs(x));
-//            }
-//
-//    }
+    public double getturretangle(){
+//        double x = follower.getPose().getX()-aimPos.getX();
+//        double y = follower.getPose().getY()-aimPos.getY();
+        double x = follower.getPose().getX()-xpos;
+        double y = follower.getPose().getY()-ypos;
+        double h = follower.getPose().getHeading()+angle;
+ //       if(!TredFblue) {
+            if (y < 0) {
+                return 1 * h - Math.atan(abs(y) / abs(x));
+            } else {
+                return 1 * h + Math.atan(abs(y) / abs(x));
+            }
+
+    }
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();

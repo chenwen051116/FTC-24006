@@ -48,6 +48,8 @@ public class BohanTele extends CommandOpMode {
     private boolean yjustpressed = false;
     private boolean yholding = false;
 
+    private boolean MovingshootingMode = false;
+
 
 
 
@@ -103,7 +105,13 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Blue, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(()->updateMovingshooting(true));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()->updateMovingshooting(false));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()->light.setLight(Light.Color.Off, Light.Color.Off));
 
+    }
+    public void updateMovingshooting(boolean flag){
+        MovingshootingMode = flag;
     }
 
 
@@ -115,6 +123,9 @@ public class BohanTele extends CommandOpMode {
         turret.periodic();
         limelight.periodic();
 //        intake.periodic();
+        if(MovingshootingMode){
+            light.setLight(Light.Color.Violet,Light.Color.Violet);
+        }
         if(gamepad1.dpad_left){
             drivetrain.TredFblue = false;
         }
@@ -152,10 +163,17 @@ public class BohanTele extends CommandOpMode {
         }
 
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
-            shooter.ododis = drivetrain.getdis_TWO();
+            if(MovingshootingMode) {
+                shooter.ododis = drivetrain.getdis_TWO();
+                turret.aimangle = drivetrain.getturretangle_TWO();
+            }
+            else{
+                shooter.ododis = drivetrain.getdis();
+                turret.aimangle = drivetrain.getturretangle();
+            }
             turret.updateAutoShoot(true);
             turret.tx = limelight.getTx();
-            turret.aimangle = drivetrain.getturretangle_TWO();
+
         }
         else{
             turret.updateAutoShoot(false);

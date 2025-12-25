@@ -82,6 +82,8 @@ public class Shooter extends SubsystemBase {
     public boolean rpmreached = false;
 
     public boolean forceShooting = false;
+
+    public boolean Movingshooting = false;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting

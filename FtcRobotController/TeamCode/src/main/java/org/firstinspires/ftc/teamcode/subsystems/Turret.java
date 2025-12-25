@@ -70,6 +70,7 @@ public class Turret extends SubsystemBase {
     public int autopos = 0;
 
     public double offset = 0;
+    public boolean Movingshooting = false;
 
     // Constructor for intake motors
 
@@ -232,6 +233,7 @@ public class Turret extends SubsystemBase {
                 // thus you will need to make sure that the robot is not in these two states
                 //focusMode();
                 if (tx > llbar || tx < -llbar || abs(tx) < 0.01) {
+
                     settoangle(aimangle+offset);
                 } else {
                     focusMode();
