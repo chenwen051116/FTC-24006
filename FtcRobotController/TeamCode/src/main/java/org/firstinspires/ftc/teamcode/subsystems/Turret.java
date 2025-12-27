@@ -106,6 +106,14 @@ public class Turret extends SubsystemBase {
         return !magLim.getState();
     }
 
+    public static double wrapCentered(double angle, double centerRad) {
+        double twoPi = 2.0 * Math.PI;
+        while (angle - centerRad <= -Math.PI) angle += twoPi;
+        while (angle - centerRad >   Math.PI) angle -= twoPi;
+        return angle;
+    }
+
+
     public void settoangle(double arcangle){
 
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
@@ -221,6 +229,8 @@ public class Turret extends SubsystemBase {
         offset+=change;
     }
 
+
+
     @Override
     public void periodic() { // FTC 0.001s cycle
 
@@ -233,8 +243,11 @@ public class Turret extends SubsystemBase {
                 // thus you will need to make sure that the robot is not in these two states
                 //focusMode();
                 if (tx > llbar || tx < -llbar || abs(tx) < 0.01) {
+                    double desired = aimangle + offset;
+                    desired = wrapCentered(desired, Math.PI); // shift wrap point by 180°
+                    settoangle(desired);
 
-                    settoangle(aimangle+offset);
+                   // settoangle(aimangle+offset);
                 } else {
                     focusMode();
                 }

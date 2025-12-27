@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Turret.wrapCentered;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
@@ -204,8 +205,11 @@ public class Drivetrain extends SubsystemBase {
 //        double y = follower.getPose().getY()-aimPos.getY();
         double x = follower.getPose().getX()-xpos;
         double y = follower.getPose().getY()-ypos;
-        double h = follower.getPose().getHeading()+angle;
- //       if(!TredFblue) {
+        //double h = follower.getPose().getHeading()+angle;
+        double hRaw = follower.getPose().getHeading();   // -pi..pi
+        double h = wrapCentered(hRaw, Math.PI);          // 0..2pi (wrap point at 0)
+
+        //       if(!TredFblue) {
             if (y < 0) {
                 return 1 * h - Math.atan(abs(y) / abs(x));
             } else {
@@ -229,7 +233,10 @@ public class Drivetrain extends SubsystemBase {
         double y = predictedPose.getY()-ypos;
 //        double x = follower.getPose().getX()-xpos;
 //        double y = follower.getPose().getY()-ypos;
-        double h = follower.getPose().getHeading()+angle;
+        //double h = follower.getPose().getHeading()+angle;
+        double hRaw = follower.getPose().getHeading();   // -pi..pi
+        double h = wrapCentered(hRaw, Math.PI);          // 0..2pi (wrap point at 0)
+
         //       if(!TredFblue) {
         if (y < 0) {
             return 1 * h - Math.atan(abs(y) / abs(x));
