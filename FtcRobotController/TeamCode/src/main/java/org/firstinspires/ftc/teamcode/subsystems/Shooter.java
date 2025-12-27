@@ -61,7 +61,10 @@ public class Shooter extends SubsystemBase {
      * Clear auto flags and stop motors for a clean TeleOp start.
      */
     public void back(){
-
+//        if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+//            shooterLeft.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+//            shooterRight.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+//        }
         shooterLeft.setTargetPosition(backpos);
         shooterRight.setTargetPosition(backpos);
         shooterRight.setPower(1);
@@ -72,17 +75,21 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shoot(){
-        if(abs(shooterLeft.getCurrentPosition())<2){
+        if(abs(shooterLeft.getCurrentPosition())<4){
             shooterLeft.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
             shooterRight.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
         }
         else{
+            if(shooterLeft.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                shooterLeft.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+                shooterRight.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+            }
             shooterLeft.setTargetPosition(0);
             shooterRight.setTargetPosition(0);
-            shooterRight.setPower(1);
-            shooterLeft.setPower(1);
-            shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            shooterRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            shooterRight.setPower(-1);
+            shooterLeft.setPower(-1);
+//            shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            shooterRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
     public void resetTeleop() {
