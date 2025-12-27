@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
 
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static int backpos = 90;
+    public static int backpos = -90;
 
 
 
