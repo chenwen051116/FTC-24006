@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,7 +24,7 @@ public class Shooter extends SubsystemBase {
 
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static int backpos = -90;
+    public static int backpos = 80;
 
 
 
@@ -40,7 +41,7 @@ public class Shooter extends SubsystemBase {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
        shooterLeft.setDirection(DcMotor.Direction.FORWARD);
-        shooterRight.setDirection(DcMotor.Direction.FORWARD);
+        shooterRight.setDirection(DcMotor.Direction.REVERSE);
 
         // Configure motor modes - only shooterLeft has encoder
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);  // Has encoder
@@ -62,7 +63,7 @@ public class Shooter extends SubsystemBase {
     public void back(){
 
         shooterLeft.setTargetPosition(backpos);
-        shooterRight.setTargetPosition(-backpos);
+        shooterRight.setTargetPosition(backpos);
         shooterRight.setPower(1);
         shooterLeft.setPower(1);
         shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
