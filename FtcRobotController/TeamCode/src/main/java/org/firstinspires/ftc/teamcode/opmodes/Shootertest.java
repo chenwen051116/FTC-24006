@@ -33,7 +33,8 @@ import java.util.List;
 
 @TeleOp
 public class Shootertest extends CommandOpMode {
-    private DcMotorEx motor;
+    private DcMotorEx motor1;
+    private DcMotorEx motor2;
 
 
 
@@ -45,9 +46,12 @@ public class Shootertest extends CommandOpMode {
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
-        motor = hardwareMap.get(DcMotorEx.class,"catapult2");
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor1 = hardwareMap.get(DcMotorEx.class,"catapult1");
+        motor2 = hardwareMap.get(DcMotorEx.class,"catapult2");
+        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -56,7 +60,8 @@ public class Shootertest extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
 
-        telemetry.addData("pos", motor.getCurrentPosition() );
+        telemetry.addData("pos1", motor1.getCurrentPosition() );
+        telemetry.addData("pos2", motor2.getCurrentPosition() );
 //        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
 //        telemetry.addData("PIDoutput", shooter.getCurrentPIDOutput());
 //        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
