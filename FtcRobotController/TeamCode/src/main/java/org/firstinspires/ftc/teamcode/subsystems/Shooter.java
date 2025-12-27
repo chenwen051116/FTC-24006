@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
 
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static int backpos = 80;
+    public static int backpos = 90;
 
 
 
@@ -37,8 +37,8 @@ public class Shooter extends SubsystemBase {
 
 
         // Configure motors
-       shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+       shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
        shooterLeft.setDirection(DcMotor.Direction.FORWARD);
         shooterRight.setDirection(DcMotor.Direction.REVERSE);
