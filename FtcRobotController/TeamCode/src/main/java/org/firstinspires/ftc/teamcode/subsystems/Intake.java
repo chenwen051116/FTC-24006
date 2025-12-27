@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         //transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.FORWARD);
         //setServoPos(servoTestpos);
     }
 

@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
 
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static int Shootpos = 0;
+    public static int backpos = 90;
 
 
 
@@ -61,7 +61,16 @@ public class Shooter extends SubsystemBase {
      */
     public void back(){
 
+        shooterLeft.setTargetPosition(backpos);
+        shooterRight.setTargetPosition(-backpos);
+        shooterRight.setPower(1);
+        shooterLeft.setPower(1);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        shooterRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+    }
+
+    public void shoot(){
         if(abs(shooterLeft.getCurrentPosition())<5){
             shooterLeft.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
             shooterRight.setMode((DcMotor.RunMode.STOP_AND_RESET_ENCODER));
@@ -69,20 +78,11 @@ public class Shooter extends SubsystemBase {
         else{
             shooterLeft.setTargetPosition(0);
             shooterRight.setTargetPosition(0);
-            shooterRight.setPower(0.4);
-            shooterLeft.setPower(0.4);
+            shooterRight.setPower(1);
+            shooterLeft.setPower(1);
             shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             shooterRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-    }
-
-    public void shoot(){
-        shooterLeft.setTargetPosition(Shootpos);
-        shooterRight.setTargetPosition(-Shootpos);
-        shooterRight.setPower(1);
-        shooterLeft.setPower(1);
-        shooterLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shooterRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void resetTeleop() {
 
