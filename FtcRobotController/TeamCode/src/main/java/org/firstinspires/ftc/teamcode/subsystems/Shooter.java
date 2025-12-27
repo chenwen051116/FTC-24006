@@ -40,7 +40,7 @@ public class Shooter extends SubsystemBase {
        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-       shooterLeft.setDirection(DcMotor.Direction.FORWARD);
+       shooterLeft.setDirection(DcMotor.Direction.REVERSE);
         shooterRight.setDirection(DcMotor.Direction.REVERSE);
 
         // Configure motor modes - only shooterLeft has encoder
