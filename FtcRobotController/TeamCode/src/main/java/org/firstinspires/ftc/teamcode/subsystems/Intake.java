@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Intake extends SubsystemBase {
 
     private final DcMotor intake;
-    private final Servo transferLeft;
-    private final Servo transferRight;
+//    private final Servo transferLeft;
+//    private final Servo transferRight;
 
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -41,8 +41,8 @@ public class Intake extends SubsystemBase {
     // Constructor for intake motors
     public Intake(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotor.class, "intake");
-        transferLeft = hardwareMap.get(Servo.class, "transferL");
-        transferRight = hardwareMap.get(Servo.class, "transferR");
+//        transferLeft = hardwareMap.get(Servo.class, "transferL");
+//        transferRight = hardwareMap.get(Servo.class, "transferR");
 
 
         // The intake does not need to necessarily move at steady
@@ -51,20 +51,20 @@ public class Intake extends SubsystemBase {
         // transfer stage
         //transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        setServoPos(servoTestpos);
+        //setServoPos(servoTestpos);
     }
 
 
-    public void setServoPos(double pos){
-        if(testmode>1){
-            transferLeft.setPosition(servoTestpos);
-            transferRight.setPosition(servoTestpos+servoDiff);
-        }
-        else {
-            transferLeft.setPosition(pos);
-            transferRight.setPosition(pos + servoDiff);
-        }
-    }
+//    public void setServoPos(double pos){
+//        if(testmode>1){
+//            transferLeft.setPosition(servoTestpos);
+//            transferRight.setPosition(servoTestpos+servoDiff);
+//        }
+//        else {
+//            transferLeft.setPosition(pos);
+//            transferRight.setPosition(pos + servoDiff);
+//        }
+//    }
     public void setIntakePower(double power) {
 
         intake.setPower(power);
@@ -101,23 +101,23 @@ public class Intake extends SubsystemBase {
         if(!shooterAuto || autoForce) {
 
             intake.setPower(intakeCurrentState.intakePower);
-            if(!gatepos) {
-                setServoPos(intakeCurrentState.transServer);
-            }
-            else{
-                setServoPos(intakeCurrentState.transServer+0.2);
-            }
+//            if(!gatepos) {
+//                setServoPos(intakeCurrentState.transServer);
+//            }
+//            else{
+//                setServoPos(intakeCurrentState.transServer+0.2);
+//            }
         }
         else{
             if(autoTrans){
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
                 intake.setPower(intakeCurrentState.intakePower);
-                setServoPos(intakeCurrentState.transServer);
+                //setServoPos(intakeCurrentState.transServer);
             }
             else{
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
                 intake.setPower(intakeCurrentState.intakePower);
-                setServoPos(intakeCurrentState.transServer);
+                //setServoPos(intakeCurrentState.transServer);
             }
         }
 
@@ -138,7 +138,7 @@ public class Intake extends SubsystemBase {
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             intake.setPower(intakeCurrentState.intakePower);
-            setServoPos(intakeCurrentState.transServer);
+            //setServoPos(intakeCurrentState.transServer);
         }
         else{
             if(autoTrans){
@@ -153,7 +153,7 @@ public class Intake extends SubsystemBase {
             }
             // update the power to the motors
             intake.setPower(intakeCurrentState.intakePower);
-            setServoPos(intakeCurrentState.transServer);
+            //setServoPos(intakeCurrentState.transServer);
         }
     }
 
@@ -166,7 +166,7 @@ public class Intake extends SubsystemBase {
         autoForce = false;
         intakeCurrentState = IntakeTransferState.Intake_Steady;
         intake.setPower(0);
-        setServoPos(intakeCurrentState.transServer);
+        //setServoPos(intakeCurrentState.transServer);
         gatepos = false;
     }
 }

@@ -45,7 +45,9 @@ public class Shootertest extends CommandOpMode {
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
-        motor = hardwareMap.get(DcMotorEx.class,"turret");
+        motor = hardwareMap.get(DcMotorEx.class,"catapult2");
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
