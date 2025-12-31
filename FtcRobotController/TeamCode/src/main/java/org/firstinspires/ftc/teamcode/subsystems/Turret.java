@@ -6,6 +6,7 @@ import static java.lang.Math.floor;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -37,6 +38,14 @@ public class Turret extends SubsystemBase {
     public double ki = 0.001;
 
     public double kf = 0;
+
+    public static double encoderkp = -0.00;
+    public static double encoderkd = 0.0000;
+    public static double encoderki = 0.000;
+
+    public static double encoderkf = 0;
+
+    private final PIDFController turretpidController;
     public double highkp = -2;
     public double txbar = 5;
 
@@ -71,6 +80,7 @@ public class Turret extends SubsystemBase {
 
     public double offset = 0;
     public boolean Movingshooting = false;
+    private double output = 0;
 
     // Constructor for intake motors
 
@@ -88,6 +98,8 @@ public class Turret extends SubsystemBase {
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         pidController = new PIDController(kp,ki,kd);
+        turretpidController = new PIDFController(encoderkp,encoderki,encoderkd,encoderkf);
+        turretpidController.setSetPoint(0);
         automode = false;
         //intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -108,14 +120,23 @@ public class Turret extends SubsystemBase {
 
     public void settoangle(double arcangle){
 
-        if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
-            turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretMotor.setPower(1);
-        turretMotor.setTargetPosition((int) floor(arcangle*arctoDegree));
-        if(turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turretpidController.setSetPoint((int) floor(arcangle*arctoDegree));
+        turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
+        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        if(output >1){
+            output =1;
         }
+        else if(output<-1){
+            output = -1;
+        }
+        turretMotor.setPower(output);
+        //turretMotor.setTargetPosition((int) floor(arcangle*arctoDegree));
+//        if(turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+//            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
     }
 
     public void focusMode(){
@@ -161,28 +182,35 @@ public class Turret extends SubsystemBase {
 
     public void centering(){
 
-            if (turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-            turretMotor.setPower(0.6);
-            targetpos = 0;
-            turretMotor.setTargetPosition(targetpos);
-            if (turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        turretpidController.setSetPoint(0);
+        turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
+        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        if(output >1){
+            output =1;
+        }
+        else if(output<-1){
+            output = -1;
+        }
+        turretMotor.setPower(output);
 
     }
     public void settopos(int pos){
-        if (turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER && turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+            turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretMotor.setPower(1);
-        targetpos = pos;
-        turretMotor.setTargetPosition(targetpos);
-        if (turretMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turretpidController.setSetPoint(pos);
+        turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
+        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        if(output >1){
+            output =1;
         }
+        else if(output<-1){
+            output = -1;
+        }
+        turretMotor.setPower(output);
     }
 
     public void manuelCenter(){
@@ -269,6 +297,7 @@ public class Turret extends SubsystemBase {
         isManeulCentering = false;
         centeringDir = false;
         maneulCenteringFlag = false;
+
         turretpidOut = 0;
         if (turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
