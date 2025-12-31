@@ -268,7 +268,7 @@ public class BohanTele extends CommandOpMode {
 //        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
 //        telemetry.addData("Pitch", limelight.getPitch());
 //        telemetry.addData("Shooterdis", shooter.distance);
-//        telemetry.addData("tuaimanglex", turret.aimangle);
+        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
 //        telemetry.addData("dis", drivetrain.getdis_TWO());
 //        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 //        telemetry.addData("ShotterForce?", shooter.forceShooting);
