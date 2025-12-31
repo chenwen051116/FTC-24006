@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.floor;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.util.Timer;
@@ -310,23 +311,89 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Shooting;
     }
 
+    public double[] shortdis = {53.3992
+            ,58.0312
+            ,63.6934
+            ,68.3024
+            ,73.3103
+            ,78.3967
+            ,83.3191
+            ,88.4699
+            ,93.2528
+            ,98.4668
+            ,103.132
+            ,108.2516};
+
+    public int[] shortrpm = {
+        2670,
+        2640,
+        2610,
+        2550,
+        2570,
+        2590,
+        2610,
+        2590,
+        2600,
+        2630,
+        2695,
+        2780
+    };
+
+    public double[] longdis = {123.6751,
+            128.7674,
+            133.5043,
+            138.4454,
+            143.3385,
+            148.7577,
+            153.3198,
+            158.6143};
+
+    public int[] longrpm = {
+            3060,
+            3085,
+            3100,
+            3140,
+            3200,
+            3270,
+            3375,
+            3430
+    };
+
     public void updateAim() {
-//        double dis = abs(ododis);
-//        if (dis > 60){
-//            setTargetRPM(7.3743*dis+2148.4+offset);
-//        }
-//        else if (dis <= 60){
-//            setTargetRPM(-7.3743*dis+3049+offset);
-//        }
-//
-//
-//        if(automode&&autoLonger){
-//            setTargetRPM(Autolong);
-//        }
-//        else if(automode&&!autoLonger){
-//            setTargetRPM(Autoshort);
-//        }
-        setTargetRPM(aimRPM);
+        double dis = abs(ododis);
+        if (dis <120){
+            int index = (int)floor((dis-53)/5.0);
+            if(index<0){
+                index = 0;
+            }
+            if(index >10){
+                index = 10;
+            }
+            double slope = (shortrpm[index+1]-shortrpm[index])/(shortdis[index+1]-shortdis[index]);
+            double target = slope*(dis-shortdis[index])+shortrpm[index];
+            setTargetRPM(target+offset);
+        }
+        else {
+            int index = (int)floor((dis-123)/5.0);
+            if(index<0){
+                index = 0;
+            }
+            if(index >6){
+                index = 6;
+            }
+            double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
+            double target = slope*(dis-longdis[index])+longrpm[index];
+            setTargetRPM(target+offset);
+        }
+
+
+        if(automode&&autoLonger){
+            setTargetRPM(Autolong);
+        }
+        else if(automode&&!autoLonger){
+            setTargetRPM(Autoshort);
+        }
+        //setTargetRPM(aimRPM);
     }
 
 
