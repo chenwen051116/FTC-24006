@@ -196,18 +196,28 @@ public class Turret extends SubsystemBase {
                 isManeulCentering = false;
             }
         }
+//        else{
+//            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
+//                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            }
+//            turretMotor.setVelocity(-centerVel);
+//            if(isCentered()){
+//                maneulCenteringFlag = true;
+//            }
+//            if(!isCentered()&&maneulCenteringFlag){
+//                turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                isManeulCentering = false;
+//                maneulCenteringFlag = false;
+//            }
+//        }
         else{
             if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
                 turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
             turretMotor.setVelocity(-centerVel);
             if(isCentered()){
-                maneulCenteringFlag = true;
-            }
-            if(!isCentered()&&maneulCenteringFlag){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 isManeulCentering = false;
-                maneulCenteringFlag = false;
             }
         }
     }
