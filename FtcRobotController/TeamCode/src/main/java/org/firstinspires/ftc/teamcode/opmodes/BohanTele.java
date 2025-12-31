@@ -249,8 +249,9 @@ public class BohanTele extends CommandOpMode {
             y2justpressed = false;
         }
 
-//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("dis", drivetrain.getdis());
 //        telemetry.addData("Omega", drivetrain.angularVel());
 //        telemetry.addData("speed over all",drivetrain.getallspeed());
 //        telemetry.addData("speed towards",drivetrain.forwardvel());
@@ -270,8 +271,6 @@ public class BohanTele extends CommandOpMode {
 //        telemetry.addData("Shooterdis", shooter.distance);
         telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
         telemetry.addData("turretpos", turret.getPos());
-
-//        telemetry.addData("dis", drivetrain.getdis_TWO());
 //        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 //        telemetry.addData("ShotterForce?", shooter.forceShooting);
 //        telemetry.addData("Rpm_Range", shooter.rpmreached);

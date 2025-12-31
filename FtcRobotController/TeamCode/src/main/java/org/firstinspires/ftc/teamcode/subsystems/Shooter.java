@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
-    public  double aimRPM = 0;
+    public static double aimRPM = 0;
 
     // Target RPM for the flywheel
     private double targetRPM = 0.0;
@@ -311,22 +311,22 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateAim() {
-        double dis = abs(ododis);
-        if (dis > 60){
-            setTargetRPM(7.3743*dis+2148.4+offset);
-        }
-        else if (dis <= 60){
-            setTargetRPM(-7.3743*dis+3049+offset);
-        }
-
-
-        if(automode&&autoLonger){
-            setTargetRPM(Autolong);
-        }
-        else if(automode&&!autoLonger){
-            setTargetRPM(Autoshort);
-        }
-        //setTargetRPM(aimRPM);
+//        double dis = abs(ododis);
+//        if (dis > 60){
+//            setTargetRPM(7.3743*dis+2148.4+offset);
+//        }
+//        else if (dis <= 60){
+//            setTargetRPM(-7.3743*dis+3049+offset);
+//        }
+//
+//
+//        if(automode&&autoLonger){
+//            setTargetRPM(Autolong);
+//        }
+//        else if(automode&&!autoLonger){
+//            setTargetRPM(Autoshort);
+//        }
+        setTargetRPM(aimRPM);
     }
 
 
