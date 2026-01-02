@@ -31,9 +31,9 @@ public class Shooter extends SubsystemBase {
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
-    public static double Kf = 1.8;    // Friction gain
+    public static double Kf = 0;    // Friction gain
 
-    public static double kv = 0.000205; // FeedForward velocity gain
+    public static double kv = 0.000215; // FeedForward velocity gain
     public static double pidThreshold = 1000.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 

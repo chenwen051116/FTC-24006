@@ -127,10 +127,6 @@ public class BohanTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
 
-        shooter.periodic();
-        turret.periodic();
-        limelight.periodic();
-//        intake.periodic();
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
@@ -252,6 +248,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("dis", drivetrain.getdis());
+        telemetry.addData("maglim", turret.magLim.getState());
 //        telemetry.addData("Omega", drivetrain.angularVel());
 //        telemetry.addData("speed over all",drivetrain.getallspeed());
 //        telemetry.addData("speed towards",drivetrain.forwardvel());
