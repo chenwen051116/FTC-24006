@@ -82,6 +82,8 @@ public class Turret extends SubsystemBase {
     public boolean Movingshooting = false;
     private double output = 0;
 
+    public double aimposition = 0;
+
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
@@ -124,6 +126,7 @@ public class Turret extends SubsystemBase {
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         turretpidController.setSetPoint((int) floor(arcangle*arctoDegree));
+        aimposition = (int) floor(arcangle*arctoDegree);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
         if(output >1){
