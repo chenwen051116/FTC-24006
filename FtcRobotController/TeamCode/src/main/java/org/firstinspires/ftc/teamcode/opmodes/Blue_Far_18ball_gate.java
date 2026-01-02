@@ -175,7 +175,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3125;
-                turret.autopos = 190;
+                turret.autopos = -313;
                 setPathState(1);
 
                 break;
@@ -205,7 +205,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
-                    turret.autopos = 195;
+                    turret.autopos = -319;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -254,7 +254,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             //2nd shooting________________________________________________
             case 6:
                 if(!follower.isBusy()) {
-                    turret.autopos = 138;
+                    turret.autopos = -371;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
@@ -386,7 +386,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             //4th shooting________________________________________________
             case 16:
                 if(!follower.isBusy()) {
-                    turret.autopos = 195;
+                    turret.autopos = -319;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -447,7 +447,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 break;
             case 22:
                 if(!follower.isBusy()) {
-                    turret.autopos = 195;
+                    turret.autopos = -319;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
