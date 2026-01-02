@@ -41,9 +41,9 @@ public class Turret extends SubsystemBase {
 
     public static double encoderkp = 0.02;
     public static double encoderkd = 0.00075;
-    public static double encoderki = 0;
+    public static double encoderki = 0.08;
 
-    public static double encoderkf = 0.001;
+    public static double encoderkf = 0;
 
     private final PIDFController turretpidController;
     public double highkp = -2;
