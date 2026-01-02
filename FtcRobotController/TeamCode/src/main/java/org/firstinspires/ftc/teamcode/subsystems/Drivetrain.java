@@ -49,8 +49,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static double angle = 0;
 
-    public static double xstaticpos = 126.67;
-    public static double ystaticpos = -129.01;
+    public static double xstaticpos = 129.67;
+    public static double ystaticpos = -134.01;
 
     public Pose bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
 
