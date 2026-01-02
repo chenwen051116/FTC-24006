@@ -174,7 +174,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
-                shooter.Autolong = 3125;
+                shooter.Autolong = 3160;
                 turret.autopos = -313;
                 setPathState(1);
 
@@ -206,7 +206,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     turret.autopos = -319;
-                    shooter.Autolong = 3100;
+                    shooter.Autolong = 3135;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
