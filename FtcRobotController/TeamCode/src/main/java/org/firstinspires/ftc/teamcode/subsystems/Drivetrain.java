@@ -38,8 +38,8 @@ public class Drivetrain extends SubsystemBase {
 
     public GoBildaPinpointDriver pin;
 
-    public static double xpos = 126.67;
-    public static double ypos = -129.01;
+    public double xpos = 126.67;
+    public double ypos = -129.01;
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.2;
 
@@ -47,10 +47,13 @@ public class Drivetrain extends SubsystemBase {
 
     public static double angle = 0;
 
-    public Pose bluenearAimPos = new Pose(xpos,ypos,angle);
+    public static double xstaticpos = 126.67;
+    public static double ystaticpos = -129.01;
+
+    public Pose bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
 
 
-    public Pose rednearAimPos = new Pose(xpos,-ypos,angle);
+    public Pose rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
     public Pose aimPos = bluenearAimPos;
 
     public Pose blueInitpose = new Pose(0.1224,-0.3717,3.141);
