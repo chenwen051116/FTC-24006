@@ -288,11 +288,13 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void redinit(){
+        rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
         xpos = rednearAimPos.getX();
         ypos = rednearAimPos.getY();
     }
 
     public void blueinit(){
+        bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
         xpos = bluenearAimPos.getX();
         ypos = bluenearAimPos.getY();
     }
