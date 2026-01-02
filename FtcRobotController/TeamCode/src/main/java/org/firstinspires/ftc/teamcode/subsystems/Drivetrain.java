@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -72,6 +74,8 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
     public static double testspeedrx = 0.2;
+
+    public double turretcenterdis = 1.2027;
 
     //servos
     public Timer looptimer;
@@ -189,13 +193,38 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getdis(){
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
+
+        double heading  = follower.getHeading();
+        double realx = follower.getPose().getX();
+        double realy = follower.getPose().getY();
+        if(heading >0){
+            realx-=turretcenterdis*cos(heading);
+            realy-=turretcenterdis*sin(heading);
+        }
+        else{
+            heading = abs(heading);
+            realx-=turretcenterdis*cos(heading);
+            realy+=turretcenterdis*sin(heading);
+        }
+        double x = realx-xpos;
+        double y = realy-ypos;
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
+        double heading  = follower.getHeading();
+        double realx = follower.getPose().getX();
+        double realy = follower.getPose().getY();
+        if(heading >0){
+            realx-=turretcenterdis*cos(heading);
+            realy-=turretcenterdis*sin(heading);
+        }
+        else{
+            heading = abs(heading);
+            realx-=turretcenterdis*cos(heading);
+            realy+=turretcenterdis*sin(heading);
+        }
+        double x = realx-xpos;
+        double y = realy-ypos;
         return sqrt(x*x+y*y)+kPShooter*forwardvel();
     }
 
@@ -205,8 +234,20 @@ public class Drivetrain extends SubsystemBase {
     public double getturretangle(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
+        double heading  = follower.getHeading();
+        double realx = follower.getPose().getX();
+        double realy = follower.getPose().getY();
+        if(heading >0){
+            realx-=turretcenterdis*cos(heading);
+            realy-=turretcenterdis*sin(heading);
+        }
+        else{
+            heading = abs(heading);
+            realx-=turretcenterdis*cos(heading);
+            realy+=turretcenterdis*sin(heading);
+        }
+        double x = realx-xpos;
+        double y = realy-ypos;
         double h = follower.getPose().getHeading()+Math.PI+angle;
  //       if(!TredFblue) {
             if (y < 0) {
@@ -237,8 +278,20 @@ public class Drivetrain extends SubsystemBase {
                 0,
                 lookAheadTime
         );
-        double x = predictedPose.getX()-xpos;
-        double y = predictedPose.getY()-ypos;
+        double heading  = follower.getHeading();
+        double realx = follower.getPose().getX();
+        double realy = follower.getPose().getY();
+        if(heading >0){
+            realx-=turretcenterdis*cos(heading);
+            realy-=turretcenterdis*sin(heading);
+        }
+        else{
+            heading = abs(heading);
+            realx-=turretcenterdis*cos(heading);
+            realy+=turretcenterdis*sin(heading);
+        }
+        double x = realx-xpos;
+        double y = realy-ypos;
 //        double x = follower.getPose().getX()-xpos;
 //        double y = follower.getPose().getY()-ypos;
         double h = follower.getPose().getHeading()+Math.PI+angle;
