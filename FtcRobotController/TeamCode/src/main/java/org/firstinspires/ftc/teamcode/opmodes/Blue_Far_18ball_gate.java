@@ -68,7 +68,7 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 0.75;
+    public static double stoptime = 1.75;
     public static double shoottime = 1.65;
     public static double xpos = 126.67;
     public static double ypos = -129.01;
@@ -280,7 +280,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 }
                 break;
             case 9:
-                if(!follower.isBusy()){
+//                if(!follower.isBusy()){
                     if (!firstshooting) {
                         timer.resetTimer();
                         firstshooting = true;
@@ -299,7 +299,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                         }
 
                     }
-                }
+//                }
                 break;
             case 10:
                 if(!follower.isBusy()){
