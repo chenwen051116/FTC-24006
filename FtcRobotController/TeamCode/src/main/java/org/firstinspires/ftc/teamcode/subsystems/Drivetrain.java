@@ -1,299 +1,140 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Turret.wrapCentered;
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Twist2d;
-import com.bylazar.configurables.PanelsConfigurables;
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.PinpointLocalizer;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Config
 public class Drivetrain extends SubsystemBase {
 
-    //declare motors.. 声明，赋值...
-    //private final DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
+    private final DcMotorEx leftFrontDrive;
+    private final DcMotorEx leftBackDrive;
+    private final DcMotorEx rightFrontDrive;
+    private final DcMotorEx rightBackDrive;
 
+    // Optional overall scaling (tunable on Dashboard)
+    public static double DRIVE_SCALE = 1.0;
 
-    private MecanumDrive drive;
+    // Store latest requested drive inputs (so periodic() can apply them)
+    private double axialCmd = 0.0;
+    private double lateralCmd = 0.0;
+    private double yawCmd = 0.0;
 
-    public Follower follower;
+    // Last computed motor powers (useful for telemetry)
+    private double leftFrontPower = 0.0;
+    private double rightFrontPower = 0.0;
+    private double leftBackPower = 0.0;
+    private double rightBackPower = 0.0;
 
-    public GoBildaPinpointDriver pin;
+    public Drivetrain(HardwareMap hardwareMap) {
+        leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front_drive");
+        leftBackDrive   = hardwareMap.get(DcMotorEx.class, "left_back_drive");
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
+        rightBackDrive  = hardwareMap.get(DcMotorEx.class, "right_back_drive");
 
-    public static double xpos = 126.67;
-    public static double ypos = -129.01;
-    public Pose2d predictedPose = new Pose2d();
-    public static double lookAheadTime = 0.2;
+        // Match your TeleOp motor directions exactly
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-    public static double lookAheadTimeShooter = 0.2;
+        // Match your TeleOp BRAKE behavior
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    public static double angle = 0;
+        // Match your TeleOp modes
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    public Pose bluenearAimPos = new Pose(xpos,ypos,angle);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
-    public Pose rednearAimPos = new Pose(xpos,-ypos,angle);
-    public Pose aimPos = bluenearAimPos;
-
-    public Pose blueInitpose = new Pose(0.1224,-0.3717,3.141);
-    public Pose redInitpose = new Pose(-0.02583,-0.09087,-3.141);
-
-    public static boolean TredFblue = false;
-
-    public static Pose lastPose = new Pose(0,0,0);
-
-    public double lastheading = 0;
-
-    public static double kPTurret = -0.7;
-
-    public static double kPShooter= -0.15;
-
-    public static double testspeedx = 0.2;
-    public static double testspeedy= 0.2;
-    public static double testspeedrx = 0.2;
-
-    //servos
-    public Timer looptimer;
-
-    public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
-//        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
-//        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
-//        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
-//        backRightMotor = hardwareMap.get(DcMotor.class, "backRight");
-       // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-
-        follower = Constants.createFollower(hardwareMap);
-        PanelsConfigurables.INSTANCE.refreshClass(this);
-        follower.startTeleopDrive();
-        follower.update();
-        follower.setStartingPose(new Pose(0,0,0));
-        follower.setPose(lastPose);
-//        pin = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
-//        pin.setPosition(new Pose2D(DistanceUnit.MM,0,0, AngleUnit.RADIANS,0));
-//        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-//        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        looptimer = new Timer();
+        stop();
     }
 
-    public void teleDrive(double frontBackVelocity, double strafeVelocity, double turnVelocity) {
-        // What the follower *effectively* sees – include your sign flips here:
-        double y  = frontBackVelocity;
-        double x  = strafeVelocity;
-        double rx = turnVelocity;
-
-        if(abs(rx)<0.1){
-            rx = 0;
-        }
-        // Recreate mecanum mixing
-        double fl = y + x + rx;
-        double bl = y - x + rx;
-        double fr = y - x - rx;
-        double br = y + x - rx;
-
-        double maxMag = Math.max(
-                Math.max(Math.abs(fl), Math.abs(fr)),
-                Math.max(Math.abs(bl), Math.abs(br))
-        );
-
-        double scale = 1.0;
-        if (maxMag > 1.0) {
-            scale = 1.0 / maxMag;
-        }
-
-        double yScaled  = y  * scale;
-        double xScaled  = x  * scale;
-        double rxScaled = rx * scale;
-
-        follower.update();
-        // undo the sign changes we baked into x, rx
-        follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
+    /**
+     * Set drive commands in the SAME meaning as your original code:
+     * leftFront = axial + lateral + yaw
+     * rightFront = axial - lateral - yaw
+     * leftBack = axial - lateral + yaw
+     * rightBack = axial + lateral - yaw
+     */
+    public void setDriveCommands(double axial, double lateral, double yaw) {
+        this.axialCmd = axial;
+        this.lateralCmd = lateral;
+        this.yawCmd = yaw;
     }
 
-
-//    public void teleDrive (double frontBackVelocity, double strafeVelocity, double turnVelocity){
-////        double y = frontBackVelocity;
-////        double x = strafeVelocity;
-////        double rx = turnVelocity;
-//        follower.update();
-//        follower.setTeleOpDrive(frontBackVelocity, -strafeVelocity, -turnVelocity, true);
-////        // Denominator is the largest motor power (absolute value) or 1
-////        // This ensures all the powers maintain the same ratio, but only when
-////        // at least one is out of the range [-1, 1]
-////        double denominator = Math.max(abs(y) + abs(x) + abs(rx), 1);
-////        double frontLeftPower = (y + x + rx) / denominator;
-////        double backLeftPower = (y - x + rx) / denominator;
-////        double frontRightPower = (y - x - rx) / denominator;
-////        double backRightPower = (y + x - rx) / denominator;
-////
-////        frontLeftMotor.setPower(frontLeftPower);
-////        frontRightMotor.setPower(frontRightPower);
-////        backLeftMotor.setPower(backLeftPower);
-////        backRightMotor.setPower(backRightPower);
-////        pin.update();
-//    }
-    // 在 Drivetrain getter
-//    public double getFrontLeftPower() {
-//        return frontLeftMotor.getPower();
-//    }
-//
-//    public double getFrontRightPower() {
-//        return frontRightMotor.getPower();
-//    }
-//
-//    public double getBackLeftPower() {
-//        return backLeftMotor.getPower();
-//    }
-//
-//    public double getBackRightPower() {
-//        return backRightMotor.getPower();
-//    }
-
-    public void localizerInit(double x, double y, double heading){
-        follower.setPose(new Pose(x,y,heading));
+    /**
+     * Convenience method that matches your EXACT gamepad mapping from the LinearOpMode:
+     *
+     * double yaw     = gamepad1.left_stick_y;
+     * double axial   = -gamepad1.right_stick_x;
+     * double lateral = -gamepad1.left_stick_x;
+     */
+    public void setFromGamepad(double leftStickY, double leftStickX, double rightStickX) {
+        double yaw = leftStickY;
+        double axial = -rightStickX;
+        double lateral = -leftStickX;
+        setDriveCommands(axial, lateral, yaw);
     }
 
+    public void stop() {
+        axialCmd = 0.0;
+        lateralCmd = 0.0;
+        yawCmd = 0.0;
 
-    public void originInit(){
-        if(TredFblue){
-            localizerInit(redInitpose.getX(),redInitpose.getY(),redInitpose.getHeading());
-        }
-        else{
-            localizerInit(blueInitpose.getX(),blueInitpose.getY(),blueInitpose.getHeading());
-        }
+        leftFrontDrive.setPower(0.0);
+        rightFrontDrive.setPower(0.0);
+        leftBackDrive.setPower(0.0);
+        rightBackDrive.setPower(0.0);
+
+        leftFrontPower = rightFrontPower = leftBackPower = rightBackPower = 0.0;
     }
 
-    public double getdis(){
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
-        return sqrt(x*x+y*y);
-    }
-    public double getdis_TWO(){
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
-        return sqrt(x*x+y*y)+kPShooter*forwardvel();
-    }
+    public double getLeftFrontPower()  { return leftFrontPower; }
+    public double getRightFrontPower() { return rightFrontPower; }
+    public double getLeftBackPower()   { return leftBackPower; }
+    public double getRightBackPower()  { return rightBackPower; }
 
-    public double getallspeed(){
-        return follower.getVelocity().getMagnitude();
-    }
-    public double getturretangle(){
-//        double x = follower.getPose().getX()-aimPos.getX();
-//        double y = follower.getPose().getY()-aimPos.getY();
-        double x = follower.getPose().getX()-xpos;
-        double y = follower.getPose().getY()-ypos;
-        //double h = follower.getPose().getHeading()+angle;
-        double hRaw = follower.getPose().getHeading();   // -pi..pi
-        double h = wrapCentered(hRaw, Math.PI);          // 0..2pi (wrap point at 0)
+    @Override
+    public void periodic() {
+        // Compute powers exactly like your TeleOp
+        leftFrontPower  = axialCmd + lateralCmd + yawCmd;
+        rightFrontPower = axialCmd - lateralCmd - yawCmd;
+        leftBackPower   = axialCmd - lateralCmd + yawCmd;
+        rightBackPower  = axialCmd + lateralCmd - yawCmd;
 
-        //       if(!TredFblue) {
-            if (y < 0) {
-                return 1 * h - Math.atan(abs(y) / abs(x));
-            } else {
-                return 1 * h + Math.atan(abs(y) / abs(x));
-            }
+        // Normalize exactly like your TeleOp
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
 
-    }
-    public double getturretangle_TWO(){
-//        double x = follower.getPose().getX()-aimPos.getX();
-//        double y = follower.getPose().getY()-aimPos.getY();
-         predictedPose = lookaheadPoseTime(new Pose2d(
-                        follower.getPose().getX(),
-                        follower.getPose().getY(),
-                        new Rotation2d(follower.getPose().getHeading())),
-                follower.getVelocity().getXComponent(),
-                follower.getVelocity().getYComponent(),
-                0,
-                lookAheadTime
-        );
-        double x = predictedPose.getX()-xpos;
-        double y = predictedPose.getY()-ypos;
-//        double x = follower.getPose().getX()-xpos;
-//        double y = follower.getPose().getY()-ypos;
-        //double h = follower.getPose().getHeading()+angle;
-        double hRaw = follower.getPose().getHeading();   // -pi..pi
-        double h = wrapCentered(hRaw, Math.PI);          // 0..2pi (wrap point at 0)
-
-        //       if(!TredFblue) {
-        if (y < 0) {
-            return 1 * h - Math.atan(abs(y) / abs(x));
-        } else {
-            return 1 * h + Math.atan(abs(y) / abs(x));
+        if (max > 1.0) {
+            leftFrontPower  /= max;
+            rightFrontPower /= max;
+            leftBackPower   /= max;
+            rightBackPower  /= max;
         }
 
+        // Optional scaling (still preserves normalization behavior)
+        leftFrontPower  *= DRIVE_SCALE;
+        rightFrontPower *= DRIVE_SCALE;
+        leftBackPower   *= DRIVE_SCALE;
+        rightBackPower  *= DRIVE_SCALE;
 
-        }
-
-        public double looptime(){
-            return looptimer.getElapsedTime();
-
-
-        }
-    public double angularVel(){
-        double dx = follower.getPose().getX() - xpos;
-        double dy = follower.getPose().getY() - ypos;
-
-        double omega =
-                (dx * follower.getVelocity().getYComponent() - dy * follower.getVelocity().getXComponent()) / (dx*dx + dy*dy);
-
-        return omega;
+        // Apply
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
     }
-
-    public double forwardvel(){
-        double dx = follower.getPose().getX() - xpos;
-        double dy = follower.getPose().getY() - ypos;
-
-        double dist = Math.sqrt(dx*dx + dy*dy);
-
-        return -(dx * follower.getVelocity().getXComponent() + dy * follower.getVelocity().getYComponent())/dist;
-    }
-
-    public Pose2d lookaheadPoseTime(Pose2d current, double vx, double vy, double omega, double lookaheadTimeSec) {
-//        lookaheadTimeSec = lookaheadTimeSec/looptime();
-        double dx = vx * lookaheadTimeSec;      // meters
-        double dy = vy * lookaheadTimeSec;      // meters (left +)
-        double dtheta = omega * lookaheadTimeSec; // radians
-
-        Twist2d twist = new Twist2d(dx, dy, dtheta);
-        return current.exp(twist);
-    }
-
-    public void redinit(){
-        xpos = rednearAimPos.getX();
-        ypos = rednearAimPos.getY();
-    }
-
-    public void blueinit(){
-        xpos = bluenearAimPos.getX();
-        ypos = bluenearAimPos.getY();
-    }
-
-    public void period(){
-        looptimer.resetTimer();
-    }
-
 }
-

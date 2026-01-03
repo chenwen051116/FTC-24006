@@ -49,21 +49,14 @@ public class BohanTele extends CommandOpMode {
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
         //Subsystems
         drivetrain = new Drivetrain(hardwareMap);
-        drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
+        //drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         intake = new Intake(hardwareMap);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
 
-
-        if(Drivetrain.TredFblue){
-            drivetrain.redinit();
-        }
-        else{
-            drivetrain.blueinit();
-        }
-
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()->shooter.shoot());
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()->shooter.back());
+//
+//        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()->shooter.shoot());
+//        gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()->shooter.back());
         //Commands
         //LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
@@ -76,10 +69,11 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-
-        telemetry.addData("Looptime", drivetrain.looptime());
+        shooter.setFireButton(gamepad1.right_bumper);
+        //shooter.periodic(); // if you're not using CommandScheduler
+        drivetrain.setFromGamepad(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         telemetry.update();
-        drivetrain.period();
+
     }
 }
 
