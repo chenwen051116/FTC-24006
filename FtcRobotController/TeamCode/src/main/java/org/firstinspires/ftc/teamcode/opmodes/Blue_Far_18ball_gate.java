@@ -78,6 +78,9 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     public static double waittime = 0.2;
     public static double intaketime = 0.7;
+    public static double checkcount = 3;
+
+    public double checkcounter = checkcount;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -198,7 +201,13 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime+0.5)){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
@@ -248,7 +257,13 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
@@ -335,7 +350,13 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> (shoottime)){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(12);
@@ -383,7 +404,13 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(16);
@@ -433,10 +460,15 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-
                             setPathState(20);
                         }
 
@@ -516,7 +548,13 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18||timer.getElapsedTimeSeconds()> shoottime){
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(26);
