@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Light;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.subsystems.Foot;
 
 import java.util.List;
 
@@ -38,6 +38,9 @@ public class BohanTele extends CommandOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Shooter shooter;
+
+    private Foot foot;
+
 
     @Override
     public void initialize() { //Init button on DriverHUB
@@ -53,6 +56,7 @@ public class BohanTele extends CommandOpMode {
         intake = new Intake(hardwareMap);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
+        foot = new Foot(hardwareMap);
 
 //
 //        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()->shooter.shoot());
@@ -71,8 +75,11 @@ public class BohanTele extends CommandOpMode {
         CommandScheduler.getInstance().run();
         shooter.setFireButton(gamepad1.right_bumper);
         //shooter.periodic(); // if you're not using CommandScheduler
-        drivetrain.setFromGamepad(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        drivetrain.teleDrive(-0.9*gamepad1.left_stick_y, 0.9*gamepad1.left_stick_x, 0.9*gamepad1.right_stick_x);
         telemetry.update();
+        foot.setButtons(gamepad1.a, gamepad1.b);
+        foot.periodic();
+
 
     }
 }

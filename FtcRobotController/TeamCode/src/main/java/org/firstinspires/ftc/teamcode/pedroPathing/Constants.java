@@ -51,8 +51,8 @@ public class    Constants {
             .useVoltageCompensation(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(48)
-            .strafePodX(-154.05)
+            .forwardPodY(-63.5)
+            .strafePodX(-88.9)
             .distanceUnit(DistanceUnit.MM)
             .hardwareMapName("pinpoint")
             .yawScalar(1.0)
