@@ -120,6 +120,7 @@ public class Red_Far_18ball_gate extends OpMode {
         GatePath = follower.pathBuilder()
 
                 .addPath(new BezierLine(FinishGather2, GatePassby))
+                .setTValueConstraint(0.90)
                 .setLinearHeadingInterpolation(FinishGather2.getHeading(), GatePassby.getHeading())
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
