@@ -295,6 +295,7 @@ public class Red_Far_18ball_gate extends OpMode {
                     else{
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
+                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             follower.followPath(Shootpath4);
                             firstshooting = false;
@@ -311,6 +312,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath3);
                     shooter.autoLonger = false;
                     setPathState(11);
@@ -362,6 +364,7 @@ public class Red_Far_18ball_gate extends OpMode {
             case 14:
                 if(!follower.isBusy()){
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath4);
                     setPathState(15);
                 }
@@ -410,6 +413,7 @@ public class Red_Far_18ball_gate extends OpMode {
             case 18:
                 if(!follower.isBusy()){
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath5);
                     setPathState(19);
                     shooter.autoLonger = true;
@@ -493,6 +497,7 @@ public class Red_Far_18ball_gate extends OpMode {
             case 24:
                 if(!follower.isBusy()){
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath6);
                     setPathState(25);
                 }
