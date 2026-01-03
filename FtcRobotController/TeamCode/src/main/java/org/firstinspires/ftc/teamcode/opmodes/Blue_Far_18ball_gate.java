@@ -69,15 +69,15 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 2;
+    public static double stoptime = 2.8;
     public static double shoottime = 1.65;
-    public static double xpos = 126.67;
-    public static double ypos = -129.01;
+    public static double xpos = 129.67;
+    public static double ypos = -134.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.5;
-    public static double intaketime = 2;
+    public static double waittime = 0.2;
+    public static double intaketime = 0.7;
 
 
     public  PathChain simplePath(Pose a, Pose b){
@@ -119,6 +119,7 @@ public class Blue_Far_18ball_gate extends OpMode {
         GatePath = follower.pathBuilder()
 
                 .addPath(new BezierLine(FinishGather2, GatePassby))
+                .setTValueConstraint(0.90)
                 .setLinearHeadingInterpolation(FinishGather2.getHeading(), GatePassby.getHeading())
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
@@ -180,7 +181,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
-                shooter.Autolong = 3160;
+                shooter.Autolong = 3150;
                 turret.autopos = -313;
                 setPathState(1);
 
@@ -212,7 +213,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     turret.autopos = -319;
-                    shooter.Autolong = 3135;
+                    shooter.Autolong = 3125;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
