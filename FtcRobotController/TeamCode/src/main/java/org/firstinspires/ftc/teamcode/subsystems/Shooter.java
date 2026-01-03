@@ -57,7 +57,7 @@ public class Shooter extends SubsystemBase {
 
     public double RPMThresh = 50;
 
-    public  double Autoshort = 2600;
+    public  double Autoshort = 2580;
     public  double Autolong = 3110;
 
     //public double AutoStartlong = 3125;

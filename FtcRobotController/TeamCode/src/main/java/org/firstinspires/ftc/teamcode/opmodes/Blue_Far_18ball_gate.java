@@ -51,7 +51,7 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     private final Pose PrepGather4 = new Pose(119.5531, 0.06455, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.42, 0.06455, 0);
+    private final Pose FinishGather4 = new Pose(123.92, 0.06455, 0);
 
     private final Pose Park = new Pose(121.21, -20.7571,0);;
 
@@ -280,7 +280,7 @@ public class Blue_Far_18ball_gate extends OpMode {
             case 8:
                 if(!follower.isBusy()){
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    follower.followPath(GatePath);
+                    follower.followPath(GatePath,true);
 //                    intake.gatepos = true;
 //                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     firstshooting = false;
@@ -353,7 +353,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(prepGatherPath3);
+                    follower.followPath(prepGatherPath3,0.8,true);
                     setPathState(8);
                 }
                 break;
