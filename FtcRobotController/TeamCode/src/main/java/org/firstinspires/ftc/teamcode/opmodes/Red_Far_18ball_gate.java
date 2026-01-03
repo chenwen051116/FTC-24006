@@ -530,7 +530,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 if(!follower.isBusy()) {
                     turret.autopos = 0;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(lastOutPath);
                     resetSubsystemsForTeleop();
