@@ -40,7 +40,7 @@ public class Red_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
-    private final Pose GatePose = new Pose(122.5,59.0147, 0);
+    private final Pose GatePose = new Pose(122.5,59.2147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
 
     private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
@@ -53,14 +53,13 @@ public class Red_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.92, -0.06455, 0);
 
-    private final Pose Park = new Pose(121.21, 20.7571,0);
+    private final Pose Park = new Pose(121.21, 20.7571,0);;
 
     private final Pose FinishGather5 = new Pose(121.42, -0.06455, 0);
 
-
     private boolean firstshooting = false;
     private PathChain GatePath, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
-    private PathChain prepGatherPath6,finishGatherPath6,Shootpath6,prepGatherPath1, prepGatherPath2, prepGatherPath3, prepGatherPath4;
+    private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
 
     private PathChain finishGatherPath1,finishGatherPath2,finishGatherPath3,finishGatherPath4;
     public Intake intake;
@@ -73,13 +72,12 @@ public class Red_Far_18ball_gate extends OpMode {
     public static double stoptime = 2.8;
     public static double shoottime = 1.65;
     public static double xpos = 129.67;
-    public static double ypos = -134.01;
+    public static double ypos = 134.01;
 
     public static double angle = 0;
 
     public static double waittime = 0.2;
     public static double intaketime = 0.7;
-
     public static double checkcount = 3;
 
     public double checkcounter = checkcount;
@@ -130,7 +128,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
                 .build();
 
-         Shootpath3 = simplePath(FinishGather3,ShootPose2);
+        Shootpath3 = simplePath(FinishGather3,ShootPose2);
 
 //        Shootpath3 =     follower.pathBuilder()
 //                .addPath(new BezierLine(GatePose, Shoot2passby))
@@ -164,6 +162,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 .build();
 
         Shootpath5 = simplePath(FinishGather1,ShootPose1);
+
         prepGatherPath6 = simplePath(ShootPose1,PrepGather4);
         finishGatherPath6 = simplePath(PrepGather4,FinishGather5);
 
@@ -185,7 +184,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
-                shooter.Autolong = 3125;
+                shooter.Autolong = 3150;
                 turret.autopos = 313;
                 setPathState(1);
 
@@ -223,7 +222,7 @@ public class Red_Far_18ball_gate extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     turret.autopos = 319;
-                    shooter.Autolong = 3100;
+                    shooter.Autolong = 3125;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -241,8 +240,8 @@ public class Red_Far_18ball_gate extends OpMode {
             case 4:
                 if(!follower.isBusy()){
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath2);
-                    checkcounter = checkcount;
                     setPathState(5);
                 }
                 break;
@@ -296,7 +295,7 @@ public class Red_Far_18ball_gate extends OpMode {
             case 8:
                 if(!follower.isBusy()){
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    follower.followPath(GatePath);
+                    follower.followPath(GatePath,true);
 //                    intake.gatepos = true;
 //                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     firstshooting = false;
@@ -304,27 +303,27 @@ public class Red_Far_18ball_gate extends OpMode {
                 }
                 break;
             case 9:
-                if(!follower.isBusy()){
-                    if (!firstshooting) {
-                        timer.resetTimer();
-                        firstshooting = true;
+//                if(!follower.isBusy()){
+                if (!firstshooting) {
+                    timer.resetTimer();
+                    firstshooting = true;
+                    break;
+                }
+                else{
+                    if(timer.getElapsedTimeSeconds()> stoptime){
+                        intake.gatepos = false;
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                        follower.followPath(Shootpath4);
+                        firstshooting = false;
+                        setPathState(15);
+                        //setPathState(23);
+
                         break;
                     }
-                    else{
-                        if(timer.getElapsedTimeSeconds()> stoptime){
-                            intake.gatepos = false;
-                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            follower.followPath(Shootpath4);
-                            firstshooting = false;
-                            setPathState(15);
-                            //setPathState(23);
 
-                            break;
-                        }
-
-                    }
                 }
+//                }
                 break;
             case 10:
                 if(!follower.isBusy()){
@@ -360,7 +359,7 @@ public class Red_Far_18ball_gate extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                          setPathState(12);
+                            setPathState(12);
                         }
 
                     }
@@ -375,7 +374,7 @@ public class Red_Far_18ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(prepGatherPath3);
+                    follower.followPath(prepGatherPath3,0.8,true);
                     setPathState(8);
                 }
                 break;
@@ -387,8 +386,8 @@ public class Red_Far_18ball_gate extends OpMode {
                 break;
             case 14:
                 if(!follower.isBusy()){
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath4);
                     setPathState(15);
                 }
@@ -414,7 +413,6 @@ public class Red_Far_18ball_gate extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-
                             setPathState(16);
                         }
 
@@ -443,13 +441,11 @@ public class Red_Far_18ball_gate extends OpMode {
                 break;
             case 18:
                 if(!follower.isBusy()){
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath5);
-                    shooter.autoLonger = true;
                     setPathState(19);
-
-
+                    shooter.autoLonger = true;
                 }
                 break;
             case 19:
@@ -473,7 +469,6 @@ public class Red_Far_18ball_gate extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-
                             setPathState(20);
                         }
 
@@ -502,7 +497,7 @@ public class Red_Far_18ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(prepGatherPath1);
+                    follower.followPath(prepGatherPath6);
                     //follower.breakFollowing();
                     firstshooting = false;
                     setPathState(23);
@@ -535,8 +530,8 @@ public class Red_Far_18ball_gate extends OpMode {
                 break;
             case 24:
                 if(!follower.isBusy()){
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath6);
                     setPathState(25);
                 }
@@ -588,7 +583,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = follower.getPose();
-                    Drivetrain.TredFblue = true;
+                    Drivetrain.TredFblue = false;
                     //setPathState(28);
                     break;
 
@@ -735,8 +730,7 @@ public class Red_Far_18ball_gate extends OpMode {
     public void stop() {
         resetSubsystemsForTeleop();
         Drivetrain.lastPose = follower.getPose();
-        Drivetrain.TredFblue = true;
-        //setPathState(28);
+        Drivetrain.TredFblue = false;
     }
 
     /**
