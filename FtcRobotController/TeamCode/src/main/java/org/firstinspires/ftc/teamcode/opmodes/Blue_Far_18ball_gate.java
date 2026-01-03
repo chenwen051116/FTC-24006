@@ -53,8 +53,6 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.42, 0.06455, 0);
 
-    private final Pose FinishGather5 = new Pose(111.9794, -28.6053, 0);
-
     private final Pose Park = new Pose(121.21, -20.7571,0);;
 
 
@@ -103,8 +101,6 @@ public class Blue_Far_18ball_gate extends OpMode {
 //                .addPath(new BezierLine(PrepGather4, FinishGather4))
 //                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
 //                .build();
-
-
 
         Shootpath2 = simplePath(FinishGather4,ShootPose1);
 //
@@ -465,15 +461,6 @@ public class Blue_Far_18ball_gate extends OpMode {
                 break;
             case 23:
 
-                if (!follower.isBusy()) {
-                        follower.followPath(finishGatherPath1);
-                        setPathState(24);
-                        break;
-                }
-
-
-                break;
-            case 24:
                 if (!firstshooting) {
                     timer.resetTimer();
                     firstshooting = true;
@@ -483,13 +470,25 @@ public class Blue_Far_18ball_gate extends OpMode {
                     if(timer.getElapsedTimeSeconds()> intaketime){
                         firstshooting = false;
                         follower.breakFollowing();
-                        shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                        follower.followPath(Shootpath2);
-                        setPathState(25);
+                        follower.followPath(finishGatherPath1);
+                        setPathState(24);
 
                         break;
                     }
 
+                }
+
+                if(!follower.isBusy()) {
+                    firstshooting = false;
+                    follower.followPath(finishGatherPath1);
+                    setPathState(24);
+                }
+                break;
+            case 24:
+                if(!follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    follower.followPath(Shootpath2);
+                    setPathState(25);
                 }
                 break;
             case 25:
