@@ -40,7 +40,7 @@ public class Red_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
-    private final Pose GatePose = new Pose(122.5,59.2147, 0);
+    private final Pose GatePose = new Pose(122.5,59.0147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
 
     private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
@@ -182,7 +182,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3125;
-                turret.autopos = 316;
+                turret.autopos = 313;
                 setPathState(1);
 
                 break;
@@ -212,7 +212,7 @@ public class Red_Far_18ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
-                    turret.autopos = 318;
+                    turret.autopos = 319;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -261,7 +261,7 @@ public class Red_Far_18ball_gate extends OpMode {
             //2nd shooting________________________________________________
             case 6:
                 if(!follower.isBusy()) {
-                    turret.autopos = 353;
+                    turret.autopos = 371;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
@@ -396,7 +396,7 @@ public class Red_Far_18ball_gate extends OpMode {
             //4th shooting________________________________________________
             case 16:
                 if(!follower.isBusy()) {
-                    turret.autopos = 312;
+                    turret.autopos = 319;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -458,7 +458,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 break;
             case 22:
                 if(!follower.isBusy()) {
-                    turret.autopos = 312;
+                    turret.autopos = 319;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
