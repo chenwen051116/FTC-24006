@@ -32,8 +32,8 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain(HardwareMap hardwareMap) {
         leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "left_front_drive");
         leftBackDrive   = hardwareMap.get(DcMotorEx.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        rightBackDrive  = hardwareMap.get(DcMotorEx.class, "right_back_drive");
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
+        rightBackDrive  = hardwareMap.get(DcMotorEx.class, "right_front_drive");
 
         // Match your TeleOp motor directions exactly
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
