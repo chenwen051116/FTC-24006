@@ -461,15 +461,6 @@ public class Red_Far_18ball_gate extends OpMode {
                 break;
             case 23:
 
-                if (!follower.isBusy()) {
-                    follower.followPath(finishGatherPath1);
-                    setPathState(24);
-                    break;
-                }
-
-
-                break;
-            case 24:
                 if (!firstshooting) {
                     timer.resetTimer();
                     firstshooting = true;
@@ -479,13 +470,25 @@ public class Red_Far_18ball_gate extends OpMode {
                     if(timer.getElapsedTimeSeconds()> intaketime){
                         firstshooting = false;
                         follower.breakFollowing();
-                        shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                        follower.followPath(Shootpath2);
-                        setPathState(25);
+                        follower.followPath(finishGatherPath1);
+                        setPathState(24);
 
                         break;
                     }
 
+                }
+
+                if(!follower.isBusy()) {
+                    firstshooting = false;
+                    follower.followPath(finishGatherPath1);
+                    setPathState(24);
+                }
+                break;
+            case 24:
+                if(!follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    follower.followPath(Shootpath2);
+                    setPathState(25);
                 }
                 break;
             case 25:
