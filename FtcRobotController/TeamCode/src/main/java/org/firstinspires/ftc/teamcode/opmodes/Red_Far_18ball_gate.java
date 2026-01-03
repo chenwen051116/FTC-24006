@@ -51,7 +51,7 @@ public class Red_Far_18ball_gate extends OpMode {
 
     private final Pose PrepGather4 = new Pose(119.5531, -0.06455, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.42, -0.06455, 0);
+    private final Pose FinishGather4 = new Pose(123.92, -0.06455, 0);
 
     private final Pose Park = new Pose(121.21, 20.7571,0);
 
@@ -70,15 +70,15 @@ public class Red_Far_18ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 0.75;
+    public static double stoptime = 2.8;
     public static double shoottime = 1.65;
-    public static double xpos = 126.67;
-    public static double ypos = 129.01;
+    public static double xpos = 129.67;
+    public static double ypos = -134.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.5;
-    public static double intaketime = 2;
+    public static double waittime = 0.2;
+    public static double intaketime = 0.7;
 
 
     public  PathChain simplePath(Pose a, Pose b){
