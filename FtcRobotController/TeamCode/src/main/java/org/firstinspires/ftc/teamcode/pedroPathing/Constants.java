@@ -16,22 +16,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class    Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(12.4)
-            .forwardZeroPowerAcceleration(-34.851204314629776)
-            .lateralZeroPowerAcceleration(-60.111926352626405)
+            .mass(12.524)
+            .forwardZeroPowerAcceleration(-31.203684649136637)
+            .lateralZeroPowerAcceleration(-76.08349200453131)
             .useSecondaryTranslationalPIDF(true)
             .useSecondaryHeadingPIDF(true)
             .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.00046)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.02, 0.15))
+            .centripetalScaling(0.00023)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.025, 0.15))
             .headingPIDFCoefficients(new PIDFCoefficients(0.25, 0.001, 0.001, 0.1))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.0001, 0.6, 0.1))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.07, 0, 0.009, 0.6, 0.01))
             .secondaryTranslationalPIDFCoefficients(
-                    new PIDFCoefficients(0.055, 0.000001, 0, 0.02)
+                    new PIDFCoefficients(0.05, 0.0001, 0, 0.02)
             )
             .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.9, 0.01, 0.1, 0.01))
             .secondaryDrivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.01, 0, 0, 0.6, 0)
+                    new FilteredPIDFCoefficients(0.0005, 0, 0.0001, 0.6, 0.0)
             );
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -45,8 +45,8 @@ public class    Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(83.86456058532234)
-            .yVelocity(66.42380121186025)
+            .xVelocity(81.48237237404652)
+            .yVelocity(63.01307209645669)
             .nominalVoltage(13.3)
             .useVoltageCompensation(true);
 

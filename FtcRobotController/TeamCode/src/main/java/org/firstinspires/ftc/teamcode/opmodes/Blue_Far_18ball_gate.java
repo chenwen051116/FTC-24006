@@ -68,7 +68,7 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1.75;
+    public static double stoptime = 2;
     public static double shoottime = 1.65;
     public static double xpos = 126.67;
     public static double ypos = -129.01;

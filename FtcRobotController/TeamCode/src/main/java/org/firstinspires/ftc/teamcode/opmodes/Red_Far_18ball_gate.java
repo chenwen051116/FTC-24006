@@ -175,7 +175,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3125;
-                turret.autopos = 314;
+                turret.autopos = 316;
                 setPathState(1);
 
                 break;
@@ -205,7 +205,7 @@ public class Red_Far_18ball_gate extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!follower.isBusy()) {
-                    turret.autopos = 312;
+                    turret.autopos = 318;
                     shooter.Autolong = 3100;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
