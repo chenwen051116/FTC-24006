@@ -376,7 +376,7 @@ public class Red_Far_cycle extends OpMode {
                         break;
                     }
                     else {
-                        if (timer.getElapsedTimeSeconds() < followingtime) {
+                        if (timer.getElapsedTimeSeconds() < followingtime&&follower.getPose().getX()<122&&follower.getPose().getY()<59) {
                             if(!follower.isTeleopDrive()) {
                                 follower.breakFollowing();
                                 follower.startTeleopDrive();
