@@ -80,7 +80,9 @@ public class Intake extends SubsystemBase {
         Suck_In(1,0.71),
         Split_Out(-0.8,0.25),
         Send_It_Up(1,0.25),
-        Intake_Steady(0,0.25);
+        Intake_Steady(0,0.25),
+
+        Suck_In_slow(0.5,0.25);
         private final double intakePower;
         private final double transServer;
         // Set update the transfer state

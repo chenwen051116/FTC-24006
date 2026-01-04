@@ -376,13 +376,18 @@ public class Red_Far_cycle extends OpMode {
                         break;
                     }
                     else {
-                        if (timer.getElapsedTimeSeconds() < followingtime&&follower.getPose().getX()<120&&follower.getPose().getY()<59) {
+                        if (timer.getElapsedTimeSeconds() < followingtime) {
                             if(!follower.isTeleopDrive()) {
                                 follower.breakFollowing();
                                 follower.startTeleopDrive();
 
                             }
-                            teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            if(follower.getPose().getX()<120&&follower.getPose().getY()<59) {
+                                teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            }
+                            else{
+                                teleDrive(0, 0, 0);
+                            }
                             autoflag = true;
                         }
                         else{
@@ -392,7 +397,7 @@ public class Red_Far_cycle extends OpMode {
 //                                    0);
 
                             follower.breakFollowing();
-                            intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             if(fulltimer.getElapsedTimeSeconds()<28) {
                                 follower.followPath(simplePath(follower.getPose(),ShootPose1));
