@@ -54,7 +54,7 @@ public class Red_Far_cycle extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.92, -0.0000, 0);
 
-    private final Pose Park = new Pose(121.21, 20.7571,0);;
+    private final Pose Park = new Pose(100.21, 8.7571,0);;
 
     private final Pose FinishGather5 = new Pose(121.42, -0.06455, 0);
 
