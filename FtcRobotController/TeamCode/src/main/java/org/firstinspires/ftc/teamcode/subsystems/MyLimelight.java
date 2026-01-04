@@ -22,10 +22,13 @@ public class MyLimelight extends SubsystemBase {
     private final ElapsedTime timer = new ElapsedTime();
     private boolean llenable = true;
 
+
+
     public MyLimelight(HardwareMap hardwareMap) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // fast updates
         limelight.pipelineSwitch(0);
+
     }
 
 
@@ -41,7 +44,7 @@ public int getpipeline(){
         limelight.start();
     }
     public void initPatternPipeline(){
-        limelight.pipelineSwitch(9);
+        limelight.pipelineSwitch(3);
         limelight.start();
     }
     public double getPitch() {
@@ -70,11 +73,20 @@ public int getpipeline(){
             return aprilTagLatestResult.getFiducialResults().get(0)
                     .getTargetPoseCameraSpace().getPosition().z;
         }
+
         return 0;
     }
+
     public double getTx() {
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getTx();
+        }
+        return 0;
+    }
+
+    public double getpatterTx(){
+        if(limelight.getLatestResult()!=null){
+            return limelight.getLatestResult().getPythonOutput()[0];
         }
         return 0;
     }
@@ -95,6 +107,8 @@ public int getpipeline(){
         }
         return 0;
     }
+
+
 
     public void startDetect(){
         llenable = true;

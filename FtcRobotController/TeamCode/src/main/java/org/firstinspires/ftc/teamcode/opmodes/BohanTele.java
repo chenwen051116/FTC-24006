@@ -81,21 +81,21 @@ public class BohanTele extends CommandOpMode {
         turret.resetTeleop();
 
         if(Drivetrain.TredFblue){
-            limelight.initRedPipeline();
+            limelight.initPatternPipeline();
             drivetrain.redinit();
         }
         else{
-            limelight.initBluePipeline();
+            limelight.initPatternPipeline();
             drivetrain.blueinit();
         }
 
         //Commands
-        //LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
+        LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
-        //gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).toggleWhenPressed(limelightLock);
+//        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
+//        gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.blueinit());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.redinit());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
@@ -154,8 +154,8 @@ public class BohanTele extends CommandOpMode {
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
 //            }
             intake.updateautotranse(shooter.isAtTargetRPM());
-            shooter.updateDis(limelight.getDis());
-            shooter.updateFocused(limelight.isFocused());
+//            shooter.updateDis(limelight.getDis());
+//            shooter.updateFocused(limelight.isFocused());
             //shooter.updateFocused(true);
 
 
@@ -176,7 +176,7 @@ public class BohanTele extends CommandOpMode {
                 turret.aimangle = drivetrain.getturretangle();
             }
             turret.updateAutoShoot(true);
-            turret.tx = limelight.getTx();
+            //turret.tx = limelight.getTx();
 
         }
         else{

@@ -360,7 +360,7 @@ public class BLUE_Near_12ballgate extends OpMode {
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
             intake.updateautotranse(shooter.isAtTargetRPM());
-            shooter.updateDis(limelight.getDis());
+            //shooter.updateDis(limelight.getDis());
             shooter.updateFocused(true);
         }
         else{
@@ -393,7 +393,7 @@ public class BLUE_Near_12ballgate extends OpMode {
         shooter = new Shooter(hardwareMap);
         shooter.automode = true;
         limelight = new MyLimelight(hardwareMap);
-        limelight.initRedPipeline();
+        limelight.initPatternPipeline();
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);

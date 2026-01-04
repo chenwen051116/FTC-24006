@@ -181,7 +181,7 @@ public class Shooter extends SubsystemBase {
 //            shootTimer.resetTimer();
 //            return false;
 //        }
-        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2500&&(focused||automode))||(forceShooting&&rpmreached);
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2500)||(forceShooting&&rpmreached);
 
 //        else{
 //

@@ -470,8 +470,8 @@ public class RED_Near_12ball extends OpMode {
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
 //            }
             intake.updateautotranse(shooter.isAtTargetRPM());
-            shooter.updateDis(limelight.getDis());
-            shooter.updateFocused(limelight.isFocused());
+//            shooter.updateDis(limelight.getDis());
+//            shooter.updateFocused(limelight.isFocused());
             //shooter.updateFocused(true);
 
 
@@ -485,7 +485,7 @@ public class RED_Near_12ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
             //shooter.ododis = getdis();
             turret.updateAutoShoot(true);
-            turret.tx = limelight.getTx();
+//            turret.tx = limelight.getTx();
             //turret.aimangle = getturretangle();
         }
         else{
@@ -518,7 +518,7 @@ public class RED_Near_12ball extends OpMode {
         shooter = new Shooter(hardwareMap);
         shooter.automode = true;
         limelight = new MyLimelight(hardwareMap);
-        limelight.initRedPipeline();
+        limelight.initPatternPipeline();
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);

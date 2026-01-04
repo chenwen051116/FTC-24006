@@ -631,8 +631,8 @@ public class Blue_Far_18ball_gate extends OpMode {
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
 //            }
             intake.updateautotranse(shooter.isAtTargetRPM());
-            shooter.updateDis(limelight.getDis());
-            shooter.updateFocused(limelight.isFocused());
+//            shooter.updateDis(limelight.getDis());
+//            shooter.updateFocused(limelight.isFocused());
             //shooter.updateFocused(true);
 
 
@@ -646,7 +646,7 @@ public class Blue_Far_18ball_gate extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
             shooter.ododis = getdis();
             turret.updateAutoShoot(true);
-            turret.tx = limelight.getTx();
+//            turret.tx = limelight.getTx();
             turret.aimangle = getturretangle();
         }
         else{
@@ -697,7 +697,7 @@ public class Blue_Far_18ball_gate extends OpMode {
         shooter = new Shooter(hardwareMap);
         shooter.automode = true;
         limelight = new MyLimelight(hardwareMap);
-        limelight.initRedPipeline();
+        limelight.initPatternPipeline();
         limelight.startDetect();
         intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);

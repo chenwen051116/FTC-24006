@@ -13,7 +13,7 @@ public class LimelightLockInCommand extends CommandBase {
     Drivetrain drivetrain;
     MyLimelight limelight;
     Gamepad gamepad1;
-    public static double Kp = 0.03;
+    public static double Kp = 0.003;
 
     public LimelightLockInCommand(Drivetrain drivetrain, MyLimelight limelight, Gamepad gamepad1) { //()里传参
         this.drivetrain = drivetrain; //this. = instance variable(上面的), 右面的 = ()里的
@@ -31,7 +31,7 @@ public class LimelightLockInCommand extends CommandBase {
     @Override
     public void execute() { // scheduler periodically calls the function
         drivetrain.teleDrive(-0.9 * gamepad1.left_stick_y, 0.9 * gamepad1.left_stick_x,
-                Kp * limelight.getTx());
+                Kp * limelight.getpatterTx());
 
     }
 
