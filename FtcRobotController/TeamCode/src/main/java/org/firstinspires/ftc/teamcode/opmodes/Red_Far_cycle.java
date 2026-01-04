@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Turret;
 public class Red_Far_cycle extends OpMode {
 
     private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer, timer;
+    private Timer pathTimer, actionTimer, opmodeTimer, timer,fulltimer;
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
@@ -187,6 +187,7 @@ public class Red_Far_cycle extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                fulltimer.resetTimer();
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //follower.followPath(Shootpath1,true);
@@ -352,7 +353,7 @@ public class Red_Far_cycle extends OpMode {
                 break;
             case 22:
                 if(!follower.isBusy()) {
-                    cyclecounter -=1;
+                    //cyclecounter -=1;
 
                     turret.autopos = 319;
                     shooter.Autolong = 3100;
@@ -364,7 +365,7 @@ public class Red_Far_cycle extends OpMode {
                     //follower.breakFollowing();
                     firstshooting = false;
 
-                    if(cyclecounter>0) {
+                    if(fulltimer.getElapsedTimeSeconds()<28) {
                         setPathState(23);
                     }
                     else{
@@ -386,7 +387,7 @@ public class Red_Far_cycle extends OpMode {
                                 follower.startTeleopDrive();
 
                             }
-                            teleDrive(1, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            teleDrive(0.6, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
                             autoflag = true;
                         }
                         else{
@@ -399,7 +400,12 @@ public class Red_Far_cycle extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             follower.followPath(simplePath(follower.getPose(),ShootPose1));
-                            setPathState(24);
+                            if(fulltimer.getElapsedTimeSeconds()<28) {
+                                setPathState(24);
+                            }
+                            else{
+                                setPathState(26);
+                            }
                             break;
                         }
                     }
@@ -427,7 +433,12 @@ public class Red_Far_cycle extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(22);
+                            if(fulltimer.getElapsedTimeSeconds()<28) {
+                                setPathState(22);
+                            }
+                            else{
+                                setPathState(26);
+                            }
                         }
 
                     }
@@ -449,7 +460,7 @@ public class Red_Far_cycle extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(lastOutPath);
+                    follower.followPath(simplePath(follower.getPose(),Park));
                     resetSubsystemsForTeleop();
                     setPathState(27);
                 }
@@ -570,6 +581,7 @@ public class Red_Far_cycle extends OpMode {
         pathTimer = new Timer();
         timer = new Timer();
         opmodeTimer = new Timer();
+        fulltimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         intake = new Intake(hardwareMap);
