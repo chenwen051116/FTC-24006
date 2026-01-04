@@ -50,9 +50,9 @@ public class Red_Far_cycle extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose PrepGather4 = new Pose(119.5531, -0.06455, 0);//accounted for overshoot
+    private final Pose PrepGather4 = new Pose(119.5531, -0.0000, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.92, -0.06455, 0);
+    private final Pose FinishGather4 = new Pose(123.92, -0.0000, 0);
 
     private final Pose Park = new Pose(121.21, 20.7571,0);;
 
@@ -77,7 +77,7 @@ public class Red_Far_cycle extends OpMode {
 
     public static double angle = 0;
 
-    public static double waittime = 0.2;
+    public static double waittime = 0.1;
     public static double intaketime = 0.7;
     public static double checkcount = 3;
 
@@ -85,7 +85,7 @@ public class Red_Far_cycle extends OpMode {
 
     public double checkcounter = checkcount;
 
-    public static double cyclecounter = 5;
+    public double cyclecounter = 5;
 
     public boolean autoflag = false;
 
@@ -191,7 +191,7 @@ public class Red_Far_cycle extends OpMode {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
-                shooter.Autolong = 3150;
+                shooter.Autolong = 3160;
                 turret.autopos = 313;
                 setPathState(1);
 
@@ -229,7 +229,7 @@ public class Red_Far_cycle extends OpMode {
             case 2:
                 if(!follower.isBusy()) {
                     turret.autopos = 319;
-                    shooter.Autolong = 3125;
+                    shooter.Autolong = 3135;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
