@@ -399,7 +399,7 @@ public class Red_Far_cycle extends OpMode {
                             follower.breakFollowing();
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            if(fulltimer.getElapsedTimeSeconds()<28) {
+                            if(fulltimer.getElapsedTimeSeconds()<26) {
                                 follower.followPath(simplePath(follower.getPose(),ShootPose1));
                                 setPathState(24);
                             }
@@ -433,7 +433,7 @@ public class Red_Far_cycle extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            if(fulltimer.getElapsedTimeSeconds()<28) {
+                            if(fulltimer.getElapsedTimeSeconds()<26) {
                                 setPathState(22);
                             }
                             else{
