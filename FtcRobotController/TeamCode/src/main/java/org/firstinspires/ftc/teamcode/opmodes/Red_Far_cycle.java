@@ -378,8 +378,8 @@ public class Red_Far_cycle extends OpMode {
                         break;
                     }
                     else {
-                        if (timer.getElapsedTimeSeconds() < followingtime&&follower.getPose().getX()<122) {
-                            teleDrive(0.6, 0,
+                        if (timer.getElapsedTimeSeconds() < followingtime) {
+                            teleDrive(0.8, 0,
                                     LimelightLockInCommand.Kp * limelight.getpatterTx());
                         }
                         else{
@@ -417,6 +417,7 @@ public class Red_Far_cycle extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            firstshooting = false;
                             setPathState(22);
                         }
 
