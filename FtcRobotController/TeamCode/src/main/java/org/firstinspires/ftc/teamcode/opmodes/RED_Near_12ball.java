@@ -23,13 +23,13 @@ public class RED_Near_12ball extends OpMode {
 
     private int pathState = 0;
     private final Pose startPose = new Pose(112.522,112.651,0.701); // Start Pose of our robot.
-    private final Pose PrepGather1 = new Pose(88.880,70.346 ,0);
+    private final Pose PrepGather1 = new Pose(92.880,70.346 ,0);
     private final Pose FinishGather1 = new Pose(111.989,70.346, 0);
 
-    private final Pose PrepGather2 = new Pose(88.880,46.804, 0);
+    private final Pose PrepGather2 = new Pose(92.880,46.804, 0);
 
     private final Pose FinishGather2 = new Pose(111.989, 46.804, 0);
-    private final Pose PrepGather3 = new Pose(88.880,22.586, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(92.880,22.586, 0);//accounted for overshoot
     private final Pose FinishGather3 = new Pose(111.989, 22.586, 0);
  private final Pose Park = new Pose(110.539 ,84.386, 1.060);
 
@@ -63,7 +63,6 @@ public class RED_Near_12ball extends OpMode {
         fGPath1 = follower.pathBuilder()
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
-
                 .build();
         Shootpath1 = follower.pathBuilder()
 
@@ -116,26 +115,10 @@ public class RED_Near_12ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                if(!follower.isBusy()) {
-                    if (!firstshooting) {
+                firstshooting = false;
+                setPathState(1);
 
-                        timer.resetTimer();
-                        shooter.setFireButton(true);
-                        firstshooting = true;
-                    }
-                    else{
-
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            firstshooting = false;
-                            setPathState(1);
-                        }
-
-                    }
-                    break;
-
-                }
                 break;
-
             case 1:
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
