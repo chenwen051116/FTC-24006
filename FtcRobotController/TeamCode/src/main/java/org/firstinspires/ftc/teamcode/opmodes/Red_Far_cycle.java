@@ -87,6 +87,8 @@ public class Red_Far_cycle extends OpMode {
 
     public static double cyclecounter = 5;
 
+    public boolean autoflag = false;
+
 
     public  PathChain simplePath(Pose a, Pose b){
         return follower.pathBuilder()
@@ -379,11 +381,12 @@ public class Red_Far_cycle extends OpMode {
                     }
                     else {
                         if (timer.getElapsedTimeSeconds() < followingtime) {
-                            teleDrive(0.8, 0,
-                                    LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            teleDrive(0.8, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            autoflag = true;
                         }
                         else{
                             firstshooting = false;
+                            autoflag = false;
                             teleDrive(0, 0,
                                     0);
                             follower.breakFollowing();
@@ -531,6 +534,8 @@ public class Red_Far_cycle extends OpMode {
         telemetry.addData("timer", timer.getElapsedTimeSeconds());
         telemetry.addData("shooter state", shooter.shooterStatus);
         telemetry.addData("intake state", intake.intakeCurrentState);
+        telemetry.addData("cyclestate", autoflag);
+        telemetry.addData("limelighttx", limelight.getpatterTx());
         telemetry.update();
     }
 
