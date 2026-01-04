@@ -60,7 +60,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().reset(); // drop any stale commands from previous opmode
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
@@ -245,42 +245,42 @@ public class BohanTele extends CommandOpMode {
             y2justpressed = false;
         }
 
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.addData("dis", drivetrain.getdis());
-        telemetry.addData("maglim", turret.magLim.getState());
-//        telemetry.addData("Omega", drivetrain.angularVel());
-//        telemetry.addData("speed over all",drivetrain.getallspeed());
-//        telemetry.addData("speed towards",drivetrain.forwardvel());
-//        telemetry.addData("x", drivetrain.follower.getPose().getX());
-//        telemetry.addData("y", drivetrain.follower.getPose().getY());
-//        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
-//        telemetry.addData("PIDoutput", turret.turretpidOut);
-//        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
-//        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
-//        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
-//        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
-//        telemetry.addData("Apriltag dist", limelight.getDis());
-//        telemetry.addData("Apriltag X", limelight.getX());
-//        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
-//        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
-//        telemetry.addData("Pitch", limelight.getPitch());
-//        telemetry.addData("Shooterdis", shooter.distance);
-        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
-        telemetry.addData("turretpos", turret.getPos());
-        telemetry.addData("turretaimpos", turret.aimposition);
-//        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
-//        telemetry.addData("ShotterForce?", shooter.forceShooting);
-//        telemetry.addData("Rpm_Range", shooter.rpmreached);
-//        telemetry.addData("TransferDis", shooter.getTransDis());
-
-
-//        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
-//        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
-//        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
-//        telemetry.addData("BR Power", drivetrain.getBackRightPower());
-        telemetry.addData("Looptime", drivetrain.looptime());
-        telemetry.update();
+//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//        telemetry.addData("dis", drivetrain.getdis());
+//        telemetry.addData("maglim", turret.magLim.getState());
+////        telemetry.addData("Omega", drivetrain.angularVel());
+////        telemetry.addData("speed over all",drivetrain.getallspeed());
+////        telemetry.addData("speed towards",drivetrain.forwardvel());
+////        telemetry.addData("x", drivetrain.follower.getPose().getX());
+////        telemetry.addData("y", drivetrain.follower.getPose().getY());
+////        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
+////        telemetry.addData("PIDoutput", turret.turretpidOut);
+////        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
+////        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
+////        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
+////        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
+////        telemetry.addData("Apriltag dist", limelight.getDis());
+////        telemetry.addData("Apriltag X", limelight.getX());
+////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
+////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
+////        telemetry.addData("Pitch", limelight.getPitch());
+////        telemetry.addData("Shooterdis", shooter.distance);
+//        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
+//        telemetry.addData("turretpos", turret.getPos());
+//        telemetry.addData("turretaimpos", turret.aimposition);
+////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
+////        telemetry.addData("ShotterForce?", shooter.forceShooting);
+////        telemetry.addData("Rpm_Range", shooter.rpmreached);
+////        telemetry.addData("TransferDis", shooter.getTransDis());
+//
+//
+////        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
+////        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
+////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
+////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
+//        telemetry.addData("Looptime", drivetrain.looptime());
+//        telemetry.update();
         drivetrain.period();
     }
 }
