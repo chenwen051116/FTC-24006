@@ -81,7 +81,7 @@ public class Red_Far_cycle extends OpMode {
     public static double intaketime = 0.7;
     public static double checkcount = 3;
 
-    public static double followingtime = 2;
+    public static double followingtime = 1.5;
 
     public double checkcounter = checkcount;
 
