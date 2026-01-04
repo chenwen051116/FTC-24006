@@ -381,16 +381,20 @@ public class Red_Far_cycle extends OpMode {
                     }
                     else {
                         if (timer.getElapsedTimeSeconds() < followingtime) {
-                            follower.startTeleopDrive();
-                            follower.breakFollowing();
-                            teleDrive(0.7, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            if(!follower.isTeleopDrive()) {
+                                follower.breakFollowing();
+                                follower.startTeleopDrive();
+
+                            }
+                            teleDrive(1, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
                             autoflag = true;
                         }
                         else{
                             firstshooting = false;
                             autoflag = false;
-                            teleDrive(0, 0,
-                                    0);
+//                            teleDrive(0, 0,
+//                                    0);
+
                             follower.breakFollowing();
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
