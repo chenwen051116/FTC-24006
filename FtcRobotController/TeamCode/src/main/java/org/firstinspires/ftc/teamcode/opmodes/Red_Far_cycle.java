@@ -381,7 +381,9 @@ public class Red_Far_cycle extends OpMode {
                     }
                     else {
                         if (timer.getElapsedTimeSeconds() < followingtime) {
-                            teleDrive(0.8, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            follower.startTeleopDrive();
+                            follower.breakFollowing();
+                            teleDrive(0.7, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
                             autoflag = true;
                         }
                         else{
