@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "Red_Far_cycle")
+@Autonomous(name = "Blue_Far_cycle")
 
 public class Blue_Far_cycle extends OpMode {
 
