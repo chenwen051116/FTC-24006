@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static double kPTurret = -0.7;
 
-    public static double kPShooter= -0.15;
+    public static double kPShooter= 0;
 
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
@@ -215,9 +215,18 @@ public class Drivetrain extends SubsystemBase {
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
+                 predictedPose = lookaheadPoseTime(new Pose2d(
+                        follower.getPose().getX(),
+                        follower.getPose().getY(),
+                        new Rotation2d(follower.getPose().getHeading())),
+                follower.getVelocity().getXComponent(),
+                follower.getVelocity().getYComponent(),
+                0,
+                lookAheadTime
+        );
         double heading  = follower.getHeading();
-        double realx = follower.getPose().getX();
-        double realy = follower.getPose().getY();
+        double realx = predictedPose.getX();
+        double realy = predictedPose.getY();
         if(heading >0){
             realx-=turretcenterdis*cos(heading);
             realy-=turretcenterdis*sin(heading);
