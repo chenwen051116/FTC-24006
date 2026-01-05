@@ -43,7 +43,7 @@ public class Drivetrain extends SubsystemBase {
     public double xpos = 126.67;
     public double ypos = -129.01;
     public Pose2d predictedPose = new Pose2d();
-    public static double lookAheadTime = 0.2;
+    public static double lookAheadTime = 0.25;
 
     public static double lookAheadTimeShooter = 0.2;
 
@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static double kPTurret = -0.7;
 
-    public static double kPShooter= 0;
+    public static double kPShooter= -0.23;
 
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
