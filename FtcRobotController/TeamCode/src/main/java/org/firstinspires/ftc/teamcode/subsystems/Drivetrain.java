@@ -273,15 +273,15 @@ public class Drivetrain extends SubsystemBase {
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
-         predictedPose = lookaheadPoseTime(new Pose2d(
-                        follower.getPose().getX(),
-                        follower.getPose().getY(),
-                        new Rotation2d(follower.getPose().getHeading())),
-                follower.getVelocity().getXComponent(),
-                follower.getVelocity().getYComponent(),
-                0,
-                lookAheadTime
-        );
+//         predictedPose = lookaheadPoseTime(new Pose2d(
+//                        follower.getPose().getX(),
+//                        follower.getPose().getY(),
+//                        new Rotation2d(follower.getPose().getHeading())),
+//                follower.getVelocity().getXComponent(),
+//                follower.getVelocity().getYComponent(),
+//                0,
+//                lookAheadTime
+//        );
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
@@ -302,9 +302,9 @@ public class Drivetrain extends SubsystemBase {
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x)));
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+kPTurret*angularVel());
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x)));
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+kPTurret*angularVel());
         }
 
 
