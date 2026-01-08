@@ -49,13 +49,13 @@ public class Blue_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose PrepGather4 = new Pose(119.5531, 0.06455, 0);//accounted for overshoot
+    private final Pose PrepGather4 = new Pose(119.5531, 0.00, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.92, 0.06455, 0);
+    private final Pose FinishGather4 = new Pose(123.92, 0.00, 0);
 
     private final Pose Park = new Pose(121.21, -20.7571,0);;
 
-    private final Pose FinishGather5 = new Pose(121.42, 0.06455, 0);
+    private final Pose FinishGather5 = new Pose(121.42, 0.00, 0);
 
     private boolean firstshooting = false;
     private PathChain GatePath, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;

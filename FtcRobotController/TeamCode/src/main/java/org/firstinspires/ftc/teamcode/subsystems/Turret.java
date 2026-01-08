@@ -72,7 +72,7 @@ public class Turret extends SubsystemBase {
     public boolean centeringDir = false;
 
     private boolean maneulCenteringFlag = false;
-    public double centerVel = 80;
+    public double centerVel = 180;
 
     public boolean automode = false;
 
