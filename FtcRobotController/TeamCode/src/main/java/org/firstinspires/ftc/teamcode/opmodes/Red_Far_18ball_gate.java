@@ -42,7 +42,7 @@ public class Red_Far_18ball_gate extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
     private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
-    private final Pose GatePose = new Pose(122.5,59.2147, 0);
+    private final Pose GatePose = new Pose(122.5,62.2147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
 
     private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
@@ -164,16 +164,16 @@ public class Red_Far_18ball_gate extends OpMode {
 
         Shootpath4 = simplePath(FinishGather2,ShootPose2);
 
-//        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
-//
-//        finishGatherPath4 = simplePath(PrepGather4,FinishGather4);
-        prepGatherPath4 = follower.pathBuilder()
+        prepGatherPath4 = simplePath(ShootPose2,PrepGather1);
 
-                .addPath(new BezierLine(ShootPose2, PrepGather1))
-                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather1.getHeading())
-                .addPath(new BezierLine(PrepGather1, FinishGather1))
-                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
-                .build();
+        finishGatherPath4 = simplePath(PrepGather1,FinishGather1);
+//        prepGatherPath4 = follower.pathBuilder()
+//
+//                .addPath(new BezierLine(ShootPose2, PrepGather1))
+//                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather1.getHeading())
+//                .addPath(new BezierLine(PrepGather1, FinishGather1))
+//                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+//                .build();
 
         Shootpath5 = simplePath(FinishGather1,ShootPose1);
 
@@ -199,7 +199,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 //follower.followPath(Shootpath1,true);
                 shooter.autoLonger = true;
                 shooter.Autolong = 3225;
-                turret.autopos = 315;
+                turret.autopos = 325;
                 setPathState(1);
 
                 break;
@@ -227,7 +227,7 @@ public class Red_Far_18ball_gate extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime+1.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            turret.autopos = 0;
+                           // turret.autopos = 0;
                             setPathState(2);
                         }
 
@@ -261,7 +261,7 @@ public class Red_Far_18ball_gate extends OpMode {
                 if(!follower.isBusy()){
                     turret.isManeulCentering = false;
                     turret.centeringDir = false;
-                    turret.autopos = 319;
+                    turret.autopos = 316;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     follower.followPath(Shootpath2,0.7,true);
@@ -447,23 +447,29 @@ public class Red_Far_18ball_gate extends OpMode {
             //4th shooting________________________________________________
             case 16:
                 if(!follower.isBusy()) {
-                    turret.autopos = 319;
+                    //turret.autopos = 310;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     follower.followPath(prepGatherPath4);
+                    turret.autopos=0;
                     setPathState(17);
                 }
                 break;
             case 17:
                 if(!follower.isBusy()) {
-                    //follower.followPath(finishGatherPath4);
+                     turret.isManeulCentering = true;
+                    turret.centeringDir = false;
+                    follower.followPath(finishGatherPath4);
                     setPathState(18);
                 }
                 break;
             case 18:
                 if(!follower.isBusy()){
+                     turret.isManeulCentering = false;
+                    turret.centeringDir = false;
+                    turret.autopos = 310;
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     follower.followPath(Shootpath5);
