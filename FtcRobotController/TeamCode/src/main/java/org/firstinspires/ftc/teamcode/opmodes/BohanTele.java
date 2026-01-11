@@ -271,7 +271,7 @@ public class BohanTele extends CommandOpMode {
 //        telemetry.addData("turretaimpos", turret.aimposition);
 ////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 ////        telemetry.addData("ShotterForce?", shooter.forceShooting);
-////        telemetry.addData("Rpm_Range", shooter.rpmreached);
+       telemetry.addData("accel", drivetrain.getaccel());
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
 //
 //
@@ -279,8 +279,8 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
 ////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
 ////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
-//        telemetry.addData("Looptime", drivetrain.looptime());
-//        telemetry.update();
+        telemetry.addData("Looptime", drivetrain.looptime());
+        telemetry.update();
         drivetrain.period();
     }
 }

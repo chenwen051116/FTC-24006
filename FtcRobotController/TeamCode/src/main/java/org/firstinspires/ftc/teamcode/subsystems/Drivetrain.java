@@ -45,7 +45,9 @@ public class Drivetrain extends SubsystemBase {
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.25;
 
-    public static double lookAheadTimeShooter = 0.2;
+    //public static double lookAheadTimeShooter = 0.2;
+
+    public static double turretAccelkP = 0.05;
 
     public static double angle = 0;
 
@@ -182,8 +184,48 @@ public class Drivetrain extends SubsystemBase {
 //        return backRightMotor.getPower();
 //    }
 
+public double getaccel(){
+    double value = getSignedAccelMagnitude()*turretAccelkP;
+    if(value>-0.1&&value<0){
+        return -0.1;
+    }
+    if(value<0.1&&value>0){
+        return 0.1;
+    }
+    if(value>0.9){
+        value = 0.9;
+    }
+//    if(value<-0.9){
+//        value = -0.9;
+//    }
+    return value;
+}
+    private static double[] rotate(double x, double y, double angle) {
+        double c = Math.cos(angle);
+        double s = Math.sin(angle);
+        return new double[] { x * c - y * s, x * s + y * c };
+    }
+    public double getSignedAccelMagnitude() {
+        double ax = follower.getAcceleration().getXComponent();
+        double ay = follower.getAcceleration().getYComponent();
+        double vx = follower.getVelocity().getXComponent();
+        double vy = follower.getVelocity().getYComponent();
+
+            double heading = follower.getPose().getHeading();
+            double[] vR = rotate(vx, vy, -heading);
+            double[] aR = rotate(ax, ay, -heading);
+            vx = vR[0]; vy = vR[1];
+            ax = aR[0]; ay = aR[1];
+
+        double aMag = Math.hypot(ax, ay);
+        double vDotA = vx * ax + vy * ay; // >0 speeding up, <0 slowing down (when moving)
+        if (Math.hypot(vx, vy) < 1e-6) return 0.0;
+
+        return Math.signum(vDotA) * aMag;
+    }
     public void localizerInit(double x, double y, double heading){
         follower.setPose(new Pose(x,y,heading));
+
     }
 
 
@@ -311,9 +353,9 @@ public class Drivetrain extends SubsystemBase {
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+kPTurret*angularVel());
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()));
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+kPTurret*angularVel());
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()));
         }
 
 

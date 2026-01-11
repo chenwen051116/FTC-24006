@@ -381,6 +381,7 @@ public class Red_Far_cycle extends OpMode {
                                 follower.breakFollowing();
                                 follower.startTeleopDrive();
 
+
                             }
                             if(follower.getPose().getX()<120&&follower.getPose().getY()<59) {
                                 teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
