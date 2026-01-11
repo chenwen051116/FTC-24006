@@ -139,11 +139,13 @@ public class BohanTele extends CommandOpMode {
         if(gamepad1.dpad_up){
             drivetrain.originInit();
         }
-        if(gamepad1.a&&gamepad1.left_bumper){
+        if(shooter.shooterStatus == Shooter.ShooterStatus.Stop&&((gamepad1.a&&gamepad1.left_bumper)||(gamepad2.a&&gamepad2.left_bumper))){
+            gamepad1.rumble(200);
             turret.isManeulCentering = true;
             turret.centeringDir = false;
         }
-        if(gamepad1.a&&gamepad1.right_bumper){
+        if(shooter.shooterStatus == Shooter.ShooterStatus.Stop&&((gamepad1.a&&gamepad1.right_bumper)||(gamepad2.a&&gamepad2.right_bumper))){
+            gamepad1.rumble(200);
             turret.isManeulCentering = true;
             turret.centeringDir = true;
         }
