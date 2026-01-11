@@ -86,7 +86,7 @@ public class Shooter extends SubsystemBase {
 
     public boolean Movingshooting = false;
 
-    public double offset = 0;
+    public double offset = 10;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting
@@ -382,7 +382,7 @@ public class Shooter extends SubsystemBase {
                 index = 6;
             }
             double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
-            double target = slope*(dis-longdis[index])+longrpm[index];
+            double target = slope*(dis-longdis[index])+longrpm[index]+20;
             setTargetRPM(target+offset);
         }
 
