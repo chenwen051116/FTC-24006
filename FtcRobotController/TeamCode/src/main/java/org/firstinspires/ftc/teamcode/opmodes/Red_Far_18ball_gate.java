@@ -41,7 +41,7 @@ public class Red_Far_18ball_gate extends OpMode {
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
-    private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
+    private final Pose GatePassby = new Pose(112.6299, 62.2147, 0);
     private final Pose GatePose = new Pose(122.5,59.2147, 0);
     private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
 

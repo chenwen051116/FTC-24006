@@ -54,7 +54,7 @@ public class Blue_Far_cycle extends OpMode {
 
     private final Pose FinishGather4 = new Pose(123.92, -0.0000, 0);
 
-    private final Pose Park = new Pose(115.21, 8.7571,0);;
+    private final Pose Park = new Pose(115.21, -8.7571,0);;
 
     private final Pose FinishGather5 = new Pose(121.42, 0.06455, 0);
 
@@ -355,8 +355,10 @@ public class Blue_Far_cycle extends OpMode {
                 if(!follower.isBusy()) {
                     //cyclecounter -=1;
 
-                    turret.autopos = -319;
-                    shooter.Autolong = 3100;
+                    turret.autopos = 0;
+
+
+                    shooter.Autolong = 3135;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -377,6 +379,8 @@ public class Blue_Far_cycle extends OpMode {
                     }
                     else {
                         if (timer.getElapsedTimeSeconds() < followingtime) {
+                            turret.isManeulCentering = true;
+                            turret.centeringDir = false;
                             if(!follower.isTeleopDrive()) {
                                 follower.breakFollowing();
                                 follower.startTeleopDrive();
@@ -395,7 +399,9 @@ public class Blue_Far_cycle extends OpMode {
                             autoflag = false;
 //                            teleDrive(0, 0,
 //                                    0);
-
+                            turret.isManeulCentering = false;
+                            turret.centeringDir = false;
+                            turret.autopos = -319;
                             follower.breakFollowing();
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);

@@ -77,7 +77,7 @@ public class Intake extends SubsystemBase {
 
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
-        Suck_In(1,0.72),
+        Suck_In(1,0.73),
         Split_Out(-0.8,0.25),
         Send_It_Up(1,0.25),
         Intake_Steady(0,0.25),
