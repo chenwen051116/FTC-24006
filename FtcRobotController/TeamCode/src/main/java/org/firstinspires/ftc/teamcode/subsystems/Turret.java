@@ -195,8 +195,9 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        aimposition = Math.PI;
+        aimangle = Math.PI;
         turretpidController.setSetPoint(calculateAim());
+        aimposition = calculateAim();
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(readAngle());
         if(output >1){
@@ -238,9 +239,14 @@ public class Turret extends SubsystemBase {
         if(angle>Math.PI){
             return angle-2*Math.PI;
         }
+        else if(angle<Math.PI){
+            return angle+2*Math.PI;
+        }
         else{
             return angle;
         }
+
+
     }
     public void manuelCenter(){
         if(centeringDir){
