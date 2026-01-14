@@ -42,9 +42,9 @@ public class Turret extends SubsystemBase {
 
     public double kf = 0;
 
-    public static double encoderkp = 0.01;
-    public static double encoderkd = 0.00086;
-    public static double encoderki = 0.26;
+    public static double encoderkp = 0.0;
+    public static double encoderkd = 0.00;
+    public static double encoderki = 0;
 
     public static double encoderkf = 0;
 
@@ -87,13 +87,15 @@ public class Turret extends SubsystemBase {
 
     public double aimposition = 0;
     public GoBildaPinpointDriver pin;
+
+    public double baseHeading = 0;
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         magLim = hardwareMap.get(DigitalChannel.class,"maglim");
         pin =  hardwareMap.get(GoBildaPinpointDriver.class,"pinpointturret");
-
+        pin.setHeading(3.1415926,AngleUnit.RADIANS);
         magLim.setMode(DigitalChannel.Mode.INPUT);
 
         // We do not have distance sensor thus the following object should be removed
@@ -130,10 +132,10 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint((int) floor(arcangle*arctoDegree));
-        aimposition = (int) floor(arcangle*arctoDegree);
+        turretpidController.setSetPoint(calculateAim());
+        aimposition = calculateAim();
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
-        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        output = turretpidController.calculate(readAngle());
         if(output >1){
             output =1;
         }
@@ -193,9 +195,10 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint(0);
+        aimposition = 3.1415926;
+        turretpidController.setSetPoint(calculateAim());
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
-        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        output = turretpidController.calculate(readAngle());
         if(output >1){
             output =1;
         }
@@ -205,13 +208,14 @@ public class Turret extends SubsystemBase {
         turretMotor.setPower(output);
 
     }
-    public void settopos(int pos){
+    public void settoangleAuto(double angle){
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint(pos);
+        aimangle = angle;
+        turretpidController.setSetPoint(calculateAim());
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
-        output = turretpidController.calculate(turretMotor.getCurrentPosition());
+        output = turretpidController.calculate(readAngle());
         if(output >1){
             output =1;
         }
@@ -225,6 +229,19 @@ public class Turret extends SubsystemBase {
 
         return pin.getHeading(AngleUnit.RADIANS);
     }
+
+    public double calculateAim(){
+        return compress(aimangle+baseHeading);
+    }
+
+    public double compress(double angle){
+        if(angle>Math.PI){
+            return angle-2*Math.PI;
+        }
+        else{
+            return angle;
+        }
+    }
     public void manuelCenter(){
         if(centeringDir){
             if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
@@ -233,6 +250,7 @@ public class Turret extends SubsystemBase {
             turretMotor.setVelocity(centerVel);
             if(isCentered()){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                pin.setHeading(3.1415926,AngleUnit.RADIANS);
                 isManeulCentering = false;
             }
         }
@@ -257,6 +275,7 @@ public class Turret extends SubsystemBase {
             turretMotor.setVelocity(-centerVel);
             if(isCentered()){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                pin.setHeading(3.1415926,AngleUnit.RADIANS);
                 isManeulCentering = false;
             }
         }
@@ -294,7 +313,7 @@ public class Turret extends SubsystemBase {
             }
         }
         else{
-            settopos(autopos);
+            settoangleAuto(autopos);
         }
 
     }

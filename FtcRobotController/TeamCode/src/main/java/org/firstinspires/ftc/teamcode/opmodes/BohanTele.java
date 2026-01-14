@@ -178,6 +178,7 @@ public class BohanTele extends CommandOpMode {
                 turret.aimangle = drivetrain.getturretangle();
             }
             turret.updateAutoShoot(true);
+            turret.baseHeading = drivetrain.getHeading();
             //turret.tx = limelight.getTx();
 
         }
