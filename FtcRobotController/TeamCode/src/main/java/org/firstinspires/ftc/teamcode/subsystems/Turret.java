@@ -95,7 +95,7 @@ public class Turret extends SubsystemBase {
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         magLim = hardwareMap.get(DigitalChannel.class,"maglim");
         pin =  hardwareMap.get(GoBildaPinpointDriver.class,"pinpointturret");
-        pin.setHeading(3.1415926,AngleUnit.RADIANS);
+        pin.setHeading(0,AngleUnit.RADIANS);
         magLim.setMode(DigitalChannel.Mode.INPUT);
 
         // We do not have distance sensor thus the following object should be removed
