@@ -126,7 +126,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-
+        turret.baseHeading = drivetrain.getHeading();
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
@@ -178,7 +178,7 @@ public class BohanTele extends CommandOpMode {
                 turret.aimangle = drivetrain.getturretangle();
             }
             turret.updateAutoShoot(true);
-            turret.baseHeading = drivetrain.getHeading();
+
             //turret.tx = limelight.getTx();
 
         }
