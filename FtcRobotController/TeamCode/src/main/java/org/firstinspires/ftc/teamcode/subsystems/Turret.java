@@ -134,7 +134,7 @@ public class Turret extends SubsystemBase {
         }
         aimangle = arcangle;
         turretpidController.setSetPoint(calculateAim());
-       
+
         aimposition = calculateAim();
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(readAngle());
@@ -234,7 +234,7 @@ public class Turret extends SubsystemBase {
     }
 
     public double calculateAim(){
-        return compress(aimangle+baseHeading);
+        return compress(-aimangle+baseHeading);
     }
 
     public double compress(double angle){
