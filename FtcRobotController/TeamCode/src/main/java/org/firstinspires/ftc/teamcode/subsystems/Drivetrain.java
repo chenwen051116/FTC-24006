@@ -305,7 +305,7 @@ public double getaccel(){
         }
         double x = realx-xpos;
         double y = realy-ypos;
-        double h = follower.getPose().getHeading()+angle;
+        double h = follower.getPose().getHeading()+Math.PI+angle;
  //       if(!TredFblue) {
             if (y < 0) {
                 return compress(1 * h - Math.atan(abs(y) / abs(x)));
@@ -356,7 +356,7 @@ public double getaccel(){
         double y = realy-ypos;
 //        double x = follower.getPose().getX()-xpos;
 //        double y = follower.getPose().getY()-ypos;
-        double h = follower.getPose().getHeading()+angle;
+        double h = follower.getPose().getHeading()+Math.PI+angle;
         //       if(!TredFblue) {
 
         if (y < 0) {
