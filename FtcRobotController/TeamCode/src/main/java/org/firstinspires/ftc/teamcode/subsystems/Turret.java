@@ -80,7 +80,7 @@ public class Turret extends SubsystemBase {
 
     public double offset = 0;
     public boolean Movingshooting = false;
-    private double output = 0;
+    public double output = 0;
 
     public double aimposition = 0;
 
