@@ -39,8 +39,8 @@ public class Turret extends SubsystemBase {
 
     public double kf = 0;
 
-    public static double encoderkp = 0.0;
-    public static double encoderkd = 0.000;
+    public static double encoderkp = -0.000317;
+    public static double encoderkd = -0.00000407;
     public static double encoderki = 0;
 
     public static double encoderkf = 0;
