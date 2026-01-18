@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,7 +16,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.PinpointLocalizer;
@@ -86,13 +84,13 @@ public class Turret extends SubsystemBase {
     private double output = 0;
 
     public double aimposition = 0;
-    public GoBildaPinpointDriver pin;
+    public PinpointLocalizer pin;
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         magLim = hardwareMap.get(DigitalChannel.class,"maglim");
-        pin =  hardwareMap.get(GoBildaPinpointDriver.class,"pinpointturret");
+        pin = new PinpointLocalizer(hardwareMap,71.0 / 50781, new Pose2d(0, 0, 0));
 
         magLim.setMode(DigitalChannel.Mode.INPUT);
 
@@ -223,7 +221,7 @@ public class Turret extends SubsystemBase {
 
     public double readAngle(){
 
-        return pin.getHeading(AngleUnit.RADIANS);
+        return pin.getPose().heading.toDouble();
     }
     public void manuelCenter(){
         if(centeringDir){
