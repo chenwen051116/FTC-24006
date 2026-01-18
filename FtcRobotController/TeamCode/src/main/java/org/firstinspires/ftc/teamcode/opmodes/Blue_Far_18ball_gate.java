@@ -223,7 +223,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime+1.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            turret.autopos = 0;
+                           // turret.autopos = 0;
                             setPathState(2);
                         }
 
@@ -347,7 +347,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     drive.follower.followPath(Shootpath3);
-                    shooter.autoLonger = false;
+                    //shooter.autoLonger = false;
                     setPathState(11);
                 }
                 break;
@@ -460,7 +460,7 @@ public class Blue_Far_18ball_gate extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     drive.follower.followPath(Shootpath5);
                     setPathState(19);
-                    shooter.autoLonger = true;
+                //    shooter.autoLonger = true;
                 }
                 break;
             case 19:
@@ -661,7 +661,7 @@ public class Blue_Far_18ball_gate extends OpMode {
         turret.periodic();
         limelight.periodic();
         intake.periodic();
-        turret.automode = true;
+       // turret.automode = true;
 //        if(shooter.autoLonger){
 //            turret.autopos = -195;
 //        }
