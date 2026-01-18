@@ -72,7 +72,7 @@ public class Turret extends SubsystemBase {
     public boolean centeringDir = false;
 
     private boolean maneulCenteringFlag = false;
-    public double centerVel = 250;
+    public double centerVel = 0.4;
 
     public boolean automode = false;
 
@@ -218,10 +218,10 @@ public class Turret extends SubsystemBase {
 
     public void manuelCenter(){
         if(centeringDir){
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-            turretMotor.setVelocity(centerVel);
+            turretMotor.setPower(centerVel);
             if(isCentered()){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 isManeulCentering = false;
@@ -242,10 +242,10 @@ public class Turret extends SubsystemBase {
 //            }
 //        }
         else{
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-            turretMotor.setVelocity(-centerVel);
+            turretMotor.setPower(-centerVel);
             if(isCentered()){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 isManeulCentering = false;
