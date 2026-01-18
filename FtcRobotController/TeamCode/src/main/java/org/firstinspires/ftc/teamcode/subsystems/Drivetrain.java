@@ -145,9 +145,7 @@ public class Drivetrain extends SubsystemBase {
         follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
     }
 
-public double getHeading(){
-        return follower.getHeading();
-}
+
 //    public void teleDrive (double frontBackVelocity, double strafeVelocity, double turnVelocity){
 ////        double y = frontBackVelocity;
 ////        double x = strafeVelocity;
