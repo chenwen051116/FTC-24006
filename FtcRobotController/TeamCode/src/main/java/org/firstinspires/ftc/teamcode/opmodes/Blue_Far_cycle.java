@@ -355,7 +355,7 @@ public class Blue_Far_cycle extends OpMode {
                 if(!follower.isBusy()) {
                     //cyclecounter -=1;
 
-                    turret.autopos = 0;
+                    //turret.autopos = 0;
 
 
                     shooter.Autolong = 3135;
@@ -379,8 +379,8 @@ public class Blue_Far_cycle extends OpMode {
                     }
                     else {
                         if (timer.getElapsedTimeSeconds() < followingtime) {
-                            turret.isManeulCentering = true;
-                            turret.centeringDir = false;
+                          //  turret.isManeulCentering = true;
+                          //  turret.centeringDir = false;
                             if(!follower.isTeleopDrive()) {
                                 follower.breakFollowing();
                                 follower.startTeleopDrive();
@@ -399,8 +399,9 @@ public class Blue_Far_cycle extends OpMode {
                             autoflag = false;
 //                            teleDrive(0, 0,
 //                                    0);
-                            turret.isManeulCentering = false;
-                            turret.centeringDir = false;
+                         //   turret.isManeulCentering = false;
+                          //
+                            // turret.centeringDir = false;
                             turret.autopos = -319;
                             follower.breakFollowing();
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
