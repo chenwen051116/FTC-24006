@@ -132,9 +132,7 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        aimangle = arcangle;
         turretpidController.setSetPoint(calculateAim());
-       
         aimposition = calculateAim();
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(readAngle());
@@ -197,7 +195,7 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        aimangle = 0;
+        aimangle = Math.PI;
         turretpidController.setSetPoint(calculateAim());
         aimposition = calculateAim();
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
