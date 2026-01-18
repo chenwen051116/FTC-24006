@@ -125,8 +125,8 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint((int) floor(arcangle*arctoDegree));
-        aimposition = (int) floor(arcangle*arctoDegree);
+        turretpidController.setSetPoint((int) -floor(arcangle*arctoDegree));
+        aimposition = (int) -floor(arcangle*arctoDegree);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
         if(output >1){
