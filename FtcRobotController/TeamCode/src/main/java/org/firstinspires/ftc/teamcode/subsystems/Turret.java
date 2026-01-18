@@ -239,7 +239,7 @@ public class Turret extends SubsystemBase {
         if(angle>Math.PI){
             return angle-2*Math.PI;
         }
-        else if(angle<-Math.PI){
+        else if(angle<Math.PI){
             return angle+2*Math.PI;
         }
         else{

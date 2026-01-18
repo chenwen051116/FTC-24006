@@ -319,14 +319,9 @@ public double getaccel(){
         if(angle>Math.PI){
             return angle-2*Math.PI;
         }
-        else if(angle<-Math.PI){
-            return angle+2*Math.PI;
-        }
         else{
             return angle;
         }
-
-
     }
     public double getturretangle_TWO(){
 //        double x = follower.getPose().getX()-aimPos.getX();
