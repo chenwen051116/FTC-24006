@@ -33,15 +33,15 @@ public class Turret extends SubsystemBase {
     public boolean autoForce = false;
     public static double pidDiff = 0;
 
-    public double kp = -0.015;
+    public double kp = 0.0;
     public double kd = 0.0000;
-    public double ki = 0.001;
+    public double ki = 0.00;
 
     public double kf = 0;
 
-    public static double encoderkp = 0.01;
-    public static double encoderkd = 0.00086;
-    public static double encoderki = 0.26;
+    public static double encoderkp = 0.0;
+    public static double encoderkd = 0.000;
+    public static double encoderki = 0;
 
     public static double encoderkf = 0;
 
@@ -61,7 +61,7 @@ public class Turret extends SubsystemBase {
 
     public double tolerance = 1;
 
-    public double arctoDegree = 162.42;
+    public double arctoDegree = 8184.9497;
 
     public double llbar = 8;
 
