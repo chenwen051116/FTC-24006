@@ -60,7 +60,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void initialize() { //Init button on DriverHUB
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
-        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().reset(); // drop any stale commands from previous opmode
 
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
@@ -247,8 +247,9 @@ public class BohanTele extends CommandOpMode {
             y2justpressed = false;
         }
 
-//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
 //        telemetry.addData("dis", drivetrain.getdis());
 //        telemetry.addData("maglim", turret.magLim.getState());
 ////        telemetry.addData("Omega", drivetrain.angularVel());
