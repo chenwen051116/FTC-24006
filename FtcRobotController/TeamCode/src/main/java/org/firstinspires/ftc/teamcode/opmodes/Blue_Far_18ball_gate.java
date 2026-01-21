@@ -686,7 +686,7 @@ public class Blue_Far_18ball_gate extends OpMode {
         }
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
-            shooter.ododis = drive.getdis_TWO();
+            shooter.ododis = drive.getdis();
             turret.aimangle = drive.getturretangle_TWO();
 
             turret.updateAutoShoot(true);
