@@ -430,7 +430,7 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(2400);
+            setTargetRPM(2600);
             shootbarOn();
         }
     }
