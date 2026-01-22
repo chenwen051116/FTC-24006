@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
 
     //public static double lookAheadTimeShooter = 0.2;
 
-    public static double turretAccelkP = 0.05;
+    public static double turretAccelkP = 0.08;
 
     public static double angle = 0;
 
