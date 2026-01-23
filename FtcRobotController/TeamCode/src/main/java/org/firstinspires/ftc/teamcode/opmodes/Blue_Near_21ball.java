@@ -123,10 +123,11 @@ public class Blue_Near_21ball extends OpMode {
         Shootpath3 = simplePath(FinishGather3,ShootPose);
 
         GatePath = drive.follower.pathBuilder()
-
+                .setTValueConstraint(0.90)
                 .addPath(new BezierLine(ShootPose, GatePassby))
-               // .setTValueConstraint(0.90)
+
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), GatePassby.getHeading())
+                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
                 .build();
