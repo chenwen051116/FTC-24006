@@ -63,7 +63,7 @@ public class Blue_Near_21ball extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 2.7;
+    public static double stoptime = 1.5;
     public static double shoottime = 1.65;
 
     public static double waittime = 0;
@@ -690,7 +690,7 @@ public class Blue_Near_21ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
             shooter.ododis = drive.getdis();
-            turret.aimangle = drive.getturretangle();
+            turret.aimangle = drive.getturretangle_TWO();
 
             turret.updateAutoShoot(true);
             //turret.tx = limelight.getTx();
@@ -701,16 +701,16 @@ public class Blue_Near_21ball extends OpMode {
         }
         autonomousPathUpdate();
 
-        // Feedback to Driver Hub for debugging
-        telemetry.addData("realRPM", shooter.getFlyWheelRPM());
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", drive.follower.getPose().getX());
-        telemetry.addData("y", drive.follower.getPose().getY());
-        telemetry.addData("heading", drive.follower.getPose().getHeading());
-        telemetry.addData("timer", timer.getElapsedTimeSeconds());
-        telemetry.addData("shooter state", shooter.shooterStatus);
-        telemetry.addData("intake state", intake.intakeCurrentState);
-        telemetry.update();
+//        // Feedback to Driver Hub for debugging
+//        telemetry.addData("realRPM", shooter.getFlyWheelRPM());
+//        telemetry.addData("path state", pathState);
+//        telemetry.addData("x", drive.follower.getPose().getX());
+//        telemetry.addData("y", drive.follower.getPose().getY());
+//        telemetry.addData("heading", drive.follower.getPose().getHeading());
+//        telemetry.addData("timer", timer.getElapsedTimeSeconds());
+//        telemetry.addData("shooter state", shooter.shooterStatus);
+//        telemetry.addData("intake state", intake.intakeCurrentState);
+//        telemetry.update();
     }
 
 
