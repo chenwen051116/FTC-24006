@@ -40,8 +40,8 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose PrepGather2 = new Pose(91.9908, -52.0297-5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
-    private final Pose GatePassby = PrepGather2;
-    private final Pose GatePose = new Pose(122.0393, -52.1156, -0.6557);
+    private final Pose GatePassby = new Pose(104.9794, -52.0297, -0.6557);;
+    private final Pose GatePose = new Pose(122.0393, -52.1156-1.5, -0.6557);
     private final Pose ShootPose = new Pose(84.1620, -75.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070+8, 0);//accounted for overshoot
@@ -51,6 +51,7 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose Park = new Pose(111.21, -20.7571,0);;
 
     private boolean firstshooting = false;
+    private double gatePathPower = 0.6;
     private PathChain GateShoot,GatePath, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
 
@@ -177,7 +178,7 @@ public class Blue_Near_21ball extends OpMode {
             case 0:
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
-                drive.follower.followPath(Shootpath1);
+                drive.follower.followPath(Shootpath1,0.7,true);
                 setPathState(1);
 
                 break;
@@ -280,7 +281,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath);
+                    drive.follower.followPath(GatePath,gatePathPower,true);
                     setPathState(9);
                 }
                 break;
@@ -406,7 +407,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath);
+                    drive.follower.followPath(GatePath,gatePathPower,true);
                     setPathState(17);
                 }
                 break;
@@ -479,7 +480,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath);
+                    drive.follower.followPath(GatePath,gatePathPower,true);
                     setPathState(21);
                 }
                 break;
