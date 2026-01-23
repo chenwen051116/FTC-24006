@@ -44,7 +44,7 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose GatePose = new Pose(122.0393, -52.1156-1.5, -0.6557);
     private final Pose ShootPose = new Pose(84.1620, -75.80 ,0);
 
-    private final Pose PrepGather3 = new Pose(91.9908, -75.8070+8, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
@@ -690,7 +690,7 @@ public class Blue_Near_21ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
             shooter.ododis = drive.getdis();
-            turret.aimangle = drive.getturretangle_TWO();
+            turret.aimangle = drive.getturretangle();
 
             turret.updateAutoShoot(true);
             //turret.tx = limelight.getTx();
@@ -727,7 +727,7 @@ public class Blue_Near_21ball extends OpMode {
         limelight = new MyLimelight(hardwareMap);
         limelight.initPatternPipeline();
         limelight.startDetect();
-        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+        //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
         turret = new Turret(hardwareMap);
         buildPaths();
