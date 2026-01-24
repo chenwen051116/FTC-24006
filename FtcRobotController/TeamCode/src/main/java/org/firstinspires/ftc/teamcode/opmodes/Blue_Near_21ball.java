@@ -320,7 +320,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
+                    if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     }
                     if(timer.getElapsedTimeSeconds()> stoptime){
@@ -458,7 +458,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -543,7 +543,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
