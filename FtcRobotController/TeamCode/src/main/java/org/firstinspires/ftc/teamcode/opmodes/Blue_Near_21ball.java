@@ -224,7 +224,7 @@ public class Blue_Near_21ball extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             // turret.autopos = 0;
 
-                            setPathState(6);
+                            setPathState(2);
                         }
 
                     }
@@ -285,7 +285,7 @@ public class Blue_Near_21ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(24);
+                            setPathState(6);
                         }
 
                     }
@@ -371,7 +371,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(12);
+                            setPathState(16);
                         }
 
                     }
@@ -425,7 +425,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(16);
+                            setPathState(24);
                         }
 
                     }
@@ -511,7 +511,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(24);
+                            setPathState(20);
                         }
 
                     }
@@ -598,7 +598,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(2);
+                            setPathState(12);
                         }
 
                     }
