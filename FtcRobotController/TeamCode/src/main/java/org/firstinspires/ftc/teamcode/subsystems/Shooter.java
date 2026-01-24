@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -23,6 +24,7 @@ public class Shooter extends SubsystemBase {
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
+    private final VoltageSensor v;
 
     private final DistanceSensor distanceSensor;
 
@@ -86,6 +88,8 @@ public class Shooter extends SubsystemBase {
 
     public boolean Movingshooting = false;
 
+    public double vol = 14;
+
     public double offset = 10;
     public enum ShooterStatus {
         
@@ -99,6 +103,7 @@ public class Shooter extends SubsystemBase {
 
 
     public Shooter(HardwareMap hardwareMap) {
+        v=hardwareMap.get(VoltageSensor.class,"Control Hub");
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
@@ -128,6 +133,9 @@ public class Shooter extends SubsystemBase {
         automode = false;
 
         autoLonger = true;
+        vol = v.getVoltage();
+        kv = 0.0000066666667*(vol-12.5)+0.00020;
+
     }
 
     /**
