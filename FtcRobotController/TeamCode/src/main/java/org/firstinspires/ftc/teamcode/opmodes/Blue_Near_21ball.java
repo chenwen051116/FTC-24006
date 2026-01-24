@@ -322,7 +322,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
+                    if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     }
                     if(timer.getElapsedTimeSeconds()> stoptime){
@@ -461,7 +461,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -547,7 +547,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -633,7 +633,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.offset = -10;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    drive.follower.followPath(Shootpath4,1,true);
+                    drive.follower.followPath(Shootpath4,0.8,true);
                     firstshooting = false;
                     setPathState(27);
                 }
