@@ -50,7 +50,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose Park = new Pose(111.21, -20.7571,0);;
+    private final Pose Park = new Pose(79.1620, -95.80 ,0);;
 
     private boolean firstshooting = false;
     private double gatePathPower = 0.6;
@@ -167,7 +167,7 @@ public class Blue_Near_21ball extends OpMode {
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .build();
 
-        Shootpath4 = simplePath(FinishGather1,ShootPose);
+        Shootpath4 = simplePath(FinishGather1,Park);
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
