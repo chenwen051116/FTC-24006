@@ -322,7 +322,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
+                    if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     }
                     if(timer.getElapsedTimeSeconds()> stoptime){
@@ -461,7 +461,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -547,7 +547,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0.1&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -630,6 +630,7 @@ public class Blue_Near_21ball extends OpMode {
                 if(!drive.follower.isBusy()){
                     //  turret.isManeulCentering = false;
                     // turret.centeringDir = false;
+                    shooter.offset = -10;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     drive.follower.followPath(Shootpath4,1,true);
@@ -688,7 +689,7 @@ public class Blue_Near_21ball extends OpMode {
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = false;
                 if(!drive.follower.isBusy()){
-                    shooter.offset = -25;
+                    shooter.offset = 0;
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = drive.follower.getPose();
                     Drivetrain.TredFblue = false;
