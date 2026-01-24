@@ -653,30 +653,30 @@ public class Blue_Near_21ball extends OpMode {
 
 
 
-
-            case 28:
-                if(!drive.follower.isBusy()) {
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    shooter.periodic();
-                    drive.follower.followPath(lastOutPath);
-                    resetSubsystemsForTeleop();
-                    setPathState(29);
-                }
-                break;
-            case 29:
-                Drivetrain.lastPose = drive.follower.getPose();
-                Drivetrain.TredFblue = false;
-                if(!drive.follower.isBusy()){
-                    shooter.offset = -25;
-                    resetSubsystemsForTeleop();
-                    Drivetrain.lastPose = drive.follower.getPose();
-                    Drivetrain.TredFblue = false;
-                    //setPathState(28);
-                    break;
-
-                }
-                break;
+//
+//            case 28:
+//                if(!drive.follower.isBusy()) {
+//                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+//                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+//                    shooter.periodic();
+//                    drive.follower.followPath(lastOutPath);
+//                    resetSubsystemsForTeleop();
+//                    setPathState(29);
+//                }
+//                break;
+//            case 29:
+//                Drivetrain.lastPose = drive.follower.getPose();
+//                Drivetrain.TredFblue = false;
+//                if(!drive.follower.isBusy()){
+//                    shooter.offset = -25;
+//                    resetSubsystemsForTeleop();
+//                    Drivetrain.lastPose = drive.follower.getPose();
+//                    Drivetrain.TredFblue = false;
+//                    //setPathState(28);
+//                    break;
+//
+//                }
+//                break;
 
 
         }
