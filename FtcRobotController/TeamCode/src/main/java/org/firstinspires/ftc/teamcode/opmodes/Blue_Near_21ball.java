@@ -526,7 +526,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.7,false);
+                    drive.follower.followPath(GatePath1,0.5,false);
                     setPathState(40);
                 }
                 break;
