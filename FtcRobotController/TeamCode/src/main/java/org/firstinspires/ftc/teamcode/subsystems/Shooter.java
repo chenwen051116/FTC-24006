@@ -33,7 +33,7 @@ public class Shooter extends SubsystemBase {
 
     public static double Kf = 0;    // Friction gain
 
-    public static double kv = 0.000215; // FeedForward velocity gain
+    public static double kv = 0.000210; // FeedForward velocity gain
     public static double pidThreshold = 300.0; // RPM threshold for PID vs full power control
     public static double tolerance = 0.3; // RPM tolerance for "at target" determination
 
@@ -195,7 +195,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(0.97);
+        shootLimit.setPosition(0.95);
     }
 
     public void shootbarOff(){

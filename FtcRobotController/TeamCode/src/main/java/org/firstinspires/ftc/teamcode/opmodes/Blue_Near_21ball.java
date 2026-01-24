@@ -43,7 +43,7 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -58.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.7843, -60.7386, 0);//hit gate
-    private final Pose GatePose = new Pose(121.4260, -49.1962, -0.8081);//pickup
+    private final Pose GatePose = new Pose(121.9260, -49.1962, -0.7081);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
@@ -165,9 +165,14 @@ public class Blue_Near_21ball extends OpMode {
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather1.getHeading())
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .setTValueConstraint(0.90)
                 .build();
 
-        Shootpath4 = simplePath(FinishGather1,Park);
+        Shootpath4 = drive.follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather1,Park))
+                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
+                .setBrakingStrength(1.3)
+                .build();
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
@@ -188,7 +193,7 @@ public class Blue_Near_21ball extends OpMode {
 
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
-                drive.follower.followPath(Shootpath1,0.7,true);
+                drive.follower.followPath(Shootpath1,0.8,true);
                 setPathState(1);
 
                 break;
@@ -227,7 +232,7 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    shooter.offset = -25;
+                    shooter.offset = 0;
                     //  turret.autopos = 0;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -731,7 +736,7 @@ public class Blue_Near_21ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
             shooter.ododis = drive.getdis_TWO();
-            turret.aimangle = drive.getturretangle()+toRadians(5);
+            turret.aimangle = drive.getturretangle()+toRadians(3);
 
             turret.updateAutoShoot(true);
             //turret.tx = limelight.getTx();
