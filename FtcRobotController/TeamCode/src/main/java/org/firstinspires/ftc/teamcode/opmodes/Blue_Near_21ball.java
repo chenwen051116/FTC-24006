@@ -65,10 +65,10 @@ public class Blue_Near_21ball extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1.5;
+    public static double stoptime = 1;
     public static double shoottime = 1.65;
 
-    public static double waittime = 0;
+    public static double waittime = 0.5;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
