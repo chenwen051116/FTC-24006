@@ -181,6 +181,7 @@ public class Blue_Near_21ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                shooter.offset = -25;
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,0.7,true);
@@ -663,6 +664,7 @@ public class Blue_Near_21ball extends OpMode {
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = false;
                 if(!drive.follower.isBusy()){
+                    shooter.offset = -25;
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = drive.follower.getPose();
                     Drivetrain.TredFblue = false;
