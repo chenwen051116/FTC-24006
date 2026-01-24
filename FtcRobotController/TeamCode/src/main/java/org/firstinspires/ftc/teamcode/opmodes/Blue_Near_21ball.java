@@ -30,7 +30,7 @@ public class Blue_Near_21ball extends OpMode {
 
     //private drive.follower drive.follower;
     private Drivetrain drive;
-    private Timer pathTimer, actionTimer, opmodeTimer, timer;
+    private Timer pathTimer, actionTimer, opmodeTimer, timer,gatetimer;
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
@@ -310,6 +310,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.periodic();
                     drive.follower.followPath(GatePath2,gatePathPower,true);
                     firstshooting = false;
+                    gatetimer.resetTimer();
                     setPathState(9);
                 }
                 break;
@@ -321,7 +322,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
+                    if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     }
                     if(timer.getElapsedTimeSeconds()> stoptime){
@@ -447,6 +448,7 @@ public class Blue_Near_21ball extends OpMode {
                     //intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     drive.follower.followPath(GatePath2,gatePathPower,true);
+                    gatetimer.resetTimer();
                     firstshooting = false;
                     setPathState(17);
                 }
@@ -459,7 +461,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -533,6 +535,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.periodic();
                     drive.follower.followPath(GatePath2,gatePathPower,true);
                     firstshooting = false;
+                    gatetimer.resetTimer();
                     setPathState(21);
                 }
                 break;
@@ -544,7 +547,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.05&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(gatetimer.getElapsedTimeSeconds()> 0.2&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -775,6 +778,7 @@ public class Blue_Near_21ball extends OpMode {
     public void init() {
         pathTimer = new Timer();
         timer = new Timer();
+        gatetimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         drive = new Drivetrain(hardwareMap);
