@@ -42,8 +42,8 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -52.0297, -0.6557);;
-    private final Pose GatePose = new Pose(121.5393, -52.1156-1.5, -0.6557);
-    private final Pose ShootPose = new Pose(84.1620, -75.80 ,0);
+    private final Pose GatePose = new Pose(120.5393, -52.1156-1.5, -0.6557);
+    private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
 
@@ -136,13 +136,15 @@ public class Blue_Near_21ball extends OpMode {
 
        GateShoot =
                drive.follower.pathBuilder()
-
-                       .addPath(new BezierLine(GatePose, GatePassby))
-                       // .setTValueConstraint(0.90)
-                       .setLinearHeadingInterpolation(GatePose.getHeading(), GatePassby.getHeading())
-                       .addPath(new BezierLine(GatePassby, ShootPose))
-                       .setLinearHeadingInterpolation(GatePassby.getHeading(), ShootPose.getHeading())
+                       .addPath(new BezierLine(GatePose, ShootPose))
+                       .setLinearHeadingInterpolation(GatePose.getHeading(), ShootPose.getHeading())
                        .build();
+//                       .addPath(new BezierLine(GatePose, GatePassby))
+//                       // .setTValueConstraint(0.90)
+//                       .setLinearHeadingInterpolation(GatePose.getHeading(), GatePassby.getHeading())
+//                       .addPath(new BezierLine(GatePassby, ShootPose))
+//                       .setLinearHeadingInterpolation(GatePassby.getHeading(), ShootPose.getHeading())
+//                       .build();
 //        Shootpath3 =     drive.follower.pathBuilder()
 //                .addPath(new BezierLine(GatePose, Shoot2passby))
 //                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
