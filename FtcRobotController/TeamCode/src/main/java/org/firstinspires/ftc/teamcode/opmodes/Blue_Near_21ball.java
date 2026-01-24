@@ -224,7 +224,7 @@ public class Blue_Near_21ball extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             // turret.autopos = 0;
 
-                            setPathState(2);
+                            setPathState(6);
                         }
 
                     }
@@ -285,7 +285,7 @@ public class Blue_Near_21ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(6);
+                            setPathState(24);
                         }
 
                     }
@@ -315,7 +315,7 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 9:
-                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                if(gatetimer.getElapsedTimeSeconds()> 0.25&&gatetimer.getElapsedTimeSeconds()< stoptime){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                 }
                 if(!drive.follower.isBusy()){
@@ -455,7 +455,7 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 17:
-                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                if(gatetimer.getElapsedTimeSeconds()> 0.25&&gatetimer.getElapsedTimeSeconds()< stoptime){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                 }
                 if(!drive.follower.isBusy()){
@@ -542,7 +542,7 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 21:
-                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                if(gatetimer.getElapsedTimeSeconds()> 0.25&&gatetimer.getElapsedTimeSeconds()< stoptime){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                 }
                 if(!drive.follower.isBusy()){
@@ -598,7 +598,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(24);
+                            setPathState(2);
                         }
 
                     }
