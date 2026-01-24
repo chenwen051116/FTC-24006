@@ -5,6 +5,7 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -53,7 +54,7 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose Park = new Pose(72.3860, -88.5130, 0.7830);;
 
     private boolean firstshooting = false;
-    private double gatePathPower = 0.6;
+    private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
 
@@ -103,9 +104,9 @@ public class Blue_Near_21ball extends OpMode {
 //                .build();
         prepGatherPath1 = drive.follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose, PrepGather2))
+                .addPath(new BezierCurve(ShootPose, PrepGather2))
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather2.getHeading())
-                .addPath(new BezierLine(PrepGather2, FinishGather2))
+                .addPath(new BezierCurve(PrepGather2, FinishGather2))
                 .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
                 .build();
 
@@ -116,9 +117,9 @@ public class Blue_Near_21ball extends OpMode {
 //        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
         prepGatherPath2 = drive.follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose, PrepGather3))
+                .addPath(new BezierCurve(ShootPose, PrepGather3))
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather3.getHeading())
-                .addPath(new BezierLine(PrepGather3, FinishGather3))
+                .addPath(new BezierCurve(PrepGather3, FinishGather3))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
@@ -161,9 +162,9 @@ public class Blue_Near_21ball extends OpMode {
 //        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
         prepGatherPath3 = drive.follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose, PrepGather1))
+                .addPath(new BezierCurve(ShootPose, PrepGather1))
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather1.getHeading())
-                .addPath(new BezierLine(PrepGather1, FinishGather1))
+                .addPath(new BezierCurve(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .setTValueConstraint(0.90)
                 .build();
@@ -526,7 +527,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.5,false);
+                    drive.follower.followPath(GatePath1,0.6,false);
                     setPathState(40);
                 }
                 break;
