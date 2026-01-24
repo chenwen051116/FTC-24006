@@ -233,8 +233,8 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    shooter.offset = 0;
-                    shooter.offset = 0;
+
+                    shooter.offset = -10;
                     //  turret.autopos = 0;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -296,7 +296,9 @@ public class Blue_Near_21ball extends OpMode {
                 break;
             //2nd shooting________________________________________________
             case 6:
+
                 if(!drive.follower.isBusy()) {
+                    shooter.offset = 0;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
