@@ -493,7 +493,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(20);
+                            setPathState(24);
                         }
 
                     }
@@ -557,7 +557,7 @@ public class Blue_Near_21ball extends OpMode {
             case 23:
                 if(!drive.follower.isBusy()) {
                     if (!firstshooting) {
-                        shooter.updateFocused(true);
+//                        shooter.updateFocused(true);
 
                         timer.resetTimer();
                         firstshooting = true;
