@@ -190,7 +190,7 @@ public class Blue_Near_21ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-
+                shooter.offset = 15;
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,0.8,true);
@@ -232,6 +232,7 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
+                    shooter.offset = 0;
                     shooter.offset = 0;
                     //  turret.autopos = 0;
                     firstshooting = false;
