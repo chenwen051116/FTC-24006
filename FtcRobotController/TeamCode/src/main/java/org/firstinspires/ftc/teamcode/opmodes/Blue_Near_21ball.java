@@ -320,7 +320,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(timer.getElapsedTimeSeconds()> 0.3&&timer.getElapsedTimeSeconds()< stoptime){
+                    if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     }
                     if(timer.getElapsedTimeSeconds()> stoptime){
@@ -458,7 +458,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.3&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -543,7 +543,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()> 0.3&&timer.getElapsedTimeSeconds()< stoptime){
+                        if(timer.getElapsedTimeSeconds()> 0.15&&timer.getElapsedTimeSeconds()< stoptime){
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                         }
                         if(timer.getElapsedTimeSeconds()> stoptime){
@@ -655,7 +655,7 @@ public class Blue_Near_21ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(28);
+                            setPathState(29);
                         }
 
                     }
@@ -680,19 +680,19 @@ public class Blue_Near_21ball extends OpMode {
 //                    setPathState(29);
 //                }
 //                break;
-//            case 29:
-//                Drivetrain.lastPose = drive.follower.getPose();
-//                Drivetrain.TredFblue = false;
-//                if(!drive.follower.isBusy()){
-//                    shooter.offset = -25;
-//                    resetSubsystemsForTeleop();
-//                    Drivetrain.lastPose = drive.follower.getPose();
-//                    Drivetrain.TredFblue = false;
-//                    //setPathState(28);
-//                    break;
-//
-//                }
-//                break;
+            case 29:
+                Drivetrain.lastPose = drive.follower.getPose();
+                Drivetrain.TredFblue = false;
+                if(!drive.follower.isBusy()){
+                    shooter.offset = -25;
+                    resetSubsystemsForTeleop();
+                    Drivetrain.lastPose = drive.follower.getPose();
+                    Drivetrain.TredFblue = false;
+                    //setPathState(28);
+                    break;
+
+                }
+                break;
 
 
         }
