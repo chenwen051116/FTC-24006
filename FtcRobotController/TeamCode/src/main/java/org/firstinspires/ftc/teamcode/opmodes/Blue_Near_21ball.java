@@ -241,6 +241,7 @@ public class Blue_Near_21ball extends OpMode {
                     // turret.isManeulCentering = true;
                     // turret.centeringDir = false;
                     //drive.follower.followPath(finishGatherPath1,1,false);
+
                     setPathState(4);
                 }
                 break;
@@ -249,7 +250,7 @@ public class Blue_Near_21ball extends OpMode {
                     //  turret.isManeulCentering = false;
                     // turret.centeringDir = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     drive.follower.followPath(Shootpath2,1,true);
                     firstshooting = false;
                     setPathState(5);
@@ -611,7 +612,7 @@ public class Blue_Near_21ball extends OpMode {
                     //  turret.isManeulCentering = false;
                     // turret.centeringDir = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     drive.follower.followPath(Shootpath4,1,true);
                     firstshooting = false;
                     setPathState(27);
