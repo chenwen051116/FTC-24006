@@ -50,7 +50,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose Park = new Pose(79.1620, -95.80 ,0);;
+    private final Pose Park = new Pose(72.3860, -88.5130, 0.7830);;
 
     private boolean firstshooting = false;
     private double gatePathPower = 0.6;
@@ -185,7 +185,7 @@ public class Blue_Near_21ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                shooter.offset = -25;
+
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,0.7,true);
@@ -227,6 +227,7 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
+                    shooter.offset = -25;
                     //  turret.autopos = 0;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
