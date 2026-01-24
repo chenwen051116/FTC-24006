@@ -315,6 +315,9 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 9:
+                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                }
                 if(!drive.follower.isBusy()){
                 if (!firstshooting) {
                     timer.resetTimer();
@@ -322,9 +325,7 @@ public class Blue_Near_21ball extends OpMode {
                     break;
                 }
                 else{
-                    if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
-                        intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    }
+
                     if(timer.getElapsedTimeSeconds()> stoptime){
                         intake.gatepos = false;
                         shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -454,6 +455,9 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 17:
+                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                }
                 if(!drive.follower.isBusy()){
                     if (!firstshooting) {
                         timer.resetTimer();
@@ -461,9 +465,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                        }
+
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -540,6 +542,9 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             case 21:
+                if(gatetimer.getElapsedTimeSeconds()> 0.2&&gatetimer.getElapsedTimeSeconds()< stoptime){
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                }
                 if(!drive.follower.isBusy()){
                     if (!firstshooting) {
                         timer.resetTimer();
@@ -547,9 +552,7 @@ public class Blue_Near_21ball extends OpMode {
                         break;
                     }
                     else{
-                        if(gatetimer.getElapsedTimeSeconds()> 0&&timer.getElapsedTimeSeconds()< stoptime){
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                        }
+
                         if(timer.getElapsedTimeSeconds()> stoptime){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
