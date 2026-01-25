@@ -47,7 +47,7 @@ public class    Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(81.48237237404652)
             .yVelocity(63.01307209645669)
-            .nominalVoltage(13.3)
+            .nominalVoltage(13.5)
             .useVoltageCompensation(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()

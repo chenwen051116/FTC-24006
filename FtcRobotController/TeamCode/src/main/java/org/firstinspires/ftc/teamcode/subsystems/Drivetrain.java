@@ -54,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
 
-    public static double bluexOffset = 3;
+    public static double bluexOffset = -4;
     public static double blueyOffset = -4;
 
 
