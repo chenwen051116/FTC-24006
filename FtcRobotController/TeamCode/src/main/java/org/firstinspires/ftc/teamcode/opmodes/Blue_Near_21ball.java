@@ -55,7 +55,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private boolean firstshooting = false;
 
-    public double turretoff = 6;
+    public double turretoff = -3;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -772,6 +772,8 @@ public class Blue_Near_21ball extends OpMode {
 //        // Feedback to Driver Hub for debugging
         telemetry.addData("turret target", turret.currentpos);
         telemetry.addData("turret aim", turret.aimposition);
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
 //        telemetry.addData("x", drive.follower.getPose().getX());
 //        telemetry.addData("y", drive.follower.getPose().getY());
 //        telemetry.addData("heading", drive.follower.getPose().getHeading());
