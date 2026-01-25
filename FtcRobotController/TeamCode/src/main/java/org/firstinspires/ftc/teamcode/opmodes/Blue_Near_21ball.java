@@ -4,7 +4,9 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -780,13 +782,14 @@ public class Blue_Near_21ball extends OpMode {
 //        telemetry.addData("timer", timer.getElapsedTimeSeconds());
 //        telemetry.addData("shooter state", shooter.shooterStatus);
 //        telemetry.addData("intake state", intake.intakeCurrentState);
-//        telemetry.update();
+        telemetry.update();
     }
 
 
     /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pathTimer = new Timer();
         timer = new Timer();
         gatetimer = new Timer();
@@ -805,6 +808,11 @@ public class Blue_Near_21ball extends OpMode {
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.blueinit();
+        telemetry.addData("turret target", turret.currentpos);
+        telemetry.addData("turret aim", turret.aimposition);
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+        telemetry.update();
 
     }
 
