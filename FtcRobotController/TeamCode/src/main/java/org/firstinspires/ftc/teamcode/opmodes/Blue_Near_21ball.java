@@ -55,7 +55,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private boolean firstshooting = false;
 
-    public double turretoff = 3;
+    public double turretoff = 6;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -531,7 +531,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.6,false);
+                    drive.follower.followPath(GatePath1,0.7,false);
                     setPathState(40);
                 }
                 break;
