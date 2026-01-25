@@ -770,8 +770,8 @@ public class Blue_Near_21ball extends OpMode {
         autonomousPathUpdate();
 
 //        // Feedback to Driver Hub for debugging
-//        telemetry.addData("realRPM", shooter.getFlyWheelRPM());
-//        telemetry.addData("path state", pathState);
+        telemetry.addData("turret target", turret.currentpos);
+        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("x", drive.follower.getPose().getX());
 //        telemetry.addData("y", drive.follower.getPose().getY());
 //        telemetry.addData("heading", drive.follower.getPose().getHeading());
