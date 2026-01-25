@@ -55,7 +55,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private boolean firstshooting = false;
 
-    public static double turretoff = 3;
+    public double turretoff = 3;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -235,7 +235,7 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-
+                    turretoff = 0;
                     shooter.offset = -10;
                     //  turret.autopos = 0;
                     firstshooting = false;
