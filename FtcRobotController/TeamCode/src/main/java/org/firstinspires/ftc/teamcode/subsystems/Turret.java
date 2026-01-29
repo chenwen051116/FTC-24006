@@ -218,8 +218,8 @@ public class Turret extends SubsystemBase {
 
     public void manuelCenter(){
         if(centeringDir){
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             turretMotor.setPower(centerVel);
             if(isCentered()){
@@ -232,8 +232,8 @@ public class Turret extends SubsystemBase {
             }
         }
         else{
-            if(turretMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER){
-                turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
+                turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
             turretMotor.setPower(-centerVel);
             if(isCentered()){
