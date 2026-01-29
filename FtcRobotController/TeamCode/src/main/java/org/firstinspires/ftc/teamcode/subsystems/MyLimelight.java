@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
 
@@ -47,6 +48,16 @@ public int getpipeline(){
         limelight.pipelineSwitch(3);
         limelight.start();
     }
+    public void initLocalizePipeline(){
+        limelight.pipelineSwitch(4);
+        limelight.start();
+    }
+    public Pose3D getMT2Pose(){
+        if (llenable && hasTarget()) {
+            return aprilTagLatestResult.getBotpose_MT2();
+        }
+        return null;
+    }
     public double getPitch() {
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
@@ -64,7 +75,7 @@ public int getpipeline(){
     public double getY() {
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getFiducialResults().get(0)
-                    .getTargetPoseCameraSpace().getPosition().y;
+                    .getTargetPoseCameraSpace().    getPosition().y;
         }
         return 0;
     }
