@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -125,6 +127,7 @@ public class BohanTele extends CommandOpMode {
     }
 
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
@@ -134,10 +137,10 @@ public class BohanTele extends CommandOpMode {
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
         if(gamepad1.dpad_left){
-            drivetrain.TredFblue = false;
+            Drivetrain.TredFblue = false;
         }
         if(gamepad1.dpad_right){
-            drivetrain.TredFblue = true;
+            Drivetrain.TredFblue = true;
         }
         if(gamepad1.dpad_up){
             drivetrain.originInit();
