@@ -134,7 +134,7 @@ public class Shooter extends SubsystemBase {
 
         autoLonger = true;
         vol = v.getVoltage();
-        kv = 0.00021-0.0000086666667*(vol-12.5);
+        kv = 0.00020-0.0000086666667*(vol-12.7);
 
     }
 

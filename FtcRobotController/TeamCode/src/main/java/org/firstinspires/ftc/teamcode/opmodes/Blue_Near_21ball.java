@@ -45,7 +45,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -60.7386, 0);//real pass by
-    private final Pose GatePassby2 = new Pose(118.7843, -60.7386, 0);//hit gate
+    private final Pose GatePassby2 = new Pose(118.7843, -59.2386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, -49.1962, -0.7081);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
@@ -57,7 +57,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private boolean firstshooting = false;
 
-    public double turretoff = -3;
+    public double turretoff = 3;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -73,7 +73,7 @@ public class Blue_Near_21ball extends OpMode {
     public static double stoptime = 1;
     public static double shoottime = 1.65;
 
-    public static double waittime = 0.5;
+    public static double waittime = 0.65;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -175,8 +175,9 @@ public class Blue_Near_21ball extends OpMode {
 
         Shootpath4 = drive.follower.pathBuilder()
                 .addPath(new BezierLine(FinishGather1,Park))
-                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
-                .setBrakingStrength(1.3)
+//                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
+                .setConstantHeadingInterpolation(Park.getHeading())
+                .setBrakingStrength(0.8)
                 .build();
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
@@ -195,7 +196,7 @@ public class Blue_Near_21ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                shooter.offset = 15;
+                shooter.offset = 25;
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,0.8,true);
@@ -237,8 +238,8 @@ public class Blue_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    turretoff = 0;
-                    shooter.offset = -10;
+                    turretoff = 3;
+                    shooter.offset = -45;
                     //  turret.autopos = 0;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -302,7 +303,7 @@ public class Blue_Near_21ball extends OpMode {
             case 6:
 
                 if(!drive.follower.isBusy()) {
-                    shooter.offset = 0;
+//                    shooter.offset = 0;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
@@ -533,7 +534,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.7,false);
+                    drive.follower.followPath(GatePath1,0.6,false);
                     setPathState(40);
                 }
                 break;
@@ -640,10 +641,10 @@ public class Blue_Near_21ball extends OpMode {
                 if(!drive.follower.isBusy()){
                     //  turret.isManeulCentering = false;
                     // turret.centeringDir = false;
-                    shooter.offset = -10;
+                    shooter.offset = -25;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    drive.follower.followPath(Shootpath4,0.8,true);
+                    drive.follower.followPath(Shootpath4,1,true);
                     firstshooting = false;
                     setPathState(27);
                 }
@@ -772,17 +773,17 @@ public class Blue_Near_21ball extends OpMode {
         autonomousPathUpdate();
 
 //        // Feedback to Driver Hub for debugging
-        telemetry.addData("turret target", turret.currentpos);
-        telemetry.addData("turret aim", turret.aimposition);
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//        telemetry.addData("turret target", turret.currentpos);
+//        telemetry.addData("turret aim", turret.aimposition);
+//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
 //        telemetry.addData("x", drive.follower.getPose().getX());
 //        telemetry.addData("y", drive.follower.getPose().getY());
 //        telemetry.addData("heading", drive.follower.getPose().getHeading());
 //        telemetry.addData("timer", timer.getElapsedTimeSeconds());
 //        telemetry.addData("shooter state", shooter.shooterStatus);
 //        telemetry.addData("intake state", intake.intakeCurrentState);
-        telemetry.update();
+//        telemetry.update();
     }
 
 
@@ -808,11 +809,11 @@ public class Blue_Near_21ball extends OpMode {
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.blueinit();
-        telemetry.addData("turret target", turret.currentpos);
-        telemetry.addData("turret aim", turret.aimposition);
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-        telemetry.update();
+//        telemetry.addData("turret target", turret.currentpos);
+//        telemetry.addData("turret aim", turret.aimposition);
+//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//        telemetry.update();
 
     }
 
