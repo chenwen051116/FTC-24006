@@ -9,10 +9,14 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
@@ -22,6 +26,8 @@ public class MyLimelight extends SubsystemBase {
     private LLResult aprilTagLatestResult;
     private final ElapsedTime timer = new ElapsedTime();
     private boolean llenable = true;
+
+    public double llheading = 0;
 
 
 
@@ -53,10 +59,11 @@ public int getpipeline(){
         limelight.start();
     }
     public Pose3D getMT2Pose(){
+        limelight.updateRobotOrientation(llheading);
         if (llenable && hasTarget()) {
             return aprilTagLatestResult.getBotpose_MT2();
         }
-        return null;
+        return new Pose3D(new Position(DistanceUnit.CM,0,0,0,0),new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
     }
     public double getPitch() {
         if (llenable && hasTarget()) {

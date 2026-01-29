@@ -129,7 +129,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-
+        limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
