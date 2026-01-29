@@ -110,7 +110,7 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Orange, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> limelight.initLocalizePipeline());
+//        gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> limelight.initLocalizePipeline());
 
         gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(()->updateMovingshooting(true));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(()->updateMovingshooting(false));
@@ -290,19 +290,19 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
 ////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
         telemetry.addData("Looptime", drivetrain.looptime());
-        Pose3D pose = limelight.getMT2Pose();
-        if (pose != null) {
-            double x   = pose.getPosition().x;
-            double y   = pose.getPosition().y;
-            double z   = pose.getPosition().z;
-            double yaw = pose.getOrientation().getYaw(AngleUnit.RADIANS);
-
-            telemetry.addData(
-                    "MT2",
-                    String.format("x=%.2f y=%.2f z=%.2f yaw=%.1f",
-                            x, y, z, yaw)
-            );
-        }
+//        Pose3D pose = limelight.getMT2Pose();
+//        if (pose != null) {
+//            double x   = pose.getPosition().x;
+//            double y   = pose.getPosition().y;
+//            double z   = pose.getPosition().z;
+//            double yaw = pose.getOrientation().getYaw(AngleUnit.RADIANS);
+//
+//            telemetry.addData(
+//                    "MT2",
+//                    String.format("x=%.2f y=%.2f z=%.2f yaw=%.1f",
+//                            x, y, z, yaw)
+//            );
+//        }
         telemetry.update();
         drivetrain.period();
     }
