@@ -84,6 +84,8 @@ public class Turret extends SubsystemBase {
 
     public double aimposition = 0;
 
+    public double zerooff = 0;
+
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap) {
@@ -125,7 +127,7 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint((int) -floor(arcangle*arctoDegree));
+        turretpidController.setSetPoint((int) -floor(arcangle*arctoDegree) + zerooff);
         aimposition = (int) -floor(arcangle*arctoDegree);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
@@ -188,7 +190,7 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint(0);
+        turretpidController.setSetPoint(0+zerooff);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
         if(output >1){
@@ -204,7 +206,7 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint(pos);
+        turretpidController.setSetPoint(pos+zerooff);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
         if(output >1){
@@ -227,6 +229,7 @@ public class Turret extends SubsystemBase {
             }
             if(!isCentered()&&maneulCenteringFlag){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                zerooff = 1548;
                 isManeulCentering = false;
                 maneulCenteringFlag = false;
             }
@@ -241,6 +244,7 @@ public class Turret extends SubsystemBase {
             }
             if(!isCentered()&&maneulCenteringFlag){
                 turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                zerooff = -1094;
                 isManeulCentering = false;
                 maneulCenteringFlag = false;
             }
