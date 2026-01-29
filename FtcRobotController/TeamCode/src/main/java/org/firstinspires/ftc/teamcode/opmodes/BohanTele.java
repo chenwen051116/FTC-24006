@@ -43,7 +43,6 @@ public class BohanTele extends CommandOpMode {
     private Turret turret;
 
     private Light light;
-    private Pose3D pose = limelight.getMT2Pose();
     private boolean xjustpressed = false;
     private boolean xholding = false;
     private boolean yjustpressed = false;
@@ -129,6 +128,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
+
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
@@ -287,6 +287,7 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
 ////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
         telemetry.addData("Looptime", drivetrain.looptime());
+        Pose3D pose = limelight.getMT2Pose();
         if (pose != null) {
             double x   = pose.getPosition().x;
             double y   = pose.getPosition().y;
