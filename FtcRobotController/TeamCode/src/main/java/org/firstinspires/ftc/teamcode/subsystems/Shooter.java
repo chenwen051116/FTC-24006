@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
     private final DistanceSensor distanceSensor;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.25;  // Proportional gain
+    public static double Kp = 0.35;  // Proportional gain
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
