@@ -104,8 +104,8 @@ public class BohanTele extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(()->light.setLight(Light.Color.Green, Light.Color.Green));
 
         //DRIVER TWO
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(()->turret.changeOffset(-0.08));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(()->turret.changeOffset(0.08));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(()->turret.changeOffset(-0.05));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(()->turret.changeOffset(0.05));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(()->light.setLight(Light.Color.Off, Light.Color.Orange));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Orange, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
