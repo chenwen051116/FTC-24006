@@ -85,8 +85,7 @@ public class Turret extends SubsystemBase {
     public double aimposition = 0;
 
     public double zerooff = 0;
-
-
+    
 
     // Constructor for intake motors
 

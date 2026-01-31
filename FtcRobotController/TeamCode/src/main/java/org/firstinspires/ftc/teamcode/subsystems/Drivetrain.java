@@ -90,6 +90,8 @@ public class Drivetrain extends SubsystemBase {
 
     public double looptime = 0;
 
+    public boolean ifMovingShooting = false;
+
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
 //        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
 //        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
@@ -243,7 +245,7 @@ public double getaccel(){
     }
 
     public double getdis(){
-
+        ifMovingShooting = false;
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
@@ -261,6 +263,7 @@ public double getaccel(){
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
+        ifMovingShooting = true;
                  predictedPose = lookaheadPoseTime(new Pose2d(
                         follower.getPose().getX(),
                         follower.getPose().getY(),
@@ -291,6 +294,7 @@ public double getaccel(){
         return follower.getVelocity().getMagnitude();
     }
     public double getturretangle(){
+        ifMovingShooting = false;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
         double heading  = follower.getHeading();
@@ -326,6 +330,7 @@ public double getaccel(){
         }
     }
     public double getturretangle_TWO(){
+        ifMovingShooting = true;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
 //         predictedPose = lookaheadPoseTime(new Pose2d(
@@ -372,7 +377,9 @@ public double getaccel(){
         }
 
         public void updateAngularVel(){
-            angularVelnum = (follower.getHeading()-lastheading)/looptime;
+            if(abs((follower.getHeading()-lastheading)/looptime)<0.05) {
+                angularVelnum = (follower.getHeading() - lastheading) / looptime;
+            }
         }
 
         public void updateLastHeading(){
@@ -421,8 +428,10 @@ public double getaccel(){
 
     public void period(){
         looptimeupdate();
-        updateAngularVel();
-        updateLastHeading();
+        if(ifMovingShooting) {
+            updateAngularVel();
+            updateLastHeading();
+        }
     }
 
 }
