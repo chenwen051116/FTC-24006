@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
     public static double kPTurret = -0.7;
 
     public static double kPShooter= -0.23;
-    public static double kPturretAngular = 0;
+    public static double kPturretAngular = 130;
 
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
