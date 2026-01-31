@@ -76,6 +76,7 @@ public class Drivetrain extends SubsystemBase {
     public static double kPTurret = -0.7;
 
     public static double kPShooter= -0.23;
+    public static double kPturretAngular = 0;
 
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
@@ -353,9 +354,9 @@ public double getaccel(){
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()));
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()));
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         }
 
 
