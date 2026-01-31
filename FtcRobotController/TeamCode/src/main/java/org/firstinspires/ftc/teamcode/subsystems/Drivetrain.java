@@ -42,6 +42,8 @@ public class Drivetrain extends SubsystemBase {
 
     public double xpos = 126.67;
     public double ypos = -129.01;
+
+    public static double turretAngularAccelkP = 0;
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.25;
 
@@ -56,6 +58,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static double bluexOffset = -0;
     public static double blueyOffset = -0;
+
+    public double angularAccelnum = 0;
 
 
     public Pose bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
@@ -72,6 +76,7 @@ public class Drivetrain extends SubsystemBase {
     public static Pose lastPose = new Pose(0,0,0);
 
     public double lastheading = 0;
+    public double lastangularvel = 0;
 
     public static double kPTurret = -0.7;
 
@@ -362,9 +367,9 @@ public double getaccel(){
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum;
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum/(1-turretAngularAccelkP*angularAccelnum);
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum;
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum/(1-turretAngularAccelkP*angularAccelnum);
         }
 
 
@@ -385,6 +390,15 @@ public double getaccel(){
         public void updateLastHeading(){
             lastheading = follower.getHeading();
         }
+
+
+    public void updatelastAngularVel(){
+            angularAccelnum = (angularVelnum - lastangularvel) / looptime;
+    }
+
+    public void updateLastAngularVel(){
+        lastangularvel = angularVelnum;
+    }
     public double angularVel(){
         double dx = follower.getPose().getX() - xpos;
         double dy = follower.getPose().getY() - ypos;
