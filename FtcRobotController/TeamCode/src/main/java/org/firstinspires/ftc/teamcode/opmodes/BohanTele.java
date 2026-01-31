@@ -176,10 +176,12 @@ public class BohanTele extends CommandOpMode {
 
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
             if(MovingshootingMode) {
+                drivetrain.ifMovingShooting = true;
                 shooter.ododis = drivetrain.getdis_TWO();
                 turret.aimangle = drivetrain.getturretangle_TWO();
             }
             else{
+                drivetrain.ifMovingShooting = false;
                 shooter.ododis = drivetrain.getdis();
                 turret.aimangle = drivetrain.getturretangle();
             }

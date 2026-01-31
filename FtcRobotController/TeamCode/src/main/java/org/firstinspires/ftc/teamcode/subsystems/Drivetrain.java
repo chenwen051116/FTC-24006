@@ -245,7 +245,7 @@ public double getaccel(){
     }
 
     public double getdis(){
-        ifMovingShooting = false;
+       // ifMovingShooting = false;
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
@@ -263,7 +263,7 @@ public double getaccel(){
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
-        ifMovingShooting = true;
+        //ifMovingShooting = true;
                  predictedPose = lookaheadPoseTime(new Pose2d(
                         follower.getPose().getX(),
                         follower.getPose().getY(),
@@ -294,7 +294,7 @@ public double getaccel(){
         return follower.getVelocity().getMagnitude();
     }
     public double getturretangle(){
-        ifMovingShooting = false;
+        //ifMovingShooting = false;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
         double heading  = follower.getHeading();
@@ -330,7 +330,7 @@ public double getaccel(){
         }
     }
     public double getturretangle_TWO(){
-        ifMovingShooting = true;
+        //ifMovingShooting = true;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
 //         predictedPose = lookaheadPoseTime(new Pose2d(
