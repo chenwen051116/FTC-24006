@@ -39,19 +39,19 @@ public class Red_Near_21ball extends OpMode {
     private int pathState = 0;
     private final Pose startPose = new Pose(116.6447, 109.9232, 0); // Start Pose of our robot.
     private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
-    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
+    private final Pose FinishGather1 = new Pose(114.9794, 28.6053+3, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
+    private final Pose FinishGather2 = new Pose(114.9794, 52.0297+3, 0);
     private final Pose GatePassby = new Pose(104.9794, 60.7386+1, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.7843, 59.7386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, 49.1962, 0.7081);//pickup
-    private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
+    private final Pose ShootPose = new Pose(77.6620, 70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, 75.8070+2, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
+    private final Pose FinishGather3 = new Pose(114.9794, 75.8070+2, 0);
 
     private final Pose Park = new Pose(72.3860, 88.5130, -0.7830);
 
@@ -125,6 +125,7 @@ public class Red_Near_21ball extends OpMode {
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather3.getHeading())
                 .addPath(new BezierCurve(PrepGather3, FinishGather3))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .setBrakingStrength(1)
                 .build();
 
         Shootpath3 = simplePath(FinishGather3,ShootPose);
@@ -641,7 +642,7 @@ public class Red_Near_21ball extends OpMode {
                 if(!drive.follower.isBusy()){
                     //  turret.isManeulCentering = false;
                     // turret.centeringDir = false;
-                    shooter.offset = -25;
+                    shooter.offset = -20;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     drive.follower.followPath(Shootpath4,1,true);
