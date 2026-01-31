@@ -83,9 +83,12 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedrx = 0.2;
 
     public double turretcenterdis = 1.2027;
+    public double angularVelnum = 0;
 
     //servos
     public Timer looptimer;
+
+    public double looptime = 0;
 
     public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
 //        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -362,10 +365,18 @@ public double getaccel(){
 
         }
 
-        public double looptime(){
-            return looptimer.getElapsedTime();
+        public void looptimeupdate(){
+            looptime = looptimer.getElapsedTime();
+            looptimer.resetTimer();
+            //return looptimer.getElapsedTime();
+        }
 
+        public void updateAngularVel(){
+            angularVelnum = (follower.getHeading()-lastheading)/looptime;
+        }
 
+        public void updateLastHeading(){
+            lastheading = follower.getHeading();
         }
     public double angularVel(){
         double dx = follower.getPose().getX() - xpos;
@@ -409,7 +420,9 @@ public double getaccel(){
     }
 
     public void period(){
-        looptimer.resetTimer();
+        looptimeupdate();
+        updateAngularVel();
+        updateLastHeading();
     }
 
 }

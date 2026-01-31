@@ -280,7 +280,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("turretaimpos", turret.aimposition);
 ////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 ////        telemetry.addData("ShotterForce?", shooter.forceShooting);
-       telemetry.addData("accel", drivetrain.follower.getAngularVelocity());
+       telemetry.addData("accel", drivetrain.angularVelnum);
         telemetry.addData("pidoutput", turret.output);
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
 //
@@ -289,7 +289,7 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
 ////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
 ////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
-        telemetry.addData("Looptime", drivetrain.looptime());
+        telemetry.addData("Looptime", drivetrain.looptime);
 //        Pose3D pose = limelight.getMT2Pose();
 //        if (pose != null) {
 //            double x   = pose.getPosition().x;
