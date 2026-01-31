@@ -362,9 +362,9 @@ public double getaccel(){
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum;
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum;
         }
 
 
