@@ -52,6 +52,9 @@ public class Shooter extends SubsystemBase {
 
     public static double Autoshort = 2650;
     public static double Autolong = 3200;
+    public boolean forceShooting = false;
+
+    public boolean rpmreached = false;
 
 
     public enum ShooterStatus {
@@ -132,7 +135,21 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        return (getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>500&&(focused||automode);
+        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM!=1000&&targetRPM>1100){
+            rpmreached = true;
+        }
+//        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
+//        if(isDeccel()){
+//            shootTimer.resetTimer();
+//            return false;
+//        }
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2400)||(forceShooting&&rpmreached);
+
+//        else{
+//
+//            return shootTimer.getElapsedTimeSeconds() > shootInterval && abs(rpmdiff)<rpmdiffthresh&&getFlyWheelRPM()>1000&&(focused||automode);
+//        }
+
     }
 
     // Store current motor power for telemetry/graphing
