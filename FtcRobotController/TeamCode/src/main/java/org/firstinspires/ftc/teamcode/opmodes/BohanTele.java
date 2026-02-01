@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Intake.servopos;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -54,7 +56,7 @@ public class BohanTele extends CommandOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         intake = new Intake(hardwareMap);
-        intake.setSwingBarPos(0.4);
+        //intake.setSwingBarPos(0.4);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
@@ -67,8 +69,8 @@ public class BohanTele extends CommandOpMode {
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
+       // gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
+       // gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelight.initRedPipeline());
         //DRIVER TWO
@@ -79,6 +81,7 @@ public class BohanTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
         shooter.periodic();
+        intake.setSwingBarPos(Intake.servopos);
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
             intake.updateautotranse(shooter.isAtTargetRPM());

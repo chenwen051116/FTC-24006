@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,26 +10,31 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@Config
+
 public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
     private final Servo swingBar;
-    private final DistanceSensor transferBreakBeam;
+    //private final DistanceSensor transferBreakBeam;
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
     public boolean shooterauto = false;
     public boolean autotrans = false;
+
+    public static double servopos = 0;
 
     public boolean autoforce = false;
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         swingBar = hardwareMap.get(Servo.class, "swingBar");
-        transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
+       // transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
 
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        transfer.setDirection(DcMotorSimple.Direction.REVERSE);
         autoforce = false;
         autotrans = false;
         shooterauto = false;
@@ -37,9 +43,9 @@ public class Intake extends SubsystemBase {
         swingBar.setPosition(pos);
     }
 
-    public double getDist(){
-        return transferBreakBeam.getDistance(DistanceUnit.MM);
-    }
+//    public double getDist(){
+//        return transferBreakBeam.getDistance(DistanceUnit.MM);
+//    }
 
     public void setIntakePower(double power) {
 
@@ -53,7 +59,7 @@ public class Intake extends SubsystemBase {
     public enum IntakeTransferState {
         Suck_In(1,0),
         Split_Out(-0.7, -1),
-        Send_It_Up(1,1),
+        Send_It_Up(1,0.6),
         Intake_Steady(0,0);
         private final double intakePower;
         private final double transferPower;
@@ -65,10 +71,12 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterauto || autoforce) {
+            servopos = 0.35;
             intake.setPower(intakeCurrentState.intakePower);
             transfer.setPower(intakeCurrentState.transferPower);
         }
         else{
+            servopos = 0.185;
             if(autotrans){
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
             }
@@ -76,6 +84,7 @@ public class Intake extends SubsystemBase {
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
             }
         }
+
 
     }
 
@@ -90,10 +99,12 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() { // FTC 0.001s cycle
         if(!shooterauto || autoforce) {
+            servopos = 0.35;
             intake.setPower(intakeCurrentState.intakePower);
             transfer.setPower(intakeCurrentState.transferPower);
         }
         else{
+            servopos = 0.185;
             if(autotrans){
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
             }
