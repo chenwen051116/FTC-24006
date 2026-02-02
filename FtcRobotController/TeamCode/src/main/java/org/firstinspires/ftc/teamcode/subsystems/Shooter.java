@@ -48,7 +48,7 @@ public class Shooter extends SubsystemBase {
 
     public double PIDoutput;
 
-    public static double RPMThresh = 100;
+    public static double RPMThresh = 40;
 
     public static double Autoshort = 2650;
     public static double Autolong = 3200;
@@ -143,7 +143,7 @@ public class Shooter extends SubsystemBase {
 //            shootTimer.resetTimer();
 //            return false;
 //        }
-        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2400)||(forceShooting&&rpmreached);
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>1000)||(forceShooting&&rpmreached);
 
 //        else{
 //
@@ -257,25 +257,25 @@ public class Shooter extends SubsystemBase {
     }
 
     public void updateAim() {
-//        distance = abs(distance);
-//        if (distance > 2.5){
-//            setTargetRPM(327*distance+2244);
-//        }
-//        else if (distance < 1.4){
-//            setTargetRPM(2600);
-//        }
-//        else{
-//            setTargetRPM(508*distance+1842);
-//        }
-//
-//
-//        if(automode&&autoLonger){
-//            setTargetRPM(Autolong);
-//        }
-//        else if(automode&&!autoLonger){
-//            setTargetRPM(Autoshort);
-//        }
-        setTargetRPM(aimRPM);
+        distance = abs(distance);
+        if (distance > 2.5){
+            setTargetRPM(431.03*distance+750);
+        }
+        else if (distance < 1.2){
+            setTargetRPM(1500);
+        }
+        else{
+            setTargetRPM(137.594*distance+1332.135);
+        }
+
+
+        if(automode&&autoLonger){
+            setTargetRPM(Autolong);
+        }
+        else if(automode&&!autoLonger){
+            setTargetRPM(Autoshort);
+        }
+        //setTargetRPM(aimRPM);
     }
 
 

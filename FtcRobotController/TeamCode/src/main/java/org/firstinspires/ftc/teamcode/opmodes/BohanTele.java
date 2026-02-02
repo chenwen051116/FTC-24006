@@ -80,6 +80,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
+        shooter.forceShooting = (gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
         shooter.periodic();
         intake.setSwingBarPos(Intake.servopos);
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){

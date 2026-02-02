@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase {
     public enum IntakeTransferState {
         Suck_In(1,0),
         Split_Out(-0.7, -1),
-        Send_It_Up(1,0.6),
+        Send_It_Up(1,1),
         Intake_Steady(0,0);
         private final double intakePower;
         private final double transferPower;
