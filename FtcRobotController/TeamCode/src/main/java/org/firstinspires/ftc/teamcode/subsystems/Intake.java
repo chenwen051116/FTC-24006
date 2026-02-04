@@ -32,6 +32,7 @@ public class Intake extends SubsystemBase {
 
     public boolean gatepos = false;
 
+    public boolean isFarTeleMode = false;
 
 
 
@@ -110,8 +111,14 @@ public class Intake extends SubsystemBase {
         }
         else{
             if(autoTrans){
-                intakeCurrentState = IntakeTransferState.Send_It_Up;
-                intake.setPower(intakeCurrentState.intakePower);
+                if(isFarTeleMode){
+                    intakeCurrentState = IntakeTransferState.Send_It_Up_Slow;
+                    intake.setPower(intakeCurrentState.intakePower);
+                }
+                else {
+                    intakeCurrentState = IntakeTransferState.Send_It_Up;
+                    intake.setPower(intakeCurrentState.intakePower);
+                }
                 setServoPos(intakeCurrentState.transServer);
             }
             else{

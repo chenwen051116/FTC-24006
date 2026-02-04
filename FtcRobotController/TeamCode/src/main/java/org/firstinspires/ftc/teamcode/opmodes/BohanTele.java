@@ -157,6 +157,7 @@ public class BohanTele extends CommandOpMode {
         }
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
+            intake.isFarTeleMode = shooter.isAtFar();
 //            if(shooter.reverIntake){
 //                intake.updateAutoshoot(false);
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);

@@ -200,6 +200,9 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    public boolean isAtFar(){
+        return ododis>120;
+    }
     public boolean isDeccel(){
         return rpmdiff<lowerrpmDiffThresh;
     }
