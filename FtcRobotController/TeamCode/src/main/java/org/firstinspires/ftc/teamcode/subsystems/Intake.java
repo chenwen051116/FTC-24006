@@ -4,11 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 // TODO: Adapt the system into our robot
@@ -82,7 +79,8 @@ public class Intake extends SubsystemBase {
         Send_It_Up(1,0.25),
         Intake_Steady(0,0.25),
 
-        Suck_In_slow(0.5,0.25);
+        Suck_In_slow(0.5,0.25),
+        Send_It_Up_Slow(0.7,0.25);
         private final double intakePower;
         private final double transServer;
         // Set update the transfer state

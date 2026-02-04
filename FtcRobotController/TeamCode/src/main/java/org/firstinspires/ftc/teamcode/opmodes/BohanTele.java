@@ -272,7 +272,7 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
 ////        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
 ////        telemetry.addData("Apriltag dist", limelight.getDis());
-////        telemetry.addData("Apriltag X", limelight.getX());
+        telemetry.addData("Apriltag X", limelight.getpatterTx());
 ////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
 ////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
 ////        telemetry.addData("Pitch", limelight.getPitch());
