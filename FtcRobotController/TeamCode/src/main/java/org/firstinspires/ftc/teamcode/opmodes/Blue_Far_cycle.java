@@ -533,6 +533,7 @@ public class Blue_Far_cycle extends OpMode {
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
+            intake.isFarTeleMode = shooter.isAtFar();
 //            if(shooter.reverIntake){
 //                intake.updateAutoshoot(false);
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);

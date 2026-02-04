@@ -396,7 +396,7 @@ public class Shooter extends SubsystemBase {
             }
             double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
             double target = slope*(dis-longdis[index])+longrpm[index]+20;
-            setTargetRPM(target+offset);
+            setTargetRPM(target+offset+20);
         }
 
 
