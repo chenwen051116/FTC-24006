@@ -68,7 +68,7 @@ public class BohanTele extends CommandOpMode {
         LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(limelightLock);
        // gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> intake.setSwingBarPos(0));
        // gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenReleased(() ->intake.setSwingBarPos(0.4));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> limelight.initBluePipeline());
@@ -80,7 +80,7 @@ public class BohanTele extends CommandOpMode {
     @Override
     public void run() {
         CommandScheduler.getInstance().run();
-        shooter.forceShooting = (gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
+        shooter.forceShooting = (gamepad2.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
         shooter.periodic();
         intake.setSwingBarPos(Intake.servopos);
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
@@ -93,7 +93,7 @@ public class BohanTele extends CommandOpMode {
             intake.updateAutoshoot(false);
         }
 
-        if(gamepad1.x){
+        if(gamepad2.x){
             if(!xholding){
                 xjustpressed = true;
                 xholding = true;
@@ -104,7 +104,7 @@ public class BohanTele extends CommandOpMode {
             xjustpressed = false;
         }
 
-        if(gamepad1.y){
+        if(gamepad2.y){
             if(!yholding){
                 yjustpressed = true;
                 yholding = true;
