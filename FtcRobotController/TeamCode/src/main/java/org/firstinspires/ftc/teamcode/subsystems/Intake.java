@@ -15,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
     private final Servo swingBar;
+
+    private final DistanceSensor dis;
     //private final DistanceSensor transferBreakBeam;
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -28,6 +30,7 @@ public class Intake extends SubsystemBase {
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         swingBar = hardwareMap.get(Servo.class, "swingBar");
+        dis = hardwareMap.get(DistanceSensor.class,"distance");
        // transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
 
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -47,6 +50,9 @@ public class Intake extends SubsystemBase {
 //        return transferBreakBeam.getDistance(DistanceUnit.MM);
 //    }
 
+    public double disRead(){
+        return dis.getDistance(DistanceUnit.CM);
+    }
     public void setIntakePower(double power) {
 
         intake.setPower(power);
