@@ -78,8 +78,20 @@ public class Intake extends SubsystemBase {
         intakeCurrentState = intakeTransferState;
         if(!shooterauto || autoforce) {
             servopos = 0.35;
-            intake.setPower(intakeCurrentState.intakePower);
-            transfer.setPower(intakeCurrentState.transferPower);
+            if(intakeCurrentState == IntakeTransferState.Suck_In){
+                if(disRead()<14.5){
+                    intake.setPower(IntakeTransferState.Suck_In.intakePower);
+                    transfer.setPower(IntakeTransferState.Suck_In.transferPower);
+                }
+                else{
+                    intake.setPower(IntakeTransferState.Send_It_Up.intakePower);
+                    transfer.setPower(IntakeTransferState.Send_It_Up.transferPower);
+                }
+            }
+            else {
+                intake.setPower(intakeCurrentState.intakePower);
+                transfer.setPower(intakeCurrentState.transferPower);
+            }
         }
         else{
             servopos = 0.185;
@@ -89,6 +101,8 @@ public class Intake extends SubsystemBase {
             else{
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
             }
+            intake.setPower(intakeCurrentState.intakePower);
+            transfer.setPower(intakeCurrentState.transferPower);
         }
 
 
@@ -106,8 +120,20 @@ public class Intake extends SubsystemBase {
     public void periodic() { // FTC 0.001s cycle
         if(!shooterauto || autoforce) {
             servopos = 0.35;
-            intake.setPower(intakeCurrentState.intakePower);
-            transfer.setPower(intakeCurrentState.transferPower);
+            if(intakeCurrentState == IntakeTransferState.Suck_In){
+                if(disRead()<14.5){
+                    intake.setPower(IntakeTransferState.Suck_In.intakePower);
+                    transfer.setPower(IntakeTransferState.Suck_In.transferPower);
+                }
+                else{
+                    intake.setPower(IntakeTransferState.Send_It_Up.intakePower);
+                    transfer.setPower(IntakeTransferState.Send_It_Up.transferPower);
+                }
+            }
+            else {
+                intake.setPower(intakeCurrentState.intakePower);
+                transfer.setPower(intakeCurrentState.transferPower);
+            }
         }
         else{
             servopos = 0.185;
