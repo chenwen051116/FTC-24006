@@ -16,23 +16,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class    Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(11.337)
-            .forwardZeroPowerAcceleration(-26.465452204903155)
-            .lateralZeroPowerAcceleration(-67.6584184654734)
-            .useSecondaryTranslationalPIDF(true)
-            .useSecondaryHeadingPIDF(true)
-            .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.00058)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.00008, 0.025, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0.0001, 0.1, 0.09))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0005, 0.6, 0.1))
-            .secondaryTranslationalPIDFCoefficients(
-                    new PIDFCoefficients(0.1, 0.0001, 0.012, 0   )
-            )
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.1, 0))
-            .secondaryDrivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.02, 0, 0, 0.6, 0)
-            );
+            .mass(12.2)
+//            .forwardZeroPowerAcceleration(-26.465452204903155)
+//            .lateralZeroPowerAcceleration(-67.6584184654734)
+//            .useSecondaryTranslationalPIDF(true)
+//            .useSecondaryHeadingPIDF(true)
+//            .useSecondaryDrivePIDF(true)
+//            .centripetalScaling(0.00058)
+//            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.00008, 0.025, 0))
+//            .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0.0001, 0.1, 0.09))
+//            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0005, 0.6, 0.1))
+//            .secondaryTranslationalPIDFCoefficients(
+//                    new PIDFCoefficients(0.1, 0.0001, 0.012, 0   )
+//            )
+//            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.1, 0))
+//            .secondaryDrivePIDFCoefficients(
+//                    new FilteredPIDFCoefficients(0.02, 0, 0, 0.6, 0)
+          // )
+    ;
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -45,14 +46,14 @@ public class    Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(78.28555033526084)
-            .yVelocity(58.00087083230808)
+//            .xVelocity(78.28555033526084)
+//            .yVelocity(58.00087083230808)
             .nominalVoltage(13.2)
             .useVoltageCompensation(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-84)
-            .strafePodX(-168)
+            .forwardPodY(24)
+            .strafePodX(-120)
             .distanceUnit(DistanceUnit.MM)
             .hardwareMapName("pinpoint")
             .yawScalar(1.0)
