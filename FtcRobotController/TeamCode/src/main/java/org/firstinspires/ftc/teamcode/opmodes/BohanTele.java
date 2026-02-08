@@ -121,12 +121,24 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(()->light.setLight(Light.Color.Blue, Light.Color.Blue));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(()->togglesafeMode());
     }
     public void updateMovingshooting(boolean flag){
         MovingshootingMode = flag;
     }
 
-
+public void togglesafeMode(){
+    if(gamepad2.left_stick_button){
+        drivetrain.safeMode = !drivetrain.safeMode;
+        if(drivetrain.safeMode){
+            light.setLight(Light.Color.Red, Light.Color.Red);
+        }
+        else{
+            light.setLight(Light.Color.Off, Light.Color.Off);
+        }
+    }
+}
     @SuppressLint("DefaultLocale")
     @Override
     public void run() {
@@ -134,12 +146,8 @@ public class BohanTele extends CommandOpMode {
 
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
 
-        if(gamepad2.left_stick_button&&gamepad2.right_stick_button){
-            drivetrain.safeMode = true;
-        }
-        if(drivetrain.safeMode){
-            light.setLight(Light.Color.Red, Light.Color.Red);
-        }
+
+
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
