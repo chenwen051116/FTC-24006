@@ -98,10 +98,10 @@ public class REd_Together extends OpMode {
 
 
         prepGatherPath3 = follower.pathBuilder()
-                .addPath(new BezierLine(ShootPose1, PrepGather3))
-                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
-                .addPath(new BezierLine(PrepGather3, FinishGather3))
-                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
+                .addPath(new BezierLine(ShootPose1, PrepGather2))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather2.getHeading())
+                .addPath(new BezierLine(PrepGather2, FinishGather2))
+                .setLinearHeadingInterpolation(PrepGather2.getHeading(), FinishGather2.getHeading())
 
 //                .addPath(new BezierLine(FinishGather3, GatePassby))
 //                .setLinearHeadingInterpolation(FinishGather3.getHeading(), GatePassby.getHeading())
@@ -120,8 +120,8 @@ public class REd_Together extends OpMode {
         Shootpath4 = follower.pathBuilder()
 //                .addPath(new BezierLine(GatePose, GatePassby))
 //                .setLinearHeadingInterpolation(GatePose.getHeading(), GatePassby.getHeading())
-                .addPath(new BezierLine(FinishGather3, ShootPose1))
-                .setLinearHeadingInterpolation(FinishGather3.getHeading(), ShootPose1.getHeading())
+                .addPath(new BezierLine(FinishGather2, ShootPose1))
+                .setLinearHeadingInterpolation(FinishGather2.getHeading(), ShootPose1.getHeading())
                 .build();
         lastOutPath = follower.pathBuilder()
 
