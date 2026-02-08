@@ -41,13 +41,14 @@ public class RED_Near_18ball_Push extends OpMode {
     private final Pose GatePassby2 = new Pose(118.7843, 59.7386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, 49.1962, 0.7081);//pickup
     private final Pose ShootPose = new Pose(77.6620, 70.80 ,0);
-    private final Pose ShootPosePush = new Pose(73.21, 8.7571,0.5830);
+    private final Pose ShootPosePush = new Pose(73.21, 8.7571,0);
     private final Pose ShootPosePush_PassBy = new Pose(88.00, 28.6053+3, 0);
     private final Pose PrepGather3 = new Pose(91.9908, 75.8070+2, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070+2, 0);
 
-    private final Pose Park = new Pose(90, 3, 0.2);
+    private final Pose Park = new Pose(80, 3, 0);
+    private final Pose realPark = new Pose(80, 23, 0);
 
     private boolean firstshooting = false;
 
@@ -172,7 +173,7 @@ public class RED_Near_18ball_Push extends OpMode {
                 .addPath(new BezierLine(FinishGather1,ShootPosePush_PassBy))
                 .setTangentHeadingInterpolation().setReversed()
                 .addPath(new BezierCurve(ShootPosePush_PassBy,ShootPosePush))
-                .setTangentHeadingInterpolation().setReversed()
+                .setConstantHeadingInterpolation(ShootPosePush.getHeading())
                 .setBrakingStrength(0.9)
                 .build();
 
@@ -184,6 +185,8 @@ public class RED_Near_18ball_Push extends OpMode {
                 .addPath(new BezierLine(ShootPosePush,Park))
                 .setTangentHeadingInterpolation()
                 .setBrakingStrength(1)
+                .addPath(new BezierLine(Park,realPark))
+                .setTangentHeadingInterpolation()
                 .build();
 //
 //        lastOutPath = drive.follower.pathBuilder()

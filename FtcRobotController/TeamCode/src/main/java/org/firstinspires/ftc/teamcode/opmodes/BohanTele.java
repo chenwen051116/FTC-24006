@@ -133,6 +133,13 @@ public class BohanTele extends CommandOpMode {
         CommandScheduler.getInstance().run();
 
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
+
+        if(gamepad2.left_stick_button&&gamepad2.right_stick_button){
+            drivetrain.safeMode = true;
+        }
+        if(drivetrain.safeMode){
+            light.setLight(Light.Color.Red, Light.Color.Red);
+        }
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
         }
@@ -277,7 +284,7 @@ public class BohanTele extends CommandOpMode {
 ////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
 ////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
 ////        telemetry.addData("Pitch", limelight.getPitch());
-////        telemetry.addData("Shooterdis", shooter.distance);
+        telemetry.addData("Shooterdis", shooter.ododis);
 //        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
         telemetry.addData("turretpos", turret.getPos());
         telemetry.addData("turretaimpos", turret.aimposition);

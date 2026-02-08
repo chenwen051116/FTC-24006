@@ -54,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
 
-    public static double bluexOffset = -0;
+    public static double bluexOffset = -1.5 ;
     public static double blueyOffset = -0;
 
 
@@ -84,6 +84,8 @@ public class Drivetrain extends SubsystemBase {
 
     public double turretcenterdis = 1.2027;
     public double angularVelnum = 0;
+
+    public boolean safeMode = false;
 
     //servos
     public Timer looptimer;
@@ -246,6 +248,9 @@ public double getaccel(){
 
     public double getdis(){
         ifMovingShooting = false;
+        if(safeMode){
+            return 95;
+        }
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
@@ -264,6 +269,9 @@ public double getaccel(){
     }
     public double getdis_TWO(){
         ifMovingShooting = true;
+        if(safeMode){
+            return 95;
+        }
                  predictedPose = lookaheadPoseTime(new Pose2d(
                         follower.getPose().getX(),
                         follower.getPose().getY(),
@@ -294,7 +302,11 @@ public double getaccel(){
         return follower.getVelocity().getMagnitude();
     }
     public double getturretangle(){
+
         ifMovingShooting = false;
+        if(safeMode){
+            return 3.1;
+        }
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
         double heading  = follower.getHeading();
@@ -342,6 +354,10 @@ public double getaccel(){
 //                0,
 //                lookAheadTime
 //        );
+
+        if(safeMode){
+            return 3.1;
+        }
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
