@@ -42,8 +42,6 @@ public class Drivetrain extends SubsystemBase {
 
     public double xpos = 126.67;
     public double ypos = -129.01;
-
-    public static double turretAngularAccelkP = 0;
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.25;
 
@@ -58,8 +56,6 @@ public class Drivetrain extends SubsystemBase {
 
     public static double bluexOffset = -0;
     public static double blueyOffset = -0;
-
-    public double angularAccelnum = 0;
 
 
     public Pose bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
@@ -76,12 +72,11 @@ public class Drivetrain extends SubsystemBase {
     public static Pose lastPose = new Pose(0,0,0);
 
     public double lastheading = 0;
-    public double lastangularvel = 0;
 
     public static double kPTurret = -0.7;
 
     public static double kPShooter= -0.23;
-    public static double kPturretAngular = 130;
+    public static double kPturretAngular = 0;
 
     public static double testspeedx = 0.2;
     public static double testspeedy= 0.2;
@@ -250,7 +245,7 @@ public double getaccel(){
     }
 
     public double getdis(){
-       // ifMovingShooting = false;
+        ifMovingShooting = false;
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();
         double realy = follower.getPose().getY();
@@ -268,7 +263,7 @@ public double getaccel(){
         return sqrt(x*x+y*y);
     }
     public double getdis_TWO(){
-        //ifMovingShooting = true;
+        ifMovingShooting = true;
                  predictedPose = lookaheadPoseTime(new Pose2d(
                         follower.getPose().getX(),
                         follower.getPose().getY(),
@@ -299,7 +294,7 @@ public double getaccel(){
         return follower.getVelocity().getMagnitude();
     }
     public double getturretangle(){
-        //ifMovingShooting = false;
+        ifMovingShooting = false;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
         double heading  = follower.getHeading();
@@ -335,7 +330,7 @@ public double getaccel(){
         }
     }
     public double getturretangle_TWO(){
-        //ifMovingShooting = true;
+        ifMovingShooting = true;
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
 //         predictedPose = lookaheadPoseTime(new Pose2d(
@@ -367,9 +362,9 @@ public double getaccel(){
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum/(1-turretAngularAccelkP*angularAccelnum);
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*angularVelnum/(1-turretAngularAccelkP*angularAccelnum);
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         }
 
 
@@ -382,23 +377,14 @@ public double getaccel(){
         }
 
         public void updateAngularVel(){
-            if(abs((follower.getHeading()-lastheading)/looptime)<0.05) {
+//            if(abs((follower.getHeading()-lastheading)/looptime)<0.05) {
                 angularVelnum = (follower.getHeading() - lastheading) / looptime;
-            }
+//            }
         }
 
         public void updateLastHeading(){
             lastheading = follower.getHeading();
         }
-
-
-    public void updatelastAngularVel(){
-            angularAccelnum = (angularVelnum - lastangularvel) / looptime;
-    }
-
-    public void updateLastAngularVel(){
-        lastangularvel = angularVelnum;
-    }
     public double angularVel(){
         double dx = follower.getPose().getX() - xpos;
         double dy = follower.getPose().getY() - ypos;

@@ -45,7 +45,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -60.7386, 0);//real pass by
-    private final Pose GatePassby2 = new Pose(118.7843, -59.2386, 0);//hit gate
+    private final Pose GatePassby2 = new Pose(120.7843, -59.2386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, -49.1962, -0.7081);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
@@ -168,9 +168,10 @@ public class Blue_Near_21ball extends OpMode {
 
                 .addPath(new BezierCurve(ShootPose, PrepGather1))
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather1.getHeading())
-                .addPath(new BezierCurve(PrepGather1, FinishGather1))
+                .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
-                .setTValueConstraint(0.90)
+                .setTValueConstraint(0.85)
+                .setBrakingStrength(1)
                 .build();
 
         Shootpath4 = drive.follower.pathBuilder()

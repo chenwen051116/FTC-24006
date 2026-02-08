@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
 
     public double servoDiff = 0;
 
-    public double servoTestpos = 0.2;
+    public static double servoTestpos = 0.2;
 
     public double testmode = 0;
 
@@ -75,13 +75,13 @@ public class Intake extends SubsystemBase {
 
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
-        Suck_In(1,0.73),
+        Suck_In(1,0.72),
         Split_Out(-0.8,0.25),
         Send_It_Up(1,0.25),
         Intake_Steady(0,0.25),
 
         Suck_In_slow(0.5,0.25),
-        Send_It_Up_Slow(0.7,0.25);
+        Send_It_Up_Slow(0.67,0.25);
         private final double intakePower;
         private final double transServer;
         // Set update the transfer state

@@ -1,23 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmodes; // make sure this aligns with class location
 
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -26,10 +21,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
-@Config
-@Autonomous(name = "Red_Near_21ball_gate")
-
-public class Red_Near_21ball extends OpMode {
+@Autonomous(name = "RED_Near_18ball_Push")
+public class RED_Near_18ball_Push extends OpMode {
 
     //private drive.follower drive.follower;
     private Drivetrain drive;
@@ -48,16 +41,17 @@ public class Red_Near_21ball extends OpMode {
     private final Pose GatePassby2 = new Pose(118.7843, 59.7386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, 49.1962, 0.7081);//pickup
     private final Pose ShootPose = new Pose(77.6620, 70.80 ,0);
-
+    private final Pose ShootPosePush = new Pose(73.21, 8.7571,0.5830);
+    private final Pose ShootPosePush_PassBy = new Pose(88.00, 28.6053+3, 0);
     private final Pose PrepGather3 = new Pose(91.9908, 75.8070+2, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070+2, 0);
 
-    private final Pose Park = new Pose(72.3860, 88.5130, -0.7830);
+    private final Pose Park = new Pose(90, 3, 0.2);
 
     private boolean firstshooting = false;
 
-    public double turretoff = -3;
+    public double turretoff = -5;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -175,17 +169,22 @@ public class Red_Near_21ball extends OpMode {
                 .build();
 
         Shootpath4 = drive.follower.pathBuilder()
-                .addPath(new BezierLine(FinishGather1,Park))
-//                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
-                .setConstantHeadingInterpolation(Park.getHeading())
-                .setBrakingStrength(0.8)
+                .addPath(new BezierLine(FinishGather1,ShootPosePush_PassBy))
+                .setTangentHeadingInterpolation().setReversed()
+                .addPath(new BezierCurve(ShootPosePush_PassBy,ShootPosePush))
+                .setTangentHeadingInterpolation().setReversed()
+                .setBrakingStrength(0.9)
                 .build();
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
 //        finishGatherPath4 = simplePath(PrepGather4,FinishGather4);
 
-        lastOutPath = simplePath(ShootPose,Park);
+        lastOutPath = drive.follower.pathBuilder()
+                .addPath(new BezierLine(ShootPosePush,Park))
+                .setTangentHeadingInterpolation()
+                .setBrakingStrength(1)
+                .build();
 //
 //        lastOutPath = drive.follower.pathBuilder()
 //                .addPath(new BezierLine(ShootPose1, endPose))
@@ -672,7 +671,7 @@ public class Red_Near_21ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(29);
+                            setPathState(28);
                         }
 
                     }
@@ -680,23 +679,14 @@ public class Red_Near_21ball extends OpMode {
 
                 }
                 break;
-
-
-
-
-
-
-//
-//            case 28:
-//                if(!drive.follower.isBusy()) {
-//                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-//                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-//                    shooter.periodic();
-//                    drive.follower.followPath(lastOutPath);
-//                    resetSubsystemsForTeleop();
-//                    setPathState(29);
-//                }
-//                break;
+            case 28:
+                if(!drive.follower.isBusy()) {
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    drive.follower.followPath(lastOutPath);
+                    setPathState(29);
+                }
+                break;
             case 29:
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = true;
@@ -705,7 +695,6 @@ public class Red_Near_21ball extends OpMode {
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = drive.follower.getPose();
                     Drivetrain.TredFblue = true;
-                    //setPathState(28);
                     break;
 
                 }
