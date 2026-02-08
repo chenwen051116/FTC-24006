@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
     public static double RPMThresh = 40;
 
-    public static double Autoshort = 2650;
+    public static double Autoshort = 2400;
     public static double Autolong = 3200;
     public boolean forceShooting = false;
 
@@ -259,13 +259,13 @@ public class Shooter extends SubsystemBase {
     public void updateAim() {
         distance = abs(distance);
         if (distance > 2.5){
-            setTargetRPM(431.03*distance+750);
+            setTargetRPM(3400);
         }
         else if (distance < 1.2){
-            setTargetRPM(1500);
+            setTargetRPM(2400);
         }
         else{
-            setTargetRPM(137.594*distance+1332.135);
+            setTargetRPM(520*distance+1676);
         }
 
 
@@ -275,7 +275,7 @@ public class Shooter extends SubsystemBase {
         else if(automode&&!autoLonger){
             setTargetRPM(Autoshort);
         }
-        //setTargetRPM(aimRPM);
+      // setTargetRPM(aimRPM);
     }
 
 
@@ -306,7 +306,7 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(0);
+            setTargetRPM(2000);
         }
     }
     public void updateTelemetry() {
