@@ -53,6 +53,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
+    public static double AccelInfluenceFactor = 10;
 
     public static double bluexOffset = -1.5 ;
     public static double blueyOffset = -0;
@@ -194,15 +195,15 @@ public class Drivetrain extends SubsystemBase {
 
 public double getaccel(){
     double value = getSignedAccelMagnitude()*turretAccelkP;
-    if(value>-0.1&&value<0){
-        return -0.1;
-    }
-    if(value<0.1&&value>0){
-        return 0.1;
-    }
-    if(value>0.9){
-        value = 0.9;
-    }
+//    if(value>-0.1&&value<0){
+//        return -0.1;
+//    }
+//    if(value<0.1&&value>0){
+//        return 0.1;
+//    }
+//    if(value>0.9){
+//        value = 0.9;
+//    }
 //    if(value<-0.9){
 //        value = -0.9;
 //    }
@@ -341,6 +342,22 @@ public double getaccel(){
             return angle;
         }
     }
+
+    public double compressDivider(double divider){
+        if(divider<1/AccelInfluenceFactor&&divider>=0){
+            return 1/AccelInfluenceFactor;
+        }
+        if(divider>-1/AccelInfluenceFactor&&divider<0){
+            return -1/AccelInfluenceFactor;
+        }
+        if(divider>AccelInfluenceFactor){
+            return AccelInfluenceFactor;
+        }
+        if(divider < -AccelInfluenceFactor){
+            return -AccelInfluenceFactor;
+        }
+        return divider;
+    }
     public double getturretangle_TWO(){
         ifMovingShooting = true;
 //        double x = follower.getPose().getX()-aimPos.getX();
@@ -378,9 +395,9 @@ public double getaccel(){
         //       if(!TredFblue) {
 
         if (y < 0) {
-            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
+            return compress(1 * h - Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/compressDivider(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         } else {
-            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
+            return compress(1 * h + Math.atan(abs(y) / abs(x))+(kPTurret*angularVel())/compressDivider(1-turretAccelkP*getaccel()))+kPturretAngular*follower.getAngularVelocity();
         }
 
 
