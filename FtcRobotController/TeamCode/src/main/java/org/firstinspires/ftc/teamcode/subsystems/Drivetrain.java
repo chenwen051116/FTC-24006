@@ -47,13 +47,13 @@ public class Drivetrain extends SubsystemBase {
 
     //public static double lookAheadTimeShooter = 0.2;
 
-    public static double turretAccelkP = 0.08;
+    public static double turretAccelkP = 0.06;
 
     public static double angle = 0;
 
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
-    public static double AccelInfluenceFactor = 10;
+    public static double AccelInfluenceFactor = 3;
 
     public static double bluexOffset = -1.5 ;
     public static double blueyOffset = -0;

@@ -64,6 +64,8 @@ public class Shooter extends SubsystemBase {
     public  double Autoshort = 2580;
     public  double Autolong = 3110;
 
+    public double idleSpeed = 2600;
+
     //public double AutoStartlong = 3125;
 
     public  double shootLowbar = 200;
@@ -450,7 +452,7 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(2600);
+            setTargetRPM(idleSpeed);
             shootbarOn();
         }
     }

@@ -146,7 +146,12 @@ public void togglesafeMode(){
 
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
 
-
+        if(gamepad2.left_trigger>0.5){
+            shooter.idleSpeed = 2600;
+        }
+        if(gamepad2.right_trigger>0.5){
+            shooter.idleSpeed = 3200;
+        }
 
         if(MovingshootingMode){
             light.setLight(Light.Color.Violet,Light.Color.Violet);
@@ -242,6 +247,7 @@ public void togglesafeMode(){
             y2justpressed = false;
         }
         if(yjustpressed&&shooter.shooterStatus != Shooter.ShooterStatus.Shooting){
+           // shooter.idleSpeed = 2600;
             if(shooter.shooterStatus == Shooter.ShooterStatus.Idling) {
                 shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
             }
@@ -251,6 +257,7 @@ public void togglesafeMode(){
             yjustpressed = false;
         }
         if(xjustpressed){
+          //  shooter.idleSpeed = 2600;
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
@@ -271,9 +278,9 @@ public void togglesafeMode(){
             y2justpressed = false;
         }
 
-        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
+//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+//          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
 //        telemetry.addData("dis", drivetrain.getdis());
 //        telemetry.addData("maglim", turret.magLim.getState());
 ////        telemetry.addData("Omega", drivetrain.angularVel());
@@ -286,20 +293,20 @@ public void togglesafeMode(){
 ////        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
 ////        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
 ////        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
-////        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
-////        telemetry.addData("Apriltag dist", limelight.getDis());
-        telemetry.addData("Apriltag X", limelight.getpatterTx());
-////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
-////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
-////        telemetry.addData("Pitch", limelight.getPitch());
-        telemetry.addData("Shooterdis", shooter.ododis);
-//        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
-        telemetry.addData("turretpos", turret.getPos());
-        telemetry.addData("turretaimpos", turret.aimposition);
-////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
-////        telemetry.addData("ShotterForce?", shooter.forceShooting);
-       telemetry.addData("accel", drivetrain.angularVelnum);
-        telemetry.addData("pidoutput", turret.output);
+//////        telemetry.addData("Gamepad2 Right Stick Y", gamepad2.right_stick_y);
+//////        telemetry.addData("Apriltag dist", limelight.getDis());
+//        telemetry.addData("Apriltag X", limelight.getpatterTx());
+//////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
+//////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
+//////        telemetry.addData("Pitch", limelight.getPitch());
+//        telemetry.addData("Shooterdis", shooter.ododis);
+////        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
+//        telemetry.addData("turretpos", turret.getPos());
+//        telemetry.addData("turretaimpos", turret.aimposition);
+//////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
+//////        telemetry.addData("ShotterForce?", shooter.forceShooting);
+//       telemetry.addData("accel", drivetrain.angularVelnum);
+//        telemetry.addData("pidoutput", turret.output);
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
 //
 //

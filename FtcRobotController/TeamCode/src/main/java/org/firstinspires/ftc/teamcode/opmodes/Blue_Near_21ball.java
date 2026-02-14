@@ -45,7 +45,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -60.7386, 0);//real pass by
-    private final Pose GatePassby2 = new Pose(120.7843, -59.2386, 0);//hit gate
+    private final Pose GatePassby2 = new Pose(121.2843, -59.2386, 0);//hit gate
     private final Pose GatePose = new Pose(121.9260, -49.1962, -0.7081);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
@@ -57,7 +57,7 @@ public class Blue_Near_21ball extends OpMode {
 
     private boolean firstshooting = false;
 
-    public double turretoff = 5;
+    public double turretoff = 0;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
