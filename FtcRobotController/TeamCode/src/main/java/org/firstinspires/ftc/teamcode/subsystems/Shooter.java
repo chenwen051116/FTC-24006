@@ -321,4 +321,13 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("PID Threshold", pidThreshold);
         telemetry.addData("Tolerance", tolerance);
     }
+
+    public void resetTeleop() {
+        automode = false;
+        forceShooting = false;
+        autoLonger = true;
+        rpmreached = false;
+        setShooterStatus(ShooterStatus.Stop);
+        completeStop();
+    }
 }

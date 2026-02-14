@@ -147,4 +147,14 @@ public class Intake extends SubsystemBase {
             transfer.setPower(intakeCurrentState.transferPower);
         }
     }
+
+    public void resetTeleop() {
+        shooterauto= false;
+        autotrans = false;
+        autoforce = false;
+        intakeCurrentState = IntakeTransferState.Intake_Steady;
+        intake.setPower(0);
+        //setServoPos(intakeCurrentState.transServer);
+       // gatepos = false;
+    }
 }

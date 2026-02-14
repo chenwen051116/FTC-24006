@@ -328,11 +328,20 @@ public class RED_Near_12ball extends OpMode {
                     setPathState(15);
                 }
 //                break;
-//            case 15:
-//                if(!follower.isBusy()) {
-//                    setPathState(16);
-//                }
+            case 15:
+                if(!follower.isBusy()) {
+                    resetSubsystemsForTeleop();
+                    setPathState(16);
+                }
 
+        }
+    }
+    private void resetSubsystemsForTeleop() {
+        if (shooter != null) {
+            shooter.resetTeleop();
+        }
+        if (intake != null) {
+            intake.resetTeleop();
         }
     }
     private void sleep(long ms){
