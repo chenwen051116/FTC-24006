@@ -173,7 +173,7 @@ public class Intake extends SubsystemBase {
         autoForce = false;
         intakeCurrentState = IntakeTransferState.Intake_Steady;
         intake.setPower(0);
-        setServoPos(intakeCurrentState.transServer);
+        //setServoPos(intakeCurrentState.transServer);
         gatepos = false;
     }
 }
