@@ -89,7 +89,7 @@ public class Turret extends SubsystemBase {
 
     // Constructor for intake motors
 
-    public Turret(HardwareMap hardwareMap) {
+    public Turret(HardwareMap hardwareMap, boolean isTele) {
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         magLim = hardwareMap.get(DigitalChannel.class,"maglim");
         magLim.setMode(DigitalChannel.Mode.INPUT);
@@ -98,8 +98,10 @@ public class Turret extends SubsystemBase {
         // in future updates
         // The intake does not need to necessarily move at steady
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if(!isTele) {
+            turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         pidController = new PIDController(kp,ki,kd);

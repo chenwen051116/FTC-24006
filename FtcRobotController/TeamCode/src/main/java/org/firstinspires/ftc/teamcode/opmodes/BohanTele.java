@@ -68,13 +68,13 @@ public class BohanTele extends CommandOpMode {
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
         //Subsystems
-        drivetrain = new Drivetrain(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap,true);
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         intake = new Intake(hardwareMap);
         intake.setDefaultCommand(new IntakeCommand(gamepad1, intake));
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
-        turret = new Turret(hardwareMap);
+        turret = new Turret(hardwareMap,true);
         light = new Light(hardwareMap);
 
         // Clear any leftover autonomous state that might still be latched on hardware

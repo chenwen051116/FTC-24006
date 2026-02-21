@@ -586,7 +586,7 @@ public class Red_Far_cycle extends OpMode {
         fulltimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
-        drive = new Drivetrain(hardwareMap);
+        drive = new Drivetrain(hardwareMap,false);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
         limelight = new MyLimelight(hardwareMap);
@@ -594,7 +594,7 @@ public class Red_Far_cycle extends OpMode {
         limelight.startDetect();
         //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-        turret = new Turret(hardwareMap);
+        turret = new Turret(hardwareMap,false);
         buildPaths();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);

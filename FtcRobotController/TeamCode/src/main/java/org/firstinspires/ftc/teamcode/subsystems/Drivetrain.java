@@ -95,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
 
     public boolean ifMovingShooting = false;
 
-    public Drivetrain(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
+    public Drivetrain(HardwareMap hardwareMap,boolean isTele) {      //Constructor,新建对象时需要
 //        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
 //        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRight");
 //        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
