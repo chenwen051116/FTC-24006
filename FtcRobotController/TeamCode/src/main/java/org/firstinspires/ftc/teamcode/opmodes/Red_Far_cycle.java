@@ -531,6 +531,7 @@ public class Red_Far_cycle extends OpMode {
 //            //turret.autopos = -138;
 //        }
         shooter.forceShooting = true;
+        shooter.idleSpeed = 3200;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.isFarTeleMode = shooter.isAtFar();
             intake.updateAutoshoot(true);
@@ -594,6 +595,7 @@ public class Red_Far_cycle extends OpMode {
         limelight.startDetect();
         //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+
         turret = new Turret(hardwareMap,false);
         buildPaths();
         //drive.follower.setStartingPose(startPose);

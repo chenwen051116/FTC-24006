@@ -530,6 +530,7 @@ public class Blue_Far_cycle extends OpMode {
 //        else{
 //            //turret.autopos = -138;
 //        }
+        shooter.idleSpeed = 3200;
         shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
