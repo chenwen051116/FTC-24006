@@ -23,20 +23,20 @@ public class BLUE_Far_12ball extends OpMode {
 
     private int pathState =0;
     private final Pose startPose = new Pose(0, 0, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(9.4033, -1.4877, 0.416764);
+    private final Pose ShootPose1 = new Pose(7.187, -0.9717, 0.354764);
 
-    private final Pose ShootPose2 = new Pose(71.9996,1.5216,0.7425);
-    private final Pose PrepGather1 = new Pose(24.7910, 17.19286, 1.590508);
+    private final Pose ShootPose2 = ShootPose1;
+    private final Pose PrepGather1 = new Pose(7.187, 5.904, 1.590508);
 
-    private final Pose FinishGather1 = new Pose(24.7910, 37.2588, 1.590508);
+    private final Pose FinishGather1 = new Pose(2.98, 43.7588, 1.6110508);
 
-    private final Pose PrepGather2 = new Pose(48.849, 17.19286, 1.590508);
+    private final Pose PrepGather2 = new Pose(28.631, -1.02, 1.5541);
 
-    private final Pose FinishGather2 = new Pose(48.849, 37.2588, 1.590508);
+    private final Pose FinishGather2 = new Pose(28.631, 42.2588, 1.580508);
 
-    private final Pose PrepGather3 = new Pose(72.907, 17.19286, 1.590508);
+    private final Pose PrepGather3 = PrepGather1;
 
-    private final Pose FinishGather3 = new Pose(72.907, 37.2588, 1.590508);
+    private final Pose FinishGather3 = FinishGather1;
 
     private final Pose endPose = new Pose(4.64556,44.66559,1.5623);
 
@@ -224,7 +224,7 @@ public class BLUE_Far_12ball extends OpMode {
                 }
                 break;
             case 8:
-                shooter.autoLonger = false;
+                shooter.autoLonger = true;
                 follower.followPath(Shootpath3);
                 firstshooting = false;
                 setPathState(9);
