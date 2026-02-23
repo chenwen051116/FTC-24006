@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,6 +17,7 @@ public class Intake extends SubsystemBase {
     private final DcMotor intake;
     private final Servo transferLeft;
     private final Servo transferRight;
+    private final DigitalChannel breakbeam_Front;
 
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -41,7 +44,8 @@ public class Intake extends SubsystemBase {
         intake = hardwareMap.get(DcMotor.class, "intake");
         transferLeft = hardwareMap.get(Servo.class, "transferL");
         transferRight = hardwareMap.get(Servo.class, "transferR");
-
+        breakbeam_Front = hardwareMap.get(DigitalChannel.class, "breakbeam_Front");
+        breakbeam_Front.setMode(DigitalChannel.Mode.INPUT);
 
         // The intake does not need to necessarily move at steady
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -89,6 +93,10 @@ public class Intake extends SubsystemBase {
             this.intakePower = InPower;
             this.transServer = serverPos;
         }
+    }
+
+    public boolean frontHasBall(){
+        return breakbeam_Front.getState();
     }
 
     public void setSwingBarPos(double i){

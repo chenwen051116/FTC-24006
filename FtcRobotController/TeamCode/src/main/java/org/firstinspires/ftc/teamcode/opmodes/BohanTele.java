@@ -308,26 +308,8 @@ public void togglesafeMode(){
 //       telemetry.addData("accel", drivetrain.angularVelnum);
 //        telemetry.addData("pidoutput", turret.output);
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
-//
-//
-////        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
-////        telemetry.addData("FR Power", drivetrain.getFrontRightPower());
-////        telemetry.addData("BL Power", drivetrain.getBackLeftPower());
-////        telemetry.addData("BR Power", drivetrain.getBackRightPower());
         telemetry.addData("Looptime", drivetrain.looptime);
-//        Pose3D pose = limelight.getMT2Pose();
-//        if (pose != null) {
-//            double x   = pose.getPosition().x;
-//            double y   = pose.getPosition().y;
-//            double z   = pose.getPosition().z;
-//            double yaw = pose.getOrientation().getYaw(AngleUnit.RADIANS);
-//
-//            telemetry.addData(
-//                    "MT2",
-//                    String.format("x=%.2f y=%.2f z=%.2f yaw=%.1f",
-//                            x, y, z, yaw)
-//            );
-//        }
+        telemetry.addData("FrontBallPresent?", intake.frontHasBall());
         telemetry.update();
         drivetrain.period();
     }
