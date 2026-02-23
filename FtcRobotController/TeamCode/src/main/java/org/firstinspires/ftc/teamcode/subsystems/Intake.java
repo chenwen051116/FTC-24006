@@ -96,7 +96,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean frontHasBall(){
-        return breakbeam_Front.getState();
+        return !breakbeam_Front.getState();
     }
 
     public void setSwingBarPos(double i){
