@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
     private final DcMotor intake;
     private final Servo transferLeft;
     private final Servo transferRight;
-    private final DigitalChannel breakbeam_Front;
+    private final DigitalChannel breakbeam_Front,breakbeam_Mid;
 
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -45,7 +45,9 @@ public class Intake extends SubsystemBase {
         transferLeft = hardwareMap.get(Servo.class, "transferL");
         transferRight = hardwareMap.get(Servo.class, "transferR");
         breakbeam_Front = hardwareMap.get(DigitalChannel.class, "breakbeam_Front");
+        breakbeam_Mid = hardwareMap.get(DigitalChannel.class, "breakbeam_Mid");
         breakbeam_Front.setMode(DigitalChannel.Mode.INPUT);
+        breakbeam_Mid.setMode(DigitalChannel.Mode.INPUT);
 
         // The intake does not need to necessarily move at steady
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -97,6 +99,9 @@ public class Intake extends SubsystemBase {
 
     public boolean frontHasBall(){
         return !breakbeam_Front.getState();
+    }
+    public boolean midHasBall(){
+        return !breakbeam_Mid.getState();
     }
 
     public void setSwingBarPos(double i){

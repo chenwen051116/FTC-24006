@@ -310,6 +310,7 @@ public void togglesafeMode(){
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
         telemetry.addData("Looptime", drivetrain.looptime);
         telemetry.addData("FrontBallPresent?", intake.frontHasBall());
+        telemetry.addData("MidBallPresent?", intake.midHasBall());
         telemetry.update();
         drivetrain.period();
     }

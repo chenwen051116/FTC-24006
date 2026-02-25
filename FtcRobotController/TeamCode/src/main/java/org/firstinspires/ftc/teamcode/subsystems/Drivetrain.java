@@ -65,8 +65,8 @@ public class Drivetrain extends SubsystemBase {
     public Pose rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
     public Pose aimPos = bluenearAimPos;
 
-    public Pose blueInitpose = new Pose(0.1224,-0.3717,3.141);
-    public Pose redInitpose = new Pose(-0.02583,-0.09087,-3.141);
+    public Pose blueInitpose = new Pose(2.3469,-1.9401,3.141);
+    public Pose redInitpose = new Pose(2.1257,1.2774,-3.141);
 
     public static boolean TredFblue = false;
 
