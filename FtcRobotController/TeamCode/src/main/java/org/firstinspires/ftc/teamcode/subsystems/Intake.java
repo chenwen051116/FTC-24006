@@ -19,6 +19,9 @@ public class Intake extends SubsystemBase {
     private final Servo transferRight;
     private final DigitalChannel breakbeam_Front,breakbeam_Mid;
 
+    private double bbfrontCount = 0;
+    private double bbmidCount = 0;
+
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
     // set the 3 status as false in default
@@ -31,11 +34,14 @@ public class Intake extends SubsystemBase {
 
     public static double servoTestpos = 0.2;
 
+
     public double testmode = 0;
 
     public boolean gatepos = false;
 
     public boolean isFarTeleMode = false;
+
+    public static double breakBeamThresh = 0.5;
 
 
 
@@ -98,10 +104,22 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean frontHasBall(){
-        return !breakbeam_Front.getState();
+        if(!breakbeam_Front.getState()){
+            bbfrontCount=(bbfrontCount*4+1)/5.0;
+        }
+        else{
+            bbfrontCount=(bbfrontCount*4+0)/5.0;
+        }
+        return bbfrontCount>=breakBeamThresh;
     }
     public boolean midHasBall(){
-        return !breakbeam_Mid.getState();
+        if(!breakbeam_Mid.getState()){
+            bbmidCount=(bbmidCount*4+1)/5.0;
+        }
+        else{
+            bbmidCount=(bbmidCount*4+0)/5.0;
+        }
+        return bbmidCount>=breakBeamThresh;
     }
 
     public void setSwingBarPos(double i){
@@ -113,7 +131,6 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
-
             intake.setPower(intakeCurrentState.intakePower);
             if(!gatepos) {
                 setServoPos(intakeCurrentState.transServer);
@@ -153,8 +170,12 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void periodic() { // FTC 0.001s cycle
+    public void periodic() {
+        // FTC 0.001s cycle
         if(!shooterAuto || autoForce) {
+            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()){
+                intakeCurrentState = IntakeTransferState.Send_It_Up;
+            }
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             intake.setPower(intakeCurrentState.intakePower);
