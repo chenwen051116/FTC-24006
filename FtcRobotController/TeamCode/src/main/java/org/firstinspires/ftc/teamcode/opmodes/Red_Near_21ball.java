@@ -45,7 +45,7 @@ public class Red_Near_21ball extends OpMode {
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297+3, 0);
     private final Pose GatePassby = new Pose(104.9794, 60.7386+1, 0);//real pass by
-    private final Pose GatePassby2 = new Pose(118.7843, 59.7386, 0);//hit gate
+    private final Pose GatePassby2 = new Pose(120.8224, 52.8159, 0.31919);//hit gate
     private final Pose GatePose = new Pose(120.8224, 52.8159, 0.31919);//pickup
     private final Pose ShootPose = new Pose(77.6620, 70.80 ,0);
 
