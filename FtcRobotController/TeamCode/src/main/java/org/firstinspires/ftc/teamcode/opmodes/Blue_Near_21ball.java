@@ -37,7 +37,7 @@ public class Blue_Near_21ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(116.6447, -109.9232, 0); // Start Pose of our robot.
+    private final Pose startPose = new Pose(112.6333, -117.9616, 0.99945); // Start Pose of our robot.
     private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);
 
@@ -46,7 +46,7 @@ public class Blue_Near_21ball extends OpMode {
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -60.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(121.2843, -59.2386, 0);//hit gate
-    private final Pose GatePose = new Pose(121.9260, -49.1962, -0.7081);//pickup
+    private final Pose GatePose = new Pose(118.6560, -57.5251, -0.30051);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot

@@ -36,7 +36,7 @@ public class Blue_Far_cycle extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(81.21237, 0.2738, 0); // Start Pose of our robot.
+    private final Pose startPose = new Pose(81.21237, -2.5016, 0); // Start Pose of our robot.
     private final Pose ShootPose1 = new Pose(81.21, -8.7571,0);
     private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);

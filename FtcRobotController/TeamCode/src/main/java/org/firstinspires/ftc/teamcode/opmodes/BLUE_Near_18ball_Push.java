@@ -30,7 +30,7 @@ public class BLUE_Near_18ball_Push extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(116.6447, -109.9232, 0); // Start Pose of our robot.
+    private final Pose startPose = new Pose(112.6333, -117.9616, 0.99945); // Start Pose of our robot.
     private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053-3, 0);
 
