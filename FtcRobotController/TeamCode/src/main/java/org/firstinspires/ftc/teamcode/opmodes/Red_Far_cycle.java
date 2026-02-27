@@ -54,9 +54,9 @@ public class Red_Far_cycle extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose PrepGather4 = new Pose(119.5531, -0.0000, 0);//accounted for overshoot
+    private final Pose PrepGather4 = new Pose(119.5531, 2.5016, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.92, -0.0000, 0);
+    private final Pose FinishGather4 = new Pose(123.92, 2.5016, 0);
 
     private final Pose Park = new Pose(115.21, 8.7571,0);;
 
@@ -73,8 +73,8 @@ public class Red_Far_cycle extends OpMode {
     public Scheduler scheduler;
 
     public Turret turret;
-    
-    public double turretoff = -2;
+
+    public double turretoff = 0;
 
     public static double stoptime = 2.8;
     public static double shoottime = 3;
@@ -83,7 +83,7 @@ public class Red_Far_cycle extends OpMode {
 
     public static double angle = 0;
 
-    public static double waittime = 0.1;
+    public static double waittime = 0.5;
     public static double intaketime = 0.7;
     public static double checkcount = 10;
 
@@ -96,10 +96,17 @@ public class Red_Far_cycle extends OpMode {
     public boolean autoflag = false;
 
 
+    public  PathChain simpleConstPath(Pose a, Pose b){
+        return drive.follower.pathBuilder()
+                .addPath(new BezierLine(a, b))
+                .setConstantHeadingInterpolation(b.getHeading())
+                .build();
+    }
     public  PathChain simplePath(Pose a, Pose b){
         return drive.follower.pathBuilder()
                 .addPath(new BezierLine(a, b))
                 .setLinearHeadingInterpolation(a.getHeading(), b.getHeading())
+
                 .build();
     }
     public void buildPaths() {
@@ -370,6 +377,7 @@ public class Red_Far_cycle extends OpMode {
                 break;
             case 22:
                 if(!drive.follower.isBusy()) {
+                    intake.autoIntakeUp = true;
                     //cyclecounter -=1;
 
                     //turret.autopos = 319;
@@ -400,7 +408,7 @@ public class Red_Far_cycle extends OpMode {
 
 
                             }
-                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()<59) {
+                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()>-59) {
                                 drive.teleDrive(0.35, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
                             }
                             else{
@@ -418,7 +426,7 @@ public class Red_Far_cycle extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             if(fulltimer.getElapsedTimeSeconds()<26) {
-                                drive.follower.followPath(simplePath(drive.follower.getPose(),ShootPose1));
+                                drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
                             }
                             else{
@@ -428,7 +436,7 @@ public class Red_Far_cycle extends OpMode {
                         }
                     }
                 }
-                    break;
+                break;
             case 24:
                 if(!drive.follower.isBusy()) {
                     if (!firstshooting) {
@@ -484,6 +492,7 @@ public class Red_Far_cycle extends OpMode {
                 }
                 break;
             case 27:
+                intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = true;
                 if(!drive.follower.isBusy()){
@@ -530,11 +539,11 @@ public class Red_Far_cycle extends OpMode {
 //        else{
 //            //turret.autopos = -138;
 //        }
-        shooter.forceShooting = true;
         shooter.idleSpeed = 3200;
+        shooter.forceShooting = true;
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
-            intake.isFarTeleMode = shooter.isAtFar();
             intake.updateAutoshoot(true);
+            intake.isFarTeleMode = shooter.isAtFar();
 //            if(shooter.reverIntake){
 //                intake.updateAutoshoot(false);
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
@@ -595,12 +604,11 @@ public class Red_Far_cycle extends OpMode {
         limelight.startDetect();
         //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-
         turret = new Turret(hardwareMap,false);
         buildPaths();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
-        drive.redinit();
+        drive.blueinit();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
