@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
 
     public boolean isFarTeleMode = false;
 
-    public static double breakBeamThresh = 0.1;
+    public static double breakBeamThresh = 0.3;
 
     private boolean midHasBallFlag = false;
     private boolean frontHasBallFlag = false;

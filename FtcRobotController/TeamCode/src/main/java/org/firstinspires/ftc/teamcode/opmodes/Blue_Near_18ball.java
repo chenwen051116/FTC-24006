@@ -46,7 +46,7 @@ public class Blue_Near_18ball extends OpMode {
     private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(104.9794, -57.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, -55.5252, -0.30050);//hit gate
-    private final Pose GatePose = new Pose(120.6561, -55.5252, -0.30050);//pickup
+    private final Pose GatePose = new Pose(120.6561, -55.0, -0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, -75.8070, 0);//accounted for overshoot
@@ -632,6 +632,7 @@ public class Blue_Near_18ball extends OpMode {
             case 24:
                 if(!drive.follower.isBusy()) {
                     //  turret.autopos = 0;
+                    intake.autoIntakeUp = true;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
@@ -708,6 +709,7 @@ public class Blue_Near_18ball extends OpMode {
 //                }
 //                break;
             case 29:
+                intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = false;
                 if(!drive.follower.isBusy()){
