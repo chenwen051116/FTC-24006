@@ -90,12 +90,10 @@ public class Blue_Near_21ball extends OpMode {
     public void buildPaths() {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
-        Shootpath1 = simplePath(startPose,ShootPose);
-
-        //prepGatherPath1 = simplePath(ShootPose1,PrepGather4);
-//        prepGatherPath1 = simplePath(startPose,PrepGather2);
-////        finishGatherPath1 = simplePath(PrepGather4,FinishGather4);
-//        finishGatherPath1 = drive.follower.pathBuilder()
+        Shootpath1 = drive.follower.pathBuilder()
+                .addPath(new BezierCurve(startPose, ShootPose))
+                .setConstantHeadingInterpolation(PrepGather2.getHeading())
+                .build();
 //
 //                .addPath(new BezierLine(PrepGather4, FinishGather4))
 //                .setLinearHeadingInterpolation(PrepGather4.getHeading(), FinishGather4.getHeading())
@@ -450,7 +448,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.6,false);
+                    drive.follower.followPath(GatePath1,1,false);
                     setPathState(47);
                 }
                 break;
@@ -537,7 +535,7 @@ public class Blue_Near_21ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,0.6,false);
+                    drive.follower.followPath(GatePath1,1,false);
                     setPathState(40);
                 }
                 break;
