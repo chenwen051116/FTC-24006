@@ -70,10 +70,10 @@ public class Blue_Near_21ball extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1;
+    public static double stoptime = 1.5;
     public static double shoottime = 1.65;
 
-    public static double waittime = 0.65;
+    public static double waittime = 0.1;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -390,60 +390,60 @@ public class Blue_Near_21ball extends OpMode {
 
                 }
                 break;
-            //3rd shooting________________________________________________
-//            case 12:
-//                if(!drive.follower.isBusy()) {
-//                    firstshooting = false;
-//                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-//                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-//                    shooter.periodic();
-//                    drive.follower.followPath(prepGatherPath2,1,true);
-//                    setPathState(13);
-//                }
-//                break;
-//            case 13:
-//                if(!drive.follower.isBusy()) {
-//                    //drive.follower.followPath(finishGatherPath3);
-//                    setPathState(14);
-//                }
-//                break;
-//            case 14:
-//                if(!drive.follower.isBusy()){
-//                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-//                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-//                    drive.follower.followPath(Shootpath3);
-//                    setPathState(15);
-//                }
-//                break;
-//            case 15:
-//                if(!drive.follower.isBusy()) {
-//                    if (!firstshooting) {
-//                        shooter.updateFocused(true);
-//
-//                        timer.resetTimer();
-//                        firstshooting = true;
-//                    }
-//                    else{
-//                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
-//                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-//                        }
-//                        if(shooter.getTransDis()>18){
-//                            checkcounter -=1;
-//                        }
-//                        else{
-//                            checkcounter = checkcount;
-//                        }
-//                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-//                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-//                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-//                            setPathState(24);
-//                        }
-//
-//                    }
-//                    break;
-//
-//                }
-//                break;
+           // 3rd shooting________________________________________________
+            case 12:
+                if(!drive.follower.isBusy()) {
+                    firstshooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    drive.follower.followPath(prepGatherPath2,1,true);
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                if(!drive.follower.isBusy()) {
+                    //drive.follower.followPath(finishGatherPath3);
+                    setPathState(14);
+                }
+                break;
+            case 14:
+                if(!drive.follower.isBusy()){
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    drive.follower.followPath(Shootpath3);
+                    setPathState(15);
+                }
+                break;
+            case 15:
+                if(!drive.follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
+
+                        timer.resetTimer();
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        }
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(24);
+                        }
+
+                    }
+                    break;
+
+                }
+                break;
             //4th shooting________________________________________________
             case 16:
                 if(!drive.follower.isBusy()) {
