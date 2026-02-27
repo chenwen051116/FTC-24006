@@ -175,18 +175,18 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if(!breakbeam_Front.getState()){
-            bbfrontCount=(bbfrontCount*4+1)/5.0;
+            bbfrontCount=(bbfrontCount*9+1)/10.0;
         }
         else{
-            bbfrontCount=(bbfrontCount*4+0)/5.0;
+            bbfrontCount=(bbfrontCount*9+0)/10.0;
         }
         frontHasBallFlag = (bbfrontCount>=breakBeamThresh);
 
         if(!breakbeam_Mid.getState()){
-            bbmidCount=(bbmidCount*4+1)/5.0;
+            bbmidCount=(bbmidCount*9+1)/10.0;
         }
         else{
-            bbmidCount=(bbmidCount*4+0)/5.0;
+            bbmidCount=(bbmidCount*9+0)/10.0;
         }
         midHasBallFlag = (bbmidCount>=breakBeamThresh);
 
