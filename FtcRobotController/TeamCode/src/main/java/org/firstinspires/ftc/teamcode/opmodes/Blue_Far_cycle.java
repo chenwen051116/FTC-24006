@@ -370,6 +370,7 @@ public class Blue_Far_cycle extends OpMode {
                 break;
             case 22:
                 if(!drive.follower.isBusy()) {
+                    intake.autoIntakeUp = true;
                     //cyclecounter -=1;
 
                     //turret.autopos = 319;
@@ -484,6 +485,7 @@ public class Blue_Far_cycle extends OpMode {
                 }
                 break;
             case 27:
+                intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = false;
                 if(!drive.follower.isBusy()){
