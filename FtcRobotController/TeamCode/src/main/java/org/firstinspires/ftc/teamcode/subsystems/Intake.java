@@ -45,6 +45,11 @@ public class Intake extends SubsystemBase {
 
     public static double breakBeamThresh = 0.1;
 
+    private boolean midHasBallFlag = false;
+    private boolean frontHasBallFlag = false;
+
+
+
 
 
     // Constructor for intake motors
@@ -106,26 +111,14 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean frontHasBall(){
-        if(!breakbeam_Front.getState()){
-            bbfrontCount=(bbfrontCount*4+1)/5.0;
-        }
-        else{
-            bbfrontCount=(bbfrontCount*4+0)/5.0;
-        }
-        return bbfrontCount>=breakBeamThresh;
+        return frontHasBallFlag;
     }
     public boolean midHasBall(){
-        if(!breakbeam_Mid.getState()){
-            bbmidCount=(bbmidCount*4+1)/5.0;
-        }
-        else{
-            bbmidCount=(bbmidCount*4+0)/5.0;
-        }
-        return bbmidCount>=breakBeamThresh;
+        return midHasBallFlag;
     }
 
     public boolean bothHasBall(){
-        return midHasBall()&&frontHasBall();
+        return (midHasBall()&&frontHasBall());
     }
 
     public void setSwingBarPos(double i){
@@ -181,6 +174,23 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if(!breakbeam_Front.getState()){
+            bbfrontCount=(bbfrontCount*4+1)/5.0;
+        }
+        else{
+            bbfrontCount=(bbfrontCount*4+0)/5.0;
+        }
+        frontHasBallFlag = (bbfrontCount>=breakBeamThresh);
+
+        if(!breakbeam_Mid.getState()){
+            bbmidCount=(bbmidCount*4+1)/5.0;
+        }
+        else{
+            bbmidCount=(bbmidCount*4+0)/5.0;
+        }
+        midHasBallFlag = (bbmidCount>=breakBeamThresh);
+
+
         // FTC 0.001s cycle
         if(!shooterAuto || autoForce) {
             if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()&&autoIntakeUp){

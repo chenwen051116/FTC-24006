@@ -344,7 +344,7 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 else{
 
-                    if(timer.getElapsedTimeSeconds()> stoptime){
+                    if(timer.getElapsedTimeSeconds()> stoptime || intake.bothHasBall()){
                         intake.gatepos = false;
                         shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
@@ -485,7 +485,7 @@ public class Blue_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime){
+                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
@@ -572,7 +572,7 @@ public class Blue_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime){
+                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
