@@ -83,7 +83,7 @@ public class Blue_Far_cycle extends OpMode {
 
     public static double angle = 0;
 
-    public static double waittime = 0.1;
+    public static double waittime = 0.5;
     public static double intaketime = 0.7;
     public static double checkcount = 10;
 
