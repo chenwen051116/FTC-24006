@@ -790,7 +790,7 @@ public class Blue_Near_21ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
             shooter.ododis = drive.getdis_TWO();
-            turret.aimangle = drive.getturretangle()+toRadians(turretoff);
+            turret.aimangle = drive.getturretangle_TWO()+toRadians(turretoff);
 
             turret.updateAutoShoot(true);
             //turret.tx = limelight.getTx();
