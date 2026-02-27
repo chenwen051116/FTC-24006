@@ -131,7 +131,11 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
+            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()){
+                intakeCurrentState = IntakeTransferState.Send_It_Up;
+            }
             intake.setPower(intakeCurrentState.intakePower);
+
             if(!gatepos) {
                 setServoPos(intakeCurrentState.transServer);
             }
