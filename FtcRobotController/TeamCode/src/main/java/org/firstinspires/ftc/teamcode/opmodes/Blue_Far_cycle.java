@@ -54,9 +54,9 @@ public class Blue_Far_cycle extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose PrepGather4 = new Pose(119.5531, 0.0000, 0);//accounted for overshoot
+    private final Pose PrepGather4 = new Pose(119.5531, -2.5016, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(123.92, 0.0000, 0);
+    private final Pose FinishGather4 = new Pose(123.92, -2.5016, 0);
 
     private final Pose Park = new Pose(115.21, -8.7571,0);;
 
