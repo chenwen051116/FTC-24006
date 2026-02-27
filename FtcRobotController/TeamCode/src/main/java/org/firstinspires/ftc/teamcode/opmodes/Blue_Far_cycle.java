@@ -96,10 +96,17 @@ public class Blue_Far_cycle extends OpMode {
     public boolean autoflag = false;
 
 
+    public  PathChain simpleConstPath(Pose a, Pose b){
+        return drive.follower.pathBuilder()
+                .addPath(new BezierLine(a, b))
+                .setConstantHeadingInterpolation(b.getHeading())
+                .build();
+    }
     public  PathChain simplePath(Pose a, Pose b){
         return drive.follower.pathBuilder()
                 .addPath(new BezierLine(a, b))
                 .setLinearHeadingInterpolation(a.getHeading(), b.getHeading())
+
                 .build();
     }
     public void buildPaths() {
@@ -419,7 +426,7 @@ public class Blue_Far_cycle extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             if(fulltimer.getElapsedTimeSeconds()<26) {
-                                drive.follower.followPath(simplePath(drive.follower.getPose(),ShootPose1));
+                                drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
                             }
                             else{
