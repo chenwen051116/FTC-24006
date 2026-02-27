@@ -305,6 +305,7 @@ public class Blue_Near_21ball extends OpMode {
 
                 if(!drive.follower.isBusy()) {
 //                    shooter.offset = 0;
+                    intake.autoIntakeUp = true;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
@@ -335,7 +336,7 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 else{
 
-                    if(timer.getElapsedTimeSeconds()> stoptime){
+                    if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
                         intake.gatepos = false;
                         shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                         intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
@@ -361,6 +362,7 @@ public class Blue_Near_21ball extends OpMode {
 
             case 11:
                 if(!drive.follower.isBusy()) {
+                    intake.autoIntakeUp = false;
                     if (!firstshooting) {
                         shooter.updateFocused(true);
 
@@ -380,7 +382,7 @@ public class Blue_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(20);
+                            setPathState(16);
                         }
 
                     }
@@ -389,66 +391,66 @@ public class Blue_Near_21ball extends OpMode {
                 }
                 break;
             //3rd shooting________________________________________________
-            case 12:
-                if(!drive.follower.isBusy()) {
-                    firstshooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    shooter.periodic();
-                    drive.follower.followPath(prepGatherPath2,1,true);
-                    setPathState(13);
-                }
-                break;
-            case 13:
-                if(!drive.follower.isBusy()) {
-                    //drive.follower.followPath(finishGatherPath3);
-                    setPathState(14);
-                }
-                break;
-            case 14:
-                if(!drive.follower.isBusy()){
-                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    drive.follower.followPath(Shootpath3);
-                    setPathState(15);
-                }
-                break;
-            case 15:
-                if(!drive.follower.isBusy()) {
-                    if (!firstshooting) {
-                        shooter.updateFocused(true);
-
-                        timer.resetTimer();
-                        firstshooting = true;
-                    }
-                    else{
-                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(shooter.getTransDis()>18){
-                            checkcounter -=1;
-                        }
-                        else{
-                            checkcounter = checkcount;
-                        }
-                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(24);
-                        }
-
-                    }
-                    break;
-
-                }
-                break;
+//            case 12:
+//                if(!drive.follower.isBusy()) {
+//                    firstshooting = false;
+//                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+//                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+//                    shooter.periodic();
+//                    drive.follower.followPath(prepGatherPath2,1,true);
+//                    setPathState(13);
+//                }
+//                break;
+//            case 13:
+//                if(!drive.follower.isBusy()) {
+//                    //drive.follower.followPath(finishGatherPath3);
+//                    setPathState(14);
+//                }
+//                break;
+//            case 14:
+//                if(!drive.follower.isBusy()){
+//                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+//                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+//                    drive.follower.followPath(Shootpath3);
+//                    setPathState(15);
+//                }
+//                break;
+//            case 15:
+//                if(!drive.follower.isBusy()) {
+//                    if (!firstshooting) {
+//                        shooter.updateFocused(true);
+//
+//                        timer.resetTimer();
+//                        firstshooting = true;
+//                    }
+//                    else{
+//                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+//                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+//                        }
+//                        if(shooter.getTransDis()>18){
+//                            checkcounter -=1;
+//                        }
+//                        else{
+//                            checkcounter = checkcount;
+//                        }
+//                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
+//                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+//                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+//                            setPathState(24);
+//                        }
+//
+//                    }
+//                    break;
+//
+//                }
+//                break;
             //4th shooting________________________________________________
             case 16:
                 if(!drive.follower.isBusy()) {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,1,false);
+                    drive.follower.followPath(GatePath1,0.6,false);
                     setPathState(47);
                 }
                 break;
@@ -475,7 +477,7 @@ public class Blue_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime){
+                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);

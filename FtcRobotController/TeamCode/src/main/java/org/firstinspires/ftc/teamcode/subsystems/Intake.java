@@ -22,6 +22,8 @@ public class Intake extends SubsystemBase {
     private double bbfrontCount = 0;
     private double bbmidCount = 0;
 
+    public boolean autoIntakeUp = false;
+
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
     // set the 3 status as false in default
@@ -41,7 +43,7 @@ public class Intake extends SubsystemBase {
 
     public boolean isFarTeleMode = false;
 
-    public static double breakBeamThresh = 0.5;
+    public static double breakBeamThresh = 0.1;
 
 
 
@@ -122,6 +124,10 @@ public class Intake extends SubsystemBase {
         return bbmidCount>=breakBeamThresh;
     }
 
+    public boolean bothHasBall(){
+        return midHasBall()&&frontHasBall();
+    }
+
     public void setSwingBarPos(double i){
         return;
     }
@@ -131,7 +137,7 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
-            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()){
+            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()&&autoIntakeUp){
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
             }
             intake.setPower(intakeCurrentState.intakePower);
@@ -177,7 +183,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // FTC 0.001s cycle
         if(!shooterAuto || autoForce) {
-            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()){
+            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()&&autoIntakeUp){
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
             }
             // at shooterAuto or autoForce, the power of the DC motors are set separately
