@@ -608,7 +608,7 @@ public class Red_Far_cycle extends OpMode {
         buildPaths();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
-        drive.blueinit();
+        drive.redinit();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());

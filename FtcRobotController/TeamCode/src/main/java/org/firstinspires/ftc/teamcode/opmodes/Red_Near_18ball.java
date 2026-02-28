@@ -37,23 +37,23 @@ public class Red_Near_18ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(112.6333, 115.9616, -0.99945); // Start Pose of our robot.
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053-5, 0);
-    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
+    private final Pose startPose = new Pose(116.6709, 114.2514, -1.00580); // Start Pose of our robot.
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
+    private final Pose FinishGather1 = new Pose(114.9794, 28.6053-1, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
-    private final Pose GatePassby = new Pose(104.9794, 57.7386, 0);//real pass by
+    private final Pose GatePassby = new Pose(104.9794, 55.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, 55.5252, 0.30050);//hit gate
-    private final Pose GatePose = new Pose(120.6561, 55.0, 0.30050);//pickup
+    private final Pose GatePose = new Pose(120.6561, 52.5, 0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose Park = new Pose(72.3860, 88.5130, -0.7830);;
+    private final Pose Park = new Pose(72.8860, 88.0130, -0.7930);;
 
     private boolean firstshooting = false;
 
@@ -247,7 +247,7 @@ public class Red_Near_18ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    turretoff = 3;
+                    turretoff = 0;
                     shooter.offset = -45;
                     //  turret.autopos = 0;
                     firstshooting = false;
@@ -821,7 +821,7 @@ public class Red_Near_18ball extends OpMode {
         buildPaths();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
-        drive.blueinit();
+        drive.redinit();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
