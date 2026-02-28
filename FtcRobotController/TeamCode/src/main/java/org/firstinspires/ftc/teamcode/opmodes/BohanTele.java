@@ -258,6 +258,7 @@ public void togglesafeMode(){
         }
         if(xjustpressed){
           //  shooter.idleSpeed = 2600;
+            gamepad1.rumble(200);
             if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
             }
@@ -289,7 +290,7 @@ public void togglesafeMode(){
 ////        telemetry.addData("x", drivetrain.follower.getPose().getX());
 ////        telemetry.addData("y", drivetrain.follower.getPose().getY());
 ////        telemetry.addData("h", drivetrain.follower.getPose().getHeading());
-////        telemetry.addData("PIDoutput", turret.turretpidOut);
+        telemetry.addData("PIDoutput", turret.turretpidOut);
 ////        telemetry.addData("Shooter At Target", shooter.isAtTargetRPM() ? "YES" : "NO");
 ////        telemetry.addData("Gamepad1 Right Stick X", gamepad1.right_stick_x);
 ////        telemetry.addData("Gamepad2 Left Stick Y", gamepad2.left_stick_y);
@@ -301,12 +302,12 @@ public void togglesafeMode(){
 //////        telemetry.addData("Pitch", limelight.getPitch());
 //        telemetry.addData("Shooterdis", shooter.ododis);
 ////        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
-//        telemetry.addData("turretpos", turret.getPos());
-//        telemetry.addData("turretaimpos", turret.aimposition);
+        telemetry.addData("turretpos", turret.getPos());
+        telemetry.addData("turretaimpos", turret.aimposition);
 //////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 //////        telemetry.addData("ShotterForce?", shooter.forceShooting);
 //       telemetry.addData("accel", drivetrain.angularVelnum);
-//        telemetry.addData("pidoutput", turret.output);
+        telemetry.addData("pidoutput", turret.output);
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
         telemetry.addData("Looptime", drivetrain.looptime);
         telemetry.addData("FrontBallPresent?", intake.frontHasBall());
