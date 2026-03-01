@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
 
     public boolean isFarTeleMode = false;
 
-    public static double breakBeamThresh = 0.3;
+    public static double breakBeamThresh = 0.2;
 
     private boolean midHasBallFlag = false;
     private boolean frontHasBallFlag = false;
@@ -100,6 +100,7 @@ public class Intake extends SubsystemBase {
         Intake_Steady(0,0.25),
 
         Suck_In_slow(0.5,0.25),
+        Suck_In_slow_Sorting(0.6,0.72),
         Send_It_Up_Slow(0.67,0.25);
         private final double intakePower;
         private final double transServer;
@@ -108,6 +109,10 @@ public class Intake extends SubsystemBase {
             this.intakePower = InPower;
             this.transServer = serverPos;
         }
+    }
+
+    public boolean fronthasballRaw(){
+        return !breakbeam_Front.getState();
     }
 
     public boolean frontHasBall(){
@@ -175,18 +180,18 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if(!breakbeam_Front.getState()){
-            bbfrontCount=(bbfrontCount*9+1)/10.0;
+            bbfrontCount=(bbfrontCount*4+1)/5.0;
         }
         else{
-            bbfrontCount=(bbfrontCount*9+0)/10.0;
+            bbfrontCount=(bbfrontCount*4+0)/5.0;
         }
         frontHasBallFlag = (bbfrontCount>=breakBeamThresh);
 
         if(!breakbeam_Mid.getState()){
-            bbmidCount=(bbmidCount*9+1)/10.0;
+            bbmidCount=(bbmidCount*4+1)/5.0;
         }
         else{
-            bbmidCount=(bbmidCount*9+0)/10.0;
+            bbmidCount=(bbmidCount*4+0)/5.0;
         }
         midHasBallFlag = (bbmidCount>=breakBeamThresh);
 

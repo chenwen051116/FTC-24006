@@ -37,23 +37,23 @@ public class Red_Near_21ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(112.6333, 115.9616, -0.99945); // Start Pose of our robot.
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053-5, 0);
-    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
+    private final Pose startPose = new Pose(116.6709, 114.2514, -1.00580); // Start Pose of our robot.
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
+    private final Pose FinishGather1 = new Pose(114.9794, 28.6053-1, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
     private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
-    private final Pose GatePassby = new Pose(104.9794, 57.7386, 0);//real pass by
+    private final Pose GatePassby = new Pose(104.9794, 55.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, 55.5252, 0.30050);//hit gate
-    private final Pose GatePose = new Pose(120.6561, 55.0, 0.30050);//pickup
+    private final Pose GatePose = new Pose(120.6561, 52.5, 0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
 
     private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose Park = new Pose(72.3860, 88.5130, -0.7830);;
+    private final Pose Park = new Pose(72.8860, 88.0130, -0.7930);;
 
     private boolean firstshooting = false;
 
@@ -73,7 +73,7 @@ public class Red_Near_21ball extends OpMode {
     public static double stoptime = 2;
     public static double shoottime = 1.65;
 
-    public static double waittime = 0;
+    public static double waittime = 0.5;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -123,16 +123,9 @@ public class Red_Near_21ball extends OpMode {
                 .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather3.getHeading())
                 .addPath(new BezierCurve(PrepGather3, FinishGather3))
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
-                .setBrakingStrength(1.2)
-                .setBrakingStart(1)
                 .build();
 
-        Shootpath3 = drive.follower.pathBuilder()
-                .addPath(new BezierLine(FinishGather3,Park))
-//                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
-                .setConstantHeadingInterpolation(Park.getHeading())
-                .setBrakingStrength(0.8)
-                .build();
+        //Shootpath3 = simplePath(FinishGather3,ShootPose);
 
 //        GatePath1 = drive.follower.pathBuilder()
 ////                .setTValueConstraint(0.95)
@@ -181,16 +174,16 @@ public class Red_Near_21ball extends OpMode {
 //        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
         prepGatherPath3 = drive.follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose, GatePassby))
-                .setLinearHeadingInterpolation(ShootPose.getHeading(), GatePassby.getHeading())
-                .addPath(new BezierLine(GatePassby, GatePose))
-                .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-//                .setTValueConstraint(0.85)
-//                .setBrakingStrength(1)
+                .addPath(new BezierCurve(ShootPose, PrepGather1))
+                .setLinearHeadingInterpolation(ShootPose.getHeading(), PrepGather1.getHeading())
+                .addPath(new BezierLine(PrepGather1, FinishGather1))
+                .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .setTValueConstraint(0.85)
+                .setBrakingStrength(1)
                 .build();
 
-        Shootpath4 = drive.follower.pathBuilder()
-                .addPath(new BezierLine(GatePose,Park))
+        Shootpath3 = drive.follower.pathBuilder()
+                .addPath(new BezierLine(FinishGather3,Park))
 //                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
                 .setConstantHeadingInterpolation(Park.getHeading())
                 .setBrakingStrength(0.8)
@@ -254,7 +247,7 @@ public class Red_Near_21ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    turretoff = 3;
+                    turretoff = 0;
                     shooter.offset = -45;
                     //  turret.autopos = 0;
                     firstshooting = false;
@@ -624,7 +617,7 @@ public class Red_Near_21ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(24);
+                            setPathState(12);
                         }
 
                     }
@@ -638,51 +631,34 @@ public class Red_Near_21ball extends OpMode {
 
             case 24:
                 if(!drive.follower.isBusy()) {
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
+                    //  turret.autopos = 0;
+                    intake.autoIntakeUp = true;
+                    firstshooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    drive.follower.followPath(GatePath1,1,false);
+                    drive.follower.followPath(prepGatherPath3);
                     setPathState(25);
                 }
                 break;
             case 25:
-
-
                 if(!drive.follower.isBusy()) {
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    // intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    shooter.periodic();
-                    drive.follower.followPath(GatePath2,gatePathPower,true);
-                    firstshooting = false;
-                    gatetimer.resetTimer();
+                    // turret.isManeulCentering = true;
+                    // turret.centeringDir = false;
+                    //drive.follower.followPath(finishGatherPath1,1,false);
                     setPathState(26);
                 }
                 break;
             case 26:
-                if(gatetimer.getElapsedTimeSeconds()> 0.25&&gatetimer.getElapsedTimeSeconds()< stoptime){
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                }
                 if(!drive.follower.isBusy()){
-                    if (!firstshooting) {
-                        timer.resetTimer();
-                        firstshooting = true;
-                        break;
-                    }
-                    else{
-
-                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
-                            intake.gatepos = false;
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
-                            drive.follower.followPath(GateShoot);
-                            firstshooting = false;
-                            setPathState(27);
-                            //setPathState(23);
-
-                            break;
-                        }
-
-                    }
+                    //  turret.isManeulCentering = false;
+                    // turret.centeringDir = false;
+                    shooter.offset = -25;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    drive.follower.followPath(Shootpath4,1,true);
+                    firstshooting = false;
+                    setPathState(27);
                 }
                 break;
             case 27:
@@ -707,7 +683,7 @@ public class Red_Near_21ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            setPathState(12);
+                            setPathState(29);
                         }
 
                     }
@@ -733,6 +709,7 @@ public class Red_Near_21ball extends OpMode {
 //                }
 //                break;
             case 29:
+                intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
                 Drivetrain.TredFblue = true;
                 if(!drive.follower.isBusy()){
@@ -797,7 +774,7 @@ public class Red_Near_21ball extends OpMode {
         if(shooter.shooterStatus != Shooter.ShooterStatus.Stop){
 
             shooter.ododis = drive.getdis_TWO();
-            turret.aimangle = drive.getturretangle_TWO()+toRadians(turretoff);
+            turret.aimangle = drive.getturretangle()+toRadians(turretoff);
 
             turret.updateAutoShoot(true);
             //turret.tx = limelight.getTx();
@@ -874,7 +851,7 @@ public class Red_Near_21ball extends OpMode {
     public void stop() {
         resetSubsystemsForTeleop();
         Drivetrain.lastPose = drive.follower.getPose();
-        Drivetrain.TredFblue = false;
+        Drivetrain.TredFblue = true;
     }
 
     /**

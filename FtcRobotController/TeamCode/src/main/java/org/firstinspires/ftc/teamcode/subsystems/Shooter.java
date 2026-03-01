@@ -95,6 +95,9 @@ public class Shooter extends SubsystemBase {
     public double vol = 14;
 
     public double offset = 10;
+
+    public boolean sortingMode = false;
+   // public boolean sortedOut = false;
     public enum ShooterStatus {
         
         Stop,Idling,Shooting
@@ -219,6 +222,8 @@ public class Shooter extends SubsystemBase {
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
     private double currentPIDOutput = 0.0;
+
+    public double sortingSpeed = 500;
 
     /**
      * Update PID controller and set motor powers
@@ -398,10 +403,14 @@ public class Shooter extends SubsystemBase {
             }
             double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
             double target = slope*(dis-longdis[index])+longrpm[index]+20;
-            setTargetRPM(target+offset+20);
+                setTargetRPM(target + offset + 20);
+
         }
 
 
+        if(sortingMode){
+            setTargetRPM(sortingSpeed);
+        }
         if(automode&&autoLonger){
             setTargetRPM(Autolong);
         }
@@ -430,6 +439,7 @@ public class Shooter extends SubsystemBase {
     public double getCurrentMotorPower() {
         return currentMotorPower;
     }
+
 
     /**
      * Get current PID output (for graphing/telemetry)
