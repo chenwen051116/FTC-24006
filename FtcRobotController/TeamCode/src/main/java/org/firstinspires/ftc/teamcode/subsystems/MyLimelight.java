@@ -50,6 +50,19 @@ public int getpipeline(){
         limelight.pipelineSwitch(0);
         limelight.start();
     }
+
+    public void initRealPattern(){
+        limelight.pipelineSwitch(2);
+        limelight.start();
+    }
+
+    public int patternnum(){
+       // if (llenable && hasTarget()) {
+        return getAprilTagID()-20;
+//        }
+//        return 0;
+    }
+
     public void initPatternPipeline(){
         limelight.pipelineSwitch(3);
         limelight.start();

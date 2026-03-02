@@ -48,6 +48,7 @@ public class Intake extends SubsystemBase {
     private boolean midHasBallFlag = false;
     private boolean frontHasBallFlag = false;
 
+    public double transferSpeed = 1;
 
 
 
@@ -212,13 +213,16 @@ public class Intake extends SubsystemBase {
                 // position
                 intakeCurrentState = IntakeTransferState.Send_It_Up;
 
+                    intake.setPower(transferSpeed);
+
             }
             else{
                 // if not, then the intake doesn't need to do anything
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
+                intake.setPower(intakeCurrentState.intakePower);
             }
             // update the power to the motors
-            intake.setPower(intakeCurrentState.intakePower);
+
             setServoPos(intakeCurrentState.transServer);
         }
     }

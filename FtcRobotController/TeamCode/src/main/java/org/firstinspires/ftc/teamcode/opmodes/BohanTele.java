@@ -176,6 +176,7 @@ public void togglesafeMode(){
             turret.centeringDir = true;
         }
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+            shooter.isfocused = turret.isfocuedTu();
             intake.updateAutoshoot(true);
             intake.isFarTeleMode = shooter.isAtFar();
 //            if(shooter.reverIntake){
@@ -310,8 +311,8 @@ public void togglesafeMode(){
         telemetry.addData("pidoutput", turret.output);
 ////        telemetry.addData("TransferDis", shooter.getTransDis());
         telemetry.addData("Looptime", drivetrain.looptime);
-        telemetry.addData("FrontBallPresent?", intake.frontHasBall());
-        telemetry.addData("MidBallPresent?", intake.midHasBall());
+        telemetry.addData("shootervel", drivetrain.getdis_TWO());
+        telemetry.addData("turret",drivetrain.getturretangle_TWO());
         telemetry.update();
         drivetrain.period();
     }

@@ -66,6 +66,8 @@ public class Shooter extends SubsystemBase {
 
     public double idleSpeed = 2600;
 
+    public boolean isfocused = false;
+
     //public double AutoStartlong = 3125;
 
     public  double shootLowbar = 200;
@@ -196,7 +198,7 @@ public class Shooter extends SubsystemBase {
 //            shootTimer.resetTimer();
 //            return false;
 //        }
-        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&getFlyWheelRPM()>2400)||(forceShooting&&rpmreached);
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&isfocused&&getFlyWheelRPM()>2400)||(forceShooting&&rpmreached);
 
 //        else{
 //

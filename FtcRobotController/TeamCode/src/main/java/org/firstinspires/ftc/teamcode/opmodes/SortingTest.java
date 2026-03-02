@@ -76,6 +76,7 @@ public class SortingTest extends OpMode {
     }
 
     public boolean sortflag = false;
+    public boolean sortedflag = false;
     public void toggleSortingMode(boolean sort){
         if(sort) {
             shooter.sortingMode = true;
@@ -85,7 +86,7 @@ public class SortingTest extends OpMode {
                 //shooter.sortedOut = !intake.frontHasBall();
             }
 
-            if ((!intake.fronthasballRaw())||shooter.getTransDis()>18||(shooter.rpmreached&&shooter.getFlyWheelRPM()<440)){
+            if ((!intake.frontHasBall())||(!intake.midHasBall())||shooter.getTransDis()>9||(shooter.rpmreached&&shooter.getFlyWheelRPM()<440)){
                 if(sortflag) {
                     //shooter.sortingSpeed = -1000;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
@@ -93,7 +94,13 @@ public class SortingTest extends OpMode {
                 sortflag = true;
             }
             shooter.periodic();
-            intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow_Sorting);
+            if(sortflag&&!intake.fronthasballRaw()&&!sortedflag){
+                sortedflag = true;
+                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);
+            }
+            else {
+                intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow_Sorting);
+            }
             intake.periodic();
         }
         else{
@@ -109,6 +116,7 @@ public class SortingTest extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                sortedflag = false;
                 sortflag = false;
                 firstshooting = false;
 

@@ -65,6 +65,8 @@ public class Turret extends SubsystemBase {
 
     public double llbar = 8;
 
+    public boolean isIndexing = false;
+
     public DigitalChannel magLim;
 
     public boolean isManeulCentering = false;
@@ -130,7 +132,12 @@ public class Turret extends SubsystemBase {
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        turretpidController.setSetPoint((int) -floor(arcangle*arctoDegree) + zerooff);
+        if(isIndexing){
+            turretpidController.setSetPoint(25500);
+        }
+        else {
+            turretpidController.setSetPoint((int) -floor(arcangle * arctoDegree) + zerooff);
+        }
         aimposition = (int) -floor(arcangle*arctoDegree);
         turretpidController.setPIDF(encoderkp,encoderki,encoderkd,encoderkf);
         output = turretpidController.calculate(turretMotor.getCurrentPosition());
@@ -147,6 +154,14 @@ public class Turret extends SubsystemBase {
 //        }
     }
 
+
+    public double posDiff(){
+        return abs(turretMotor.getCurrentPosition()-turretpidController.getSetPoint());
+    }
+
+    public boolean isfocuedTu(){
+        return posDiff()<200;
+    }
     public void focusMode(){
 
 

@@ -409,8 +409,14 @@ public class Red_Far_cycle extends OpMode {
 
 
                             }
-                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()>-59) {
-                                drive.teleDrive(0.35, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()<59) {
+                                if(drive.follower.getPose().getY()<10){
+                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(11-drive.follower.getPose().getY()));
+                                }
+                                else {
+                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                                }
+
                             }
                             else{
                                 drive.teleDrive(0, 0, 0);

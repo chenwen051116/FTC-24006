@@ -53,8 +53,7 @@ public class Red_Near_18ball extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
 
-    private final Pose Park = new Pose(72.8860, 88.0130, -0.7930);;
-
+    private final Pose Park = new Pose(75.3860, 95.5130, -0.7830);
     private boolean firstshooting = false;
 
     public double turretoff = 0;
@@ -205,7 +204,7 @@ public class Red_Near_18ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                shooter.offset = 25;
+                shooter.offset = 10;
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,0.8,true);
@@ -248,7 +247,7 @@ public class Red_Near_18ball extends OpMode {
             case 2:
                 if(!drive.follower.isBusy()) {
                     turretoff = 0;
-                    shooter.offset = -45;
+                    shooter.offset = -25;
                     //  turret.autopos = 0;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -344,7 +343,7 @@ public class Red_Near_18ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime || intake.bothHasBall()){
+                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1.5)){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
@@ -485,7 +484,7 @@ public class Red_Near_18ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
+                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1.5)){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
@@ -572,7 +571,7 @@ public class Red_Near_18ball extends OpMode {
                     }
                     else{
 
-                        if(timer.getElapsedTimeSeconds()> stoptime||intake.bothHasBall()){
+                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1.5)){
                             intake.gatepos = false;
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
