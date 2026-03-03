@@ -118,6 +118,15 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() { // FTC 0.001s cycle
+
+        if(!breakbeam_Mid.getState()){
+            bbmidCount=(bbmidCount*4+1)/5.0;
+        }
+        else{
+            bbmidCount=(bbmidCount*4+0)/5.0;
+        }
+        midHasBallFlag = (bbmidCount>=breakBeamThresh);
+        
         if(!shooterauto || autoforce) {
             servopos = 0.35;
             if(intakeCurrentState == IntakeTransferState.Suck_In){
