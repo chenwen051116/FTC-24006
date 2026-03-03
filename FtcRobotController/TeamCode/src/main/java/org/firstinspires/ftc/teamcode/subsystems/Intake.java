@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
     private final Servo swingBar;
-
+    private final DigitalChannel breakbeam_Mid;
     private final DistanceSensor dis;
     //private final DistanceSensor transferBreakBeam;
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
@@ -27,6 +28,7 @@ public class Intake extends SubsystemBase {
 
     public boolean autoforce = false;
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
+        breakbeam_Mid = hardwareMap.get(DigitalChannel.class,"")
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         swingBar = hardwareMap.get(Servo.class, "swingBar");
