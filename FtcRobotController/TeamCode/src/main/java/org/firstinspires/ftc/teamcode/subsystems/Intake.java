@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
     private final DcMotor intake, transfer;
     private final Servo swingBar;
     private final DigitalChannel breakbeam_Mid;
-    private final DistanceSensor dis;
+    //private final DistanceSensor dis;
     //private final DistanceSensor transferBreakBeam;
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
 
@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         swingBar = hardwareMap.get(Servo.class, "swingBar");
-        dis = hardwareMap.get(DistanceSensor.class,"distance");
+        //dis = hardwareMap.get(DistanceSensor.class,"distance");
        // transferBreakBeam = hardwareMap.get(DistanceSensor.class, "transferBreakBeam");
 
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -56,9 +56,9 @@ public class Intake extends SubsystemBase {
 //        return transferBreakBeam.getDistance(DistanceUnit.MM);
 //    }
 
-    public double disRead(){
-        return dis.getDistance(DistanceUnit.CM);
-    }
+//    public double disRead(){
+//        return dis.getDistance(DistanceUnit.CM);
+//    }
     public void setIntakePower(double power) {
 
         intake.setPower(power);
@@ -136,7 +136,7 @@ public class Intake extends SubsystemBase {
         if(!shooterauto || autoforce) {
             servopos = 0.35;
             if(intakeCurrentState == IntakeTransferState.Suck_In){
-                if(disRead()<14.5){
+                if(midHasBallFlag){
                     intake.setPower(IntakeTransferState.Suck_In.intakePower);
                     transfer.setPower(IntakeTransferState.Suck_In.transferPower);
                 }
