@@ -26,9 +26,13 @@ public class Intake extends SubsystemBase {
 
     public static double servopos = 0;
 
+    public double bbmidCount = 0;
+    public boolean midHasBallFlag = false;
+    public double breakBeamThresh = 0.2;
+
     public boolean autoforce = false;
     public Intake(HardwareMap hardwareMap) {      //Constructor,新建对象时需要
-        breakbeam_Mid = hardwareMap.get(DigitalChannel.class,"")
+        breakbeam_Mid = hardwareMap.get(DigitalChannel.class,"breakbeam");
         intake = hardwareMap.get(DcMotor.class, "intake");
         transfer = hardwareMap.get(DcMotor.class, "transfer");
         swingBar = hardwareMap.get(Servo.class, "swingBar");
@@ -81,7 +85,7 @@ public class Intake extends SubsystemBase {
         if(!shooterauto || autoforce) {
             servopos = 0.35;
             if(intakeCurrentState == IntakeTransferState.Suck_In){
-                if(disRead()<14.5){
+                if(midHasBallFlag){
                     intake.setPower(IntakeTransferState.Suck_In.intakePower);
                     transfer.setPower(IntakeTransferState.Suck_In.transferPower);
                 }
