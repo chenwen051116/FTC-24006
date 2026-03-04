@@ -455,7 +455,7 @@ public class Red_Near_9ballSorted extends OpMode {
 
             case 7:
                 if(!drive.follower.isBusy()) {
-                    shooter.idleSpeed = 500;
+                    shooter.idleSpeed = 400;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
                     turret.isIndexing = true;
@@ -679,7 +679,7 @@ public class Red_Near_9ballSorted extends OpMode {
         if (sort) {
             shooter.sortingMode = true;
             if (!sortflag) {
-                shooter.sortingSpeed = 500;
+                shooter.sortingSpeed = 400;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                 //shooter.sortedOut = !intake.frontHasBall();
             }

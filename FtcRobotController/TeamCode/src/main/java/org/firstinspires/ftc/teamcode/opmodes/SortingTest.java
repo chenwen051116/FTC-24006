@@ -81,7 +81,7 @@ public class SortingTest extends OpMode {
         if(sort) {
             shooter.sortingMode = true;
             if(!sortflag) {
-                shooter.sortingSpeed = 500;
+                shooter.sortingSpeed = 400;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                 //shooter.sortedOut = !intake.frontHasBall();
             }
