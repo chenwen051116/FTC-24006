@@ -146,7 +146,7 @@ public class BohanTele extends CommandOpMode {
         telemetry.addData("Apriltag ID", limelight.getAprilTagID());
         telemetry.addData("Pitch", limelight.getPitch());
         telemetry.addData("Shooterdis", shooter.distance);
-        telemetry.addData("distancesensor",intake.disRead());
+        //telemetry.addData("distancesensor",intake.disRead());
 
 
 //        telemetry.addData("FL Power", drivetrain.getFrontLeftPower());
