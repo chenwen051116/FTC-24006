@@ -479,6 +479,7 @@ public class Red_Near_9ballSorted extends OpMode {
                         if(timer.getElapsedTimeSeconds()> 0.5){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                            firstshooting = false;
                             setPathState(8);
                         }
 
@@ -491,12 +492,18 @@ public class Red_Near_9ballSorted extends OpMode {
             case 8:
                 sortedflag = false;
                 sortflag = false;
-                firstshooting = false;
+                if (!firstshooting) {
+//                        shooter.updateFocused(true);
 
-                if((!intake.fronthasballRaw())){
+                    timer.resetTimer();
+                    firstshooting = true;
+                }
+
+                if((!intake.fronthasballRaw())&&timer.getElapsedTimeSeconds()<1){
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                 }
                 else {
+                    firstshooting = false;
                     setPathState(9);
                 }
                 break;
