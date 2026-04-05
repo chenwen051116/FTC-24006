@@ -14,10 +14,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class Intake extends SubsystemBase {
 
-    private final DcMotor intake;
+    private final DcMotor intake,trans;
     private final Servo transferLeft;
     private final Servo transferRight;
-    private final DigitalChannel breakbeam_Front,breakbeam_Mid;
 
     private double bbfrontCount = 0;
     private double bbmidCount = 0;
@@ -43,10 +42,6 @@ public class Intake extends SubsystemBase {
 
     public boolean isFarTeleMode = false;
 
-    public static double breakBeamThresh = 0.2;
-
-    private boolean midHasBallFlag = false;
-    private boolean frontHasBallFlag = false;
 
     public double transferSpeed = 1;
 
@@ -56,12 +51,9 @@ public class Intake extends SubsystemBase {
     // Constructor for intake motors
     public Intake(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotor.class, "intake");
+        trans = hardwareMap.get(DcMotor.class, "trans");
         transferLeft = hardwareMap.get(Servo.class, "transferL");
         transferRight = hardwareMap.get(Servo.class, "transferR");
-        breakbeam_Front = hardwareMap.get(DigitalChannel.class, "breakbeam_Front");
-        breakbeam_Mid = hardwareMap.get(DigitalChannel.class, "breakbeam_Mid");
-        breakbeam_Front.setMode(DigitalChannel.Mode.INPUT);
-        breakbeam_Mid.setMode(DigitalChannel.Mode.INPUT);
 
         // The intake does not need to necessarily move at steady
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -83,9 +75,10 @@ public class Intake extends SubsystemBase {
             transferRight.setPosition(pos + servoDiff);
         }
     }
-    public void setIntakePower(double power) {
+    public void setIntakeTransPower(double ipower,double tpower) {
 
-        intake.setPower(power);
+        intake.setPower(ipower);
+        trans.setPower(tpower);
 
     }
 
@@ -95,36 +88,23 @@ public class Intake extends SubsystemBase {
 
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
-        Suck_In(1,0.72),
-        Split_Out(-0.8,0.25),
-        Send_It_Up(1,0.25),
-        Intake_Steady(0,0.25),
+        Suck_In(1,1,0.72),
+        Split_Out(-0.8,-1,0.25),
+        Send_It_Up(1,1,0.25),
+        Intake_Steady(0,0,0.25),
 
-        Suck_In_slow(0.5,0.25),
-        Suck_In_slow_Sorting(0.6,0.72),
-        Send_It_Up_Slow(0.67,0.25);
+        Suck_In_slow(0.5,0.5,0.25),
+        Suck_In_slow_Sorting(0.6,0.5,0.72),
+        Send_It_Up_Slow(0.67,0.5,0.25);
         private final double intakePower;
+        private final double transPower;
         private final double transServer;
         // Set update the transfer state
-        IntakeTransferState(double InPower, double serverPos) {
+        IntakeTransferState(double InPower,double TransPower, double serverPos) {
             this.intakePower = InPower;
             this.transServer = serverPos;
+            this.transPower = TransPower;
         }
-    }
-
-    public boolean fronthasballRaw(){
-        return !breakbeam_Front.getState();
-    }
-
-    public boolean frontHasBall(){
-        return frontHasBallFlag;
-    }
-    public boolean midHasBall(){
-        return midHasBallFlag;
-    }
-
-    public boolean bothHasBall(){
-        return (midHasBall()&&frontHasBall());
     }
 
     public void setSwingBarPos(double i){
@@ -136,11 +116,8 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeTransferState intakeTransferState) {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
-            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()&&autoIntakeUp){
-                intakeCurrentState = IntakeTransferState.Send_It_Up;
-            }
             intake.setPower(intakeCurrentState.intakePower);
-
+            trans.setPower(intakeCurrentState.transPower);
             if(!gatepos) {
                 setServoPos(intakeCurrentState.transServer);
             }
@@ -153,16 +130,19 @@ public class Intake extends SubsystemBase {
                 if(isFarTeleMode){
                     intakeCurrentState = IntakeTransferState.Send_It_Up_Slow;
                     intake.setPower(intakeCurrentState.intakePower);
+                    trans.setPower(intakeCurrentState.transPower);
                 }
                 else {
                     intakeCurrentState = IntakeTransferState.Send_It_Up;
                     intake.setPower(intakeCurrentState.intakePower);
+                    trans.setPower(intakeCurrentState.transPower);
                 }
                 setServoPos(intakeCurrentState.transServer);
             }
             else{
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
                 intake.setPower(intakeCurrentState.intakePower);
+                trans.setPower(intakeCurrentState.transPower);
                 setServoPos(intakeCurrentState.transServer);
             }
         }
@@ -180,31 +160,14 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(!breakbeam_Front.getState()){
-            bbfrontCount=(bbfrontCount*4+1)/5.0;
-        }
-        else{
-            bbfrontCount=(bbfrontCount*4+0)/5.0;
-        }
-        frontHasBallFlag = (bbfrontCount>=breakBeamThresh);
-
-        if(!breakbeam_Mid.getState()){
-            bbmidCount=(bbmidCount*4+1)/5.0;
-        }
-        else{
-            bbmidCount=(bbmidCount*4+0)/5.0;
-        }
-        midHasBallFlag = (bbmidCount>=breakBeamThresh);
 
 
         // FTC 0.001s cycle
         if(!shooterAuto || autoForce) {
-            if(intakeCurrentState == IntakeTransferState.Suck_In && midHasBall()&&autoIntakeUp){
-                intakeCurrentState = IntakeTransferState.Send_It_Up;
-            }
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             intake.setPower(intakeCurrentState.intakePower);
+            trans.setPower(intakeCurrentState.transPower);
             setServoPos(intakeCurrentState.transServer);
         }
         else{
@@ -220,6 +183,7 @@ public class Intake extends SubsystemBase {
                 // if not, then the intake doesn't need to do anything
                 intakeCurrentState = IntakeTransferState.Intake_Steady;
                 intake.setPower(intakeCurrentState.intakePower);
+                trans.setPower(intakeCurrentState.transPower);
             }
             // update the power to the motors
 
