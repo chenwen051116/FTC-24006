@@ -18,9 +18,6 @@ public class Intake extends SubsystemBase {
     private final Servo transferLeft;
     private final Servo transferRight;
 
-    private double bbfrontCount = 0;
-    private double bbmidCount = 0;
-
     public boolean autoIntakeUp = false;
 
     public IntakeTransferState intakeCurrentState = IntakeTransferState.Intake_Steady;
@@ -149,6 +146,9 @@ public class Intake extends SubsystemBase {
 
     }
 
+    public boolean bothHasBall(){
+        return true;
+    }
     // Standardization of the two functions
     public void updateAutoshoot(boolean auto){
         shooterAuto = auto;

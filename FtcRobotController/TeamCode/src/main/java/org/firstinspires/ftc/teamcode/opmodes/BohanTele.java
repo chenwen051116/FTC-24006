@@ -165,16 +165,7 @@ public void togglesafeMode(){
         if(gamepad1.dpad_up){
             drivetrain.originInit();
         }
-        if(shooter.shooterStatus == Shooter.ShooterStatus.Stop&&((gamepad1.a&&gamepad1.left_bumper)||(gamepad2.a&&gamepad2.left_bumper))){
-            gamepad1.rumble(200);
-            turret.isManeulCentering = true;
-            turret.centeringDir = false;
-        }
-        if(shooter.shooterStatus == Shooter.ShooterStatus.Stop&&((gamepad1.a&&gamepad1.right_bumper)||(gamepad2.a&&gamepad2.right_bumper))){
-            gamepad1.rumble(200);
-            turret.isManeulCentering = true;
-            turret.centeringDir = true;
-        }
+
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             shooter.isfocused = turret.isfocuedTu();
             intake.updateAutoshoot(true);
@@ -303,7 +294,6 @@ public void togglesafeMode(){
 //////        telemetry.addData("Pitch", limelight.getPitch());
 //        telemetry.addData("Shooterdis", shooter.ododis);
 ////        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
-        telemetry.addData("turretpos", turret.getPos());
         telemetry.addData("turretaimpos", turret.aimposition);
 //////        telemetry.addData("1_Right_Trig", gamepad1.right_trigger);
 //////        telemetry.addData("ShotterForce?", shooter.forceShooting);

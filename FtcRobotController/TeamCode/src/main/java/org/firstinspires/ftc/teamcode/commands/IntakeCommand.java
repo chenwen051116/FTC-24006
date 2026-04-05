@@ -35,6 +35,6 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        intake.setIntakePower(0);
+        intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
     }
 }
