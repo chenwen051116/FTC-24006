@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
     private final VoltageSensor v;
 
-    private final DistanceSensor distanceSensor;
+    //private final DistanceSensor distanceSensor;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
     public static double Kp = 0.35;  // Proportional gain
@@ -115,7 +115,7 @@ public class Shooter extends SubsystemBase {
         v=hardwareMap.get(VoltageSensor.class,"Control Hub");
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
+      //  distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
         shootLimit = hardwareMap.get(Servo.class,"shootLimit");
         shootTimer = new Timer();
         // Initialize PID controller
@@ -184,7 +184,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTransDis(){
-        return distanceSensor.getDistance(DistanceUnit.CM);
+        return 19;
     }
     public double getTargetRPM() {
         return targetRPM;
