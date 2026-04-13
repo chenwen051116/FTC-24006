@@ -8,13 +8,17 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImpl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -26,8 +30,8 @@ public class Turret extends SubsystemBase {
     // battery is not yet installed and configured
     // shooter is not yet installed and configured
 
-    private final Servo turretServoLeft;
-    private final Servo turretServoRight;
+    private final ServoImplEx turretServoLeft;
+    private final ServoImplEx turretServoRight;
 
     public boolean shooterAuto = false;
 
@@ -42,7 +46,7 @@ public class Turret extends SubsystemBase {
 
     public double tolerance = 1;
 
-    public double arctoDegree = 0.15494;
+    public static double arctoDegree = 0.155019;
 
     public double llbar = 8;
 
@@ -70,9 +74,12 @@ public class Turret extends SubsystemBase {
     // Constructor for intake motors
 
     public Turret(HardwareMap hardwareMap, boolean isTele) {
-        turretServoLeft = hardwareMap.get(Servo.class, "turretServoL");
-        turretServoRight = hardwareMap.get(Servo.class, "turretServoR");
 
+
+        turretServoLeft = hardwareMap.get(ServoImplEx.class, "turretServoL");
+        turretServoRight = hardwareMap.get(ServoImplEx.class, "turretServoR");
+        turretServoLeft.setPwmRange(new PwmControl.PwmRange(500,2500));
+        turretServoRight.setPwmRange(new PwmControl.PwmRange(500,2500));
         // We do not have distance sensor thus the following object should be removed
         // in future updates
         // The intake does not need to necessarily move at steady
