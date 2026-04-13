@@ -241,7 +241,7 @@ public class Red_Near_21ball extends OpMode {
                     else if(timer.getElapsedTimeSeconds()<(shoottime+5.5)){
                         shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                     }
-                    if(shooter.getTransDis()>18){
+                    if(intake.hasballCheck(1)){
                         checkcounter -=1;
                     }
                     else{
@@ -304,7 +304,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -358,8 +358,8 @@ public class Red_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1)){
-                            intake.gatepos = false;
+                        if((timer.getElapsedTimeSeconds()> stoptime || (intake.hasballCheck(1)&&intake.hasballCheck(2)&&intake.hasballCheck(3)))&&(timer.getElapsedTimeSeconds()>1)){
+                          
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             drive.follower.followPath(GateShoot);
@@ -395,7 +395,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -449,7 +449,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -499,8 +499,8 @@ public class Red_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1)){
-                            intake.gatepos = false;
+                        if((timer.getElapsedTimeSeconds()> stoptime || (intake.hasballCheck(1)&&intake.hasballCheck(2)&&intake.hasballCheck(3)))&&(timer.getElapsedTimeSeconds()>1)){
+                          
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             drive.follower.followPath(GateShoot);
@@ -535,7 +535,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -586,8 +586,8 @@ public class Red_Near_21ball extends OpMode {
                     }
                     else{
 
-                        if((timer.getElapsedTimeSeconds()> stoptime || (shooter.getTransDis()<18||intake.bothHasBall()))&&(timer.getElapsedTimeSeconds()>1)){
-                            intake.gatepos = false;
+                        if((timer.getElapsedTimeSeconds()> stoptime || (intake.hasballCheck(1)&&intake.hasballCheck(2)&&intake.hasballCheck(3)))&&(timer.getElapsedTimeSeconds()>1)){
+                          
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             drive.follower.followPath(GateShoot);
@@ -622,7 +622,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -687,7 +687,7 @@ public class Red_Near_21ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{

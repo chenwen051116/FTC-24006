@@ -234,7 +234,7 @@ public class Blue_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -290,7 +290,7 @@ public class Blue_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -347,7 +347,7 @@ public class Blue_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{
@@ -455,7 +455,7 @@ public class Blue_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(shooter.getTransDis()>18){
+                        if(intake.hasballCheck(1)){
                             checkcounter -=1;
                         }
                         else{

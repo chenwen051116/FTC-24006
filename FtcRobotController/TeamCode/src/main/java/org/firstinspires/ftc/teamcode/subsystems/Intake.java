@@ -35,14 +35,17 @@ public class Intake extends SubsystemBase {
 
     public double testmode = 0;
 
-    public boolean gatepos = false;
+
 
     public boolean isFarTeleMode = false;
 
 
     public double transferSpeed = 1;
+    public double hasball1sum,hasball2sum,hasball3sum = 0;
 
 
+
+    private DigitalChannel breakbeam1,breakbeam2,breakbeam3;
 
 
     // Constructor for intake motors
@@ -52,15 +55,73 @@ public class Intake extends SubsystemBase {
         transferLeft = hardwareMap.get(Servo.class, "transferL");
         transferRight = hardwareMap.get(Servo.class, "transferR");
 
+        breakbeam1 = hardwareMap.get(DigitalChannel.class, "breakbeam1");
+        breakbeam1.setMode(DigitalChannel.Mode.INPUT);
+        breakbeam2 = hardwareMap.get(DigitalChannel.class, "breakbeam2");
+        breakbeam2.setMode(DigitalChannel.Mode.INPUT);
+        breakbeam3 = hardwareMap.get(DigitalChannel.class, "breakbeam3");
+        breakbeam3.setMode(DigitalChannel.Mode.INPUT);
+
         // The intake does not need to necessarily move at steady
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         //transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        trans.setDirection(DcMotorSimple.Direction.REVERSE);
         //setServoPos(servoTestpos);
     }
 
+    public boolean hasballCheck(int num){
+        if(num == 1){
+            return hasball1sum>0.15;
+        }
+        else if (num == 2){
+            return hasball2sum>0.15;
+        }
+        else{
+            return hasball3sum>0.15;
+        }
+    }
+
+    public void updatehasballCondi(){
+        if(!breakbeam1.getState()){
+            hasball1sum= (hasball1sum*4+1)/5;
+            if(hasball1sum<0.09){
+                hasball1sum = 0;
+            }
+        }
+        else{
+            hasball1sum= (hasball1sum*4)/5;
+            if(hasball1sum<0.09){
+                hasball1sum = 0;
+            }
+        }
+        if(!breakbeam2.getState()){
+            hasball2sum= (hasball2sum*4+1)/5;
+            if(hasball2sum<0.09){
+                hasball2sum = 0;
+            }
+        }
+        else{
+            hasball2sum= (hasball2sum*4)/5;
+            if(hasball2sum<0.09){
+                hasball2sum = 0;
+            }
+        }
+        if(!breakbeam3.getState()){
+            hasball3sum= (hasball3sum*4+1)/5;
+            if(hasball3sum<0.09){
+                hasball3sum = 0;
+            }
+        }
+        else{
+            hasball3sum= (hasball3sum*4)/5;
+            if(hasball3sum<0.09){
+                hasball3sum = 0;
+            }
+        }
+    }
 
     public void setServoPos(double pos){
         if(testmode>1){
@@ -91,8 +152,7 @@ public class Intake extends SubsystemBase {
         Intake_Steady(0,0,0.25),
 
         Suck_In_slow(0.5,0.5,0.25),
-        Suck_In_slow_Sorting(0.6,0.5,0.72),
-        Send_It_Up_Slow(0.67,0.5,0.25);
+        Send_It_Up_Slow(1,1,0.25);
         private final double intakePower;
         private final double transPower;
         private final double transServer;
@@ -114,13 +174,20 @@ public class Intake extends SubsystemBase {
         intakeCurrentState = intakeTransferState;
         if(!shooterAuto || autoForce) {
             intake.setPower(intakeCurrentState.intakePower);
-            trans.setPower(intakeCurrentState.transPower);
-            if(!gatepos) {
-                setServoPos(intakeCurrentState.transServer);
+            if((intakeCurrentState == IntakeTransferState.Suck_In||intakeCurrentState==IntakeTransferState.Suck_In_slow)&&hasballCheck(1)&&hasballCheck(2)) {
+                trans.setPower(IntakeTransferState.Intake_Steady.transPower);
             }
             else{
-                setServoPos(intakeCurrentState.transServer+0.2);
+                trans.setPower(intakeCurrentState.transPower);
             }
+            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
+            {
+                setServoPos(IntakeTransferState.Intake_Steady.transServer);
+            }
+            else {
+                setServoPos(intakeCurrentState.transServer);
+            }
+
         }
         else{
             if(autoTrans){
@@ -160,15 +227,26 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        updatehasballCondi();
 
         // FTC 0.001s cycle
         if(!shooterAuto || autoForce) {
             // at shooterAuto or autoForce, the power of the DC motors are set separately
             // thus you will need to make sure that the robot is not in these two states
             intake.setPower(intakeCurrentState.intakePower);
-            trans.setPower(intakeCurrentState.transPower);
-            setServoPos(intakeCurrentState.transServer);
+            if((intakeCurrentState == IntakeTransferState.Suck_In||intakeCurrentState==IntakeTransferState.Suck_In_slow)&&hasballCheck(1)&&hasballCheck(2)) {
+                trans.setPower(IntakeTransferState.Intake_Steady.transPower);
+            }
+            else{
+                trans.setPower(intakeCurrentState.transPower);
+            }
+            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
+                {
+                    setServoPos(IntakeTransferState.Intake_Steady.transServer);
+                }
+            else {
+                setServoPos(intakeCurrentState.transServer);
+            }
         }
         else{
             if(autoTrans){
@@ -200,7 +278,5 @@ public class Intake extends SubsystemBase {
         autoForce = false;
         intakeCurrentState = IntakeTransferState.Intake_Steady;
         intake.setPower(0);
-        //setServoPos(intakeCurrentState.transServer);
-        gatepos = false;
     }
 }

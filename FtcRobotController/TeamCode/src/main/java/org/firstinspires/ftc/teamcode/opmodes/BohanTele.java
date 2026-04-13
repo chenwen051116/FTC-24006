@@ -271,6 +271,9 @@ public void togglesafeMode(){
             y2justpressed = false;
         }
 
+        if(gamepad1.left_stick_button&& gamepad1.right_stick_button){
+            drivetrain.tilt();
+        }
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
 //        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
 //          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
@@ -299,7 +302,13 @@ public void togglesafeMode(){
 //////        telemetry.addData("ShotterForce?", shooter.forceShooting);
 //       telemetry.addData("accel", drivetrain.angularVelnum);
         telemetry.addData("pidoutput", turret.output);
-////        telemetry.addData("TransferDis", shooter.getTransDis());
+       telemetry.addData("trans1ball", intake.hasballCheck(1));
+        telemetry.addData("trans2ball", intake.hasballCheck(2));
+        telemetry.addData("trans3ball", intake.hasballCheck(3));
+
+        telemetry.addData("trans1ballraw", intake.hasball1sum);
+        telemetry.addData("trans2ballraw", intake.hasball2sum);
+        telemetry.addData("trans3ballrawr", intake.hasball3sum);
         telemetry.addData("Looptime", drivetrain.looptime);
         telemetry.addData("shootervel", drivetrain.getdis_TWO());
         telemetry.addData("turret",drivetrain.getturretangle_TWO());

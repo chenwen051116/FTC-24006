@@ -183,9 +183,6 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public double getTransDis(){
-        return 19;
-    }
     public double getTargetRPM() {
         return targetRPM;
     }

@@ -42,7 +42,7 @@ public class Turret extends SubsystemBase {
 
     public double tolerance = 1;
 
-    public double arctoDegree = 0.1592356687898089;
+    public double arctoDegree = 0.15494;
 
     public double llbar = 8;
 
@@ -101,7 +101,7 @@ public class Turret extends SubsystemBase {
         if(isIndexing){
 
         }
-        aimposition = (int) -floor(arcangle*arctoDegree);
+        aimposition = -arcangle*arctoDegree;
         turretServoLeft.setPosition(0.5+ServoLoff+aimposition);
         turretServoRight.setPosition(0.5+aimposition);
         //turretMotor.setTargetPosition((int) floor(arcangle*arctoDegree));

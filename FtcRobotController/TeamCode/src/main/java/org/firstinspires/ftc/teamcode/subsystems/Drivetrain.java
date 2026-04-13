@@ -19,12 +19,12 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Config
@@ -35,6 +35,7 @@ public class Drivetrain extends SubsystemBase {
 
 
     private MecanumDrive drive;
+    private final Servo tiltleft,tiltright;
 
     public Follower follower;
 
@@ -50,6 +51,7 @@ public class Drivetrain extends SubsystemBase {
     public static double turretAccelkP = 0.07;
 
     public static double angle = 0;
+
 
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
@@ -86,6 +88,8 @@ public class Drivetrain extends SubsystemBase {
     public double turretcenterdis = 1.2027;
     public double angularVelnum = 0;
 
+    public static double tiltvalue = 0.2;
+
     public boolean safeMode = false;
 
     //servos
@@ -101,7 +105,8 @@ public class Drivetrain extends SubsystemBase {
 //        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeft");
 //        backRightMotor = hardwareMap.get(DcMotor.class, "backRight");
        // drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
-
+        tiltleft = hardwareMap.get(Servo.class,"tiltleft");
+        tiltright = hardwareMap.get(Servo.class,"tiltright");
         follower = Constants.createFollower(hardwareMap);
         PanelsConfigurables.INSTANCE.refreshClass(this);
         follower.startTeleopDrive();
@@ -152,6 +157,11 @@ public class Drivetrain extends SubsystemBase {
         follower.update();
         // undo the sign changes we baked into x, rx
         follower.setTeleOpDrive(yScaled, -xScaled, -rxScaled, true);
+    }
+
+    public void tilt(){
+        tiltleft.setPosition(tiltvalue);
+        tiltright.setPosition(tiltvalue);
     }
 
 
