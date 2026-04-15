@@ -297,7 +297,7 @@ public class Shooter extends SubsystemBase {
 
             // Apply power to both motors
             shooterLeft.setPower(power);
-            shooterRight.setPower(-power);
+            shooterRight.setPower(power);
         } else {
             // Stop motors if no target set
             currentMotorPower = 0.0;
@@ -416,7 +416,7 @@ public class Shooter extends SubsystemBase {
         else if(automode&&!autoLonger){
             setTargetRPM(Autoshort);
         }
-        //setTargetRPM(aimRPM);
+        setTargetRPM(aimRPM);
     }
 
 
