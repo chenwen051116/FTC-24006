@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 public class Shooter extends SubsystemBase {
-    private final Servo shootLimit;
+    private final Servo shootLimit,hood;
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
@@ -98,6 +98,8 @@ public class Shooter extends SubsystemBase {
 
     public double offset = 10;
 
+    public static double hoodpos = 0.2;//-0.61
+
     public boolean sortingMode = false;
    // public boolean sortedOut = false;
     public enum ShooterStatus {
@@ -117,6 +119,7 @@ public class Shooter extends SubsystemBase {
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
       //  distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
         shootLimit = hardwareMap.get(Servo.class,"shootLimit");
+        hood = hardwareMap.get(Servo.class,"hood");
         shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
@@ -212,11 +215,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(0.95);
+        shootLimit.setPosition(0.915);
     }
 
     public void shootbarOff(){
-        shootLimit.setPosition(0.725);
+        shootLimit.setPosition(0.99);
     }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
@@ -379,43 +382,43 @@ public class Shooter extends SubsystemBase {
     };
 
     public void updateAim() {
-        double dis = abs(ododis);
-        if (dis <120){
-            int index = (int)floor((dis-53)/5.0);
-            if(index<0){
-                index = 0;
-            }
-            if(index >10){
-                index = 10;
-            }
-            double slope = (shortrpm[index+1]-shortrpm[index])/(shortdis[index+1]-shortdis[index]);
-            double target = slope*(dis-shortdis[index])+shortrpm[index];
-            setTargetRPM(target+offset);
-        }
-        else {
-            int index = (int)floor((dis-123)/5.0);
-            if(index<0){
-                index = 0;
-            }
-            if(index >6){
-                index = 6;
-            }
-            double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
-            double target = slope*(dis-longdis[index])+longrpm[index]+20;
-                setTargetRPM(target + offset + 20);
-
-        }
-
-
-        if(sortingMode){
-            setTargetRPM(sortingSpeed);
-        }
-        if(automode&&autoLonger){
-            setTargetRPM(Autolong);
-        }
-        else if(automode&&!autoLonger){
-            setTargetRPM(Autoshort);
-        }
+//        double dis = abs(ododis);
+//        if (dis <120){
+//            int index = (int)floor((dis-53)/5.0);
+//            if(index<0){
+//                index = 0;
+//            }
+//            if(index >10){
+//                index = 10;
+//            }
+//            double slope = (shortrpm[index+1]-shortrpm[index])/(shortdis[index+1]-shortdis[index]);
+//            double target = slope*(dis-shortdis[index])+shortrpm[index];
+//            setTargetRPM(target+offset);
+//        }
+//        else {
+//            int index = (int)floor((dis-123)/5.0);
+//            if(index<0){
+//                index = 0;
+//            }
+//            if(index >6){
+//                index = 6;
+//            }
+//            double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
+//            double target = slope*(dis-longdis[index])+longrpm[index]+20;
+//                setTargetRPM(target + offset + 20);
+//
+//        }
+//
+//
+//        if(sortingMode){
+//            setTargetRPM(sortingSpeed);
+//        }
+//        if(automode&&autoLonger){
+//            setTargetRPM(Autolong);
+//        }
+//        else if(automode&&!autoLonger){
+//            setTargetRPM(Autoshort);
+//        }
         setTargetRPM(aimRPM);
     }
 
@@ -448,6 +451,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
+        hood.setPosition(hoodpos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){

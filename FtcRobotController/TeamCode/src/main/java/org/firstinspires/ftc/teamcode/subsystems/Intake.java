@@ -180,13 +180,13 @@ public class Intake extends SubsystemBase {
             else{
                 trans.setPower(intakeCurrentState.transPower);
             }
-            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
-            {
-                setServoPos(IntakeTransferState.Intake_Steady.transServer);
-            }
-            else {
+//            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
+//            {
+//                setServoPos(IntakeTransferState.Intake_Steady.transServer);
+//            }
+//            else {
                 setServoPos(intakeCurrentState.transServer);
-            }
+//            }
 
         }
         else{
@@ -240,13 +240,13 @@ public class Intake extends SubsystemBase {
             else{
                 trans.setPower(intakeCurrentState.transPower);
             }
-            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
-                {
-                    setServoPos(IntakeTransferState.Intake_Steady.transServer);
-                }
-            else {
+//            if((intakeCurrentState == IntakeTransferState.Suck_In)&&hasballCheck(1)&&hasballCheck(2)&&hasballCheck(3))
+//                {
+//                    setServoPos(IntakeTransferState.Intake_Steady.transServer);
+//                }
+//            else {
                 setServoPos(intakeCurrentState.transServer);
-            }
+//            }
         }
         else{
             if(autoTrans){

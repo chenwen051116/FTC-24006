@@ -316,7 +316,7 @@ public double getaccel(){
 
         ifMovingShooting = false;
         if(safeMode){
-            return 3.1;
+            return 0.1;
         }
 //        double x = follower.getPose().getX()-aimPos.getX();
 //        double y = follower.getPose().getY()-aimPos.getY();
@@ -383,7 +383,7 @@ public double getaccel(){
 //        );
 
         if(safeMode){
-            return 3.1;
+            return 0;
         }
         double heading  = follower.getHeading();
         double realx = follower.getPose().getX();

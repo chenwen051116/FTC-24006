@@ -274,10 +274,10 @@ public void togglesafeMode(){
         if(gamepad1.left_stick_button&& gamepad1.right_stick_button){
             drivetrain.tilt();
         }
-//        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
-//        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-//          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
-//        telemetry.addData("dis", drivetrain.getdis());
+        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
+        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
+          telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
+        telemetry.addData("dis", drivetrain.getdis());
 //        telemetry.addData("maglim", turret.magLim.getState());
 ////        telemetry.addData("Omega", drivetrain.angularVel());
 ////        telemetry.addData("speed over all",drivetrain.getallspeed());
