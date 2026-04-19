@@ -48,17 +48,17 @@ public class Drivetrain extends SubsystemBase {
 
     //public static double lookAheadTimeShooter = 0.2;
 
-    public static double turretAccelkP = 0.07;
+    public static double turretAccelkP = 0.03;
 
     public static double angle = 0;
 
 
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
-    public static double AccelInfluenceFactor = 3;
+    public static double AccelInfluenceFactor = 6;
 
-    public static double bluexOffset = -1.5 ;
-    public static double blueyOffset = -0;
+    public static double bluexOffset = -0 ;
+    public static double blueyOffset = 0;
 
 
     public Pose bluenearAimPos = new Pose(xstaticpos,ystaticpos,angle);
@@ -67,8 +67,8 @@ public class Drivetrain extends SubsystemBase {
     public Pose rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
     public Pose aimPos = bluenearAimPos;
 
-    public Pose blueInitpose = new Pose(2.3469,-1.9401,3.141);
-    public Pose redInitpose = new Pose(2.1257,1.2774,-3.141);
+    public Pose blueInitpose = new Pose(0.14,-0.036,3.141);
+    public Pose redInitpose = new Pose(0.14,0.036,-3.141);
 
     public static boolean TredFblue = false;
 
@@ -76,7 +76,7 @@ public class Drivetrain extends SubsystemBase {
 
     public double lastheading = 0;
 
-    public static double kPTurret = -0.7;
+    public static double kPTurret = -0.6;
 
     public static double kPShooter= -0.3;
     public static double kPturretAngular = 0;
@@ -85,7 +85,7 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedy= 0.2;
     public static double testspeedrx = 0.2;
 
-    public double turretcenterdis = 1.2027;
+    public double turretcenterdis = 1.496;
     public double angularVelnum = 0;
 
     public static double tiltvalue = 0.2;

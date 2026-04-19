@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
     public  double Autoshort = 2580;
     public  double Autolong = 3110;
 
-    public double idleSpeed = 2600;
+    public double idleSpeed = 3500;
 
     public boolean isfocused = false;
 
@@ -97,6 +97,8 @@ public class Shooter extends SubsystemBase {
     public double vol = 14;
 
     public double offset = 10;
+
+    public double transFactor = 1;
 
     public static double hoodpos = 0.2;//-0.61
 
@@ -333,68 +335,187 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Shooting;
     }
 
-    public double[] shortdis = {53.3992
-            ,58.0312
-            ,63.6934
-            ,68.3024
-            ,73.3103
-            ,78.3967
-            ,83.3191
-            ,88.4699
-            ,93.2528
-            ,98.4668
-            ,103.132
-            ,108.2516};
+//    public double[] shortdis = {40
+//            ,
+//            ,63.6934
+//            ,68.3024
+//            ,73.3103
+//            ,78.3967
+//            ,83.3191
+//            ,88.4699
+//            ,93.2528
+//            ,98.4668
+//            ,103.132
+//            ,108.2516};
 
     public int[] shortrpm = {
-        2670,
-        2640,
-        2610,
-        2550,
-        2570,
-        2590,
-        2610,
-        2590,
-        2600,
-        2630,
-        2695,
-        2780
-    };
-
-    public double[] longdis = {123.6751,
-            128.7674,
-            133.5043,
-            138.4454,
-            143.3385,
-            148.7577,
-            153.3198,
-            158.6143};
-
-    public int[] longrpm = {
-            3060,
-            3085,
+            2800,
+            3000,
+            3000,
+            3000,
+            3000,
             3100,
-            3140,
-            3200,
-            3270,
-            3375,
-            3430
+            3250,
+            3350,
+            3450,
+            3550,
+            3650,
+            3750,
+            3850,
+            3900,
+            4000,
+            4200,
+            4300,
+            4400,
+            4500,
+            4600,
+            4650,
+            4650,
+            4900,
+            4950
+
+
     };
+
+    public double[] shorthood = {
+            0.2,
+            0.2,
+            0.25,
+            0.35,
+            0.4,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.5,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+
+
+
+    };
+
+    public double[] shorttrans = {
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0.8,
+            0.8,
+            0.8,
+            0.8,
+            0.7,
+            0.7,
+            0.7,
+            0.7,
+            0.7,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+
+
+    };
+
+    public double calculateRPM(){
+        double dis = abs(ododis);
+        double hoodpos = 0.2;
+
+
+        if (dis <155&&dis>40) {
+            int index = (int) floor((dis - 40) / 5.0);
+            if (index < 0) {
+                index = 0;
+            }
+            if (index > 10) {
+                index = 10;
+            }
+            double slope = (shortrpm[index + 1] - shortrpm[index]) / 5.0;
+            double target = slope * (dis - index * 5 -40) + shortrpm[index];
+
+
+            double slopehood = (shorthood[index + 1] - shorthood[index]) / 5.0;
+            hoodpos = slopehood * (dis - index * 5 - 40) + shorthood[index];
+            if (hoodpos < 0.2) {
+                hoodpos = 0.2;
+            } else if (hoodpos > 0.6) {
+                hoodpos = 0.6;
+            }
+            hood.setPosition(hoodpos);
+
+            //  double slopetrans = (shorttrans[index + 1] - shorttrans[index]) / 5.0;
+            transFactor = shorttrans[index];
+            if(target+offset<=idleSpeed) {
+                return (target + offset);
+            }
+            else{
+                    return idleSpeed;
+            }
+
+        }
+        else{
+            hood.setPosition(0.4);
+            transFactor = 1;
+            return idleSpeed;
+        }
+
+    }
 
     public void updateAim() {
-//        double dis = abs(ododis);
-//        if (dis <120){
-//            int index = (int)floor((dis-53)/5.0);
-//            if(index<0){
-//                index = 0;
-//            }
-//            if(index >10){
-//                index = 10;
-//            }
-//            double slope = (shortrpm[index+1]-shortrpm[index])/(shortdis[index+1]-shortdis[index]);
-//            double target = slope*(dis-shortdis[index])+shortrpm[index];
-//            setTargetRPM(target+offset);
-//        }
+        double dis = abs(ododis);
+        double hoodpos = 0.2;
+
+
+        if (dis <155&&dis>40) {
+            int index = (int) floor((dis - 40) / 5.0);
+            if (index < 0) {
+                index = 0;
+            }
+            if (index > 10) {
+                index = 10;
+            }
+            double slope = (shortrpm[index + 1] - shortrpm[index]) / 5.0;
+            double target = slope * (dis - index * 5 -40) + shortrpm[index];
+            setTargetRPM(target + offset);
+
+            double slopehood = (shorthood[index + 1] - shorthood[index]) / 5.0;
+            hoodpos = slopehood * (dis - index * 5 - 40) + shorthood[index];
+            if (hoodpos < 0.2) {
+                hoodpos = 0.2;
+            } else if (hoodpos > 0.6) {
+                hoodpos = 0.6;
+            }
+            hood.setPosition(hoodpos);
+
+          //  double slopetrans = (shorttrans[index + 1] - shorttrans[index]) / 5.0;
+            transFactor = shorttrans[index];
+        }
+        else{
+            hood.setPosition(0.4);
+            transFactor = 1;
+            setTargetRPM(idleSpeed);
+        }
+
+      //  }
 //        else {
 //            int index = (int)floor((dis-123)/5.0);
 //            if(index<0){
@@ -408,8 +529,8 @@ public class Shooter extends SubsystemBase {
 //                setTargetRPM(target + offset + 20);
 //
 //        }
-//
-//
+
+
 //        if(sortingMode){
 //            setTargetRPM(sortingSpeed);
 //        }
@@ -419,7 +540,7 @@ public class Shooter extends SubsystemBase {
 //        else if(automode&&!autoLonger){
 //            setTargetRPM(Autoshort);
 //        }
-        setTargetRPM(aimRPM);
+      //  setTargetRPM(aimRPM);
     }
 
 
@@ -451,12 +572,16 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-        hood.setPosition(hoodpos);
+        //hood.setPosition(hoodpos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
             updateAim();
+            if(abs(targetRPM-getFlyWheelRPM())<500) {
                 shootbarOff();
+            }
+
+
         }
         else if(shooterStatus == ShooterStatus.Stop){
             rpmreached = false;
@@ -465,7 +590,8 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(idleSpeed);
+//            if()
+            setTargetRPM(calculateRPM());
             shootbarOn();
         }
     }

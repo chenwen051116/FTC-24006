@@ -147,10 +147,10 @@ public void togglesafeMode(){
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
 
         if(gamepad2.left_trigger>0.5){
-            shooter.idleSpeed = 2600;
+            shooter.idleSpeed = 3500;
         }
         if(gamepad2.right_trigger>0.5){
-            shooter.idleSpeed = 3200;
+            shooter.idleSpeed = 4200;
         }
 
         if(MovingshootingMode){
@@ -167,9 +167,10 @@ public void togglesafeMode(){
         }
 
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
+            intake.FarTeleTransFactor = shooter.transFactor;
             shooter.isfocused = turret.isfocuedTu();
             intake.updateAutoshoot(true);
-            intake.isFarTeleMode = shooter.isAtFar();
+           // intake.isFarTeleMode = shooter.isAtFar();
 //            if(shooter.reverIntake){
 //                intake.updateAutoshoot(false);
 //                intake.setIntakeState(Intake.IntakeTransferState.Split_Out);

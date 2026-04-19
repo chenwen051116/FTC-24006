@@ -37,8 +37,8 @@ public class Intake extends SubsystemBase {
 
 
 
-    public boolean isFarTeleMode = false;
-
+    public static boolean isFarTeleMode = true;
+public  double FarTeleTransFactor = 1;
 
     public double transferSpeed = 1;
     public double hasball1sum,hasball2sum,hasball3sum = 0;
@@ -152,7 +152,7 @@ public class Intake extends SubsystemBase {
         Intake_Steady(0,0,0.25),
 
         Suck_In_slow(0.5,0.5,0.25),
-        Send_It_Up_Slow(1,1,0.25);
+        Send_It_Up_Slow(1,0.9,0.25);
         private final double intakePower;
         private final double transPower;
         private final double transServer;
@@ -194,7 +194,7 @@ public class Intake extends SubsystemBase {
                 if(isFarTeleMode){
                     intakeCurrentState = IntakeTransferState.Send_It_Up_Slow;
                     intake.setPower(intakeCurrentState.intakePower);
-                    trans.setPower(intakeCurrentState.transPower);
+                    trans.setPower(intakeCurrentState.transPower*FarTeleTransFactor);
                 }
                 else {
                     intakeCurrentState = IntakeTransferState.Send_It_Up;
@@ -252,7 +252,16 @@ public class Intake extends SubsystemBase {
             if(autoTrans){
                 // autoTrans is the state of sending the ball from intake position to shooting
                 // position
-                intakeCurrentState = IntakeTransferState.Send_It_Up;
+                if(isFarTeleMode){
+                    intakeCurrentState = IntakeTransferState.Send_It_Up_Slow;
+                    intake.setPower(intakeCurrentState.intakePower);
+                    trans.setPower(intakeCurrentState.transPower*FarTeleTransFactor);
+                }
+                else {
+                    intakeCurrentState = IntakeTransferState.Send_It_Up;
+                    intake.setPower(intakeCurrentState.intakePower);
+                    trans.setPower(intakeCurrentState.transPower);
+                }
 
                     intake.setPower(transferSpeed);
 
