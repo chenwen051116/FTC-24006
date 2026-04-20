@@ -17,19 +17,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class    Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.524)
-            .forwardZeroPowerAcceleration(-31.203684649136637)
-            .lateralZeroPowerAcceleration(-76.08349200453131)
+            .forwardZeroPowerAcceleration(-31.625551524555735)
+            .lateralZeroPowerAcceleration(-68.44638080378525)
             .useSecondaryTranslationalPIDF(true)
             .useSecondaryHeadingPIDF(true)
             .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.00023)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.025, 0.15))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.3, 0.001, 0.002, 0.1))
+            .centripetalScaling(0.0008)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.04, 0, 0.0, 0.1))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.45, 0.00, 0.001, 0.07))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0009, 0.6, 0.001))
             .secondaryTranslationalPIDFCoefficients(
-                    new PIDFCoefficients(0.05, 0.0001, 0, 0.02)
+                    new PIDFCoefficients(0.09, 0.0001, 0.01, 0.01)
             )
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.7, 0.006, 0.05, 0.02))
+            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.9, 0.01, 0.1, 0.025))
             .secondaryDrivePIDFCoefficients(
                     new FilteredPIDFCoefficients(0.0005, 0.0001, 0.0009, 0.6, 0.0)
             );
@@ -45,9 +45,9 @@ public class    Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(81.48237237404652)
-            .yVelocity(63.01307209645669)
-            .nominalVoltage(13.3)
+            .xVelocity(89.08904020054135)
+            .yVelocity(68.94086798720473)
+            .nominalVoltage(13.5)
             .useVoltageCompensation(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
