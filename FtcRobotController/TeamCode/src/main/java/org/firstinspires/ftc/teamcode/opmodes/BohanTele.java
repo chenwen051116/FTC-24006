@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -40,6 +41,7 @@ import java.util.List;
 public class BohanTele extends CommandOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
+    private List<LynxModule> allHubs;
     private Shooter shooter;
     private MyLimelight limelight;
     private Turret turret;
@@ -64,7 +66,10 @@ public class BohanTele extends CommandOpMode {
         //Settings Stuff....Make sure to create a "xxx = new...." before using it to avoid nullPointerObject error
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().reset(); // drop any stale commands from previous opmode
-
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
         GamepadEx gamepadEx1 = new GamepadEx(gamepad1);
         GamepadEx gamepadEx2 = new GamepadEx(gamepad2);
         //Subsystems
@@ -147,10 +152,10 @@ public void togglesafeMode(){
         limelight.llheading  = drivetrain.follower.getHeading()/3.14*180;
 
         if(gamepad2.left_trigger>0.5){
-            shooter.idleSpeed = 3500;
+            shooter.idleSpeed = 2500;
         }
         if(gamepad2.right_trigger>0.5){
-            shooter.idleSpeed = 4200;
+            shooter.idleSpeed = 3000;
         }
 
         if(MovingshootingMode){
@@ -207,7 +212,7 @@ public void togglesafeMode(){
             turret.updateAutoShoot(false);
         }
         shooter.forceShooting = (gamepad1.right_trigger > 0.3 && shooter.shooterStatus == Shooter.ShooterStatus.Shooting);
-        if(gamepad1.x){
+        if(gamepad1.x||gamepad1.left_bumper){
             if(!xholding){
                 xjustpressed = true;
                 xholding = true;
@@ -315,6 +320,10 @@ public void togglesafeMode(){
         telemetry.addData("turret",drivetrain.getturretangle_TWO());
         telemetry.update();
         drivetrain.period();
+
+        for (LynxModule hub : allHubs) {
+            hub.clearBulkCache();
+        }
     }
 }
 

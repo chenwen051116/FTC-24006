@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
     //private final DistanceSensor distanceSensor;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.35;  // Proportional gain
+    public static double Kp = 0.34;  // Proportional gain
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
     public  double Autoshort = 2580;
     public  double Autolong = 3110;
 
-    public double idleSpeed = 3500;
+    public double idleSpeed = 2500;
 
     public boolean isfocused = false;
 
@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
 
     public double offset = 10;
 
-    public double transFactor = 1;
+    public static double transFactor = 1;
 
     public static double hoodpos = 0.2;//-0.61
 
@@ -148,7 +148,7 @@ public class Shooter extends SubsystemBase {
 
         autoLonger = true;
         vol = v.getVoltage();
-        kv = 0.00020-0.0000086666667*(vol-12.7);
+        kv = 0.00023-0.0000086666667*(vol-12.7);
 
     }
 
@@ -192,7 +192,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM!=2600&&targetRPM>2500){
+        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM!=2000&&targetRPM>1800){
             rpmreached = true;
         }
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
@@ -200,7 +200,7 @@ public class Shooter extends SubsystemBase {
 //            shootTimer.resetTimer();
 //            return false;
 //        }
-        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&isfocused&&getFlyWheelRPM()>2400)||(forceShooting&&rpmreached);
+        return ((getTargetRPM() < getFlyWheelRPM() + RPMThresh && getTargetRPM() > getFlyWheelRPM()-RPMThresh)&&isfocused&&getFlyWheelRPM()>1800)||(forceShooting&&rpmreached);
 
 //        else{
 //
@@ -349,30 +349,30 @@ public class Shooter extends SubsystemBase {
 //            ,108.2516};
 
     public int[] shortrpm = {
-            2800,
-            3000,
-            3000,
-            3000,
-            3000,
+            2000,
+            2000,
+            2000,
+            2100,
+            2200,
+            2300,
+            2400,
+            2400,
+            2400,
+            2500,
+            2500,
+            2600,
+            2650,
+            2750,
+            2750,
+            2850,
+            2950,
+            3050,
+            3050,
             3100,
-            3250,
-            3350,
-            3450,
-            3550,
-            3650,
-            3750,
-            3850,
-            3900,
-            4000,
-            4200,
-            4300,
-            4400,
-            4500,
-            4600,
-            4650,
-            4650,
-            4900,
-            4950
+            3150,
+            3150,
+            3200,
+            3250
 
 
     };
@@ -380,19 +380,19 @@ public class Shooter extends SubsystemBase {
     public double[] shorthood = {
             0.2,
             0.2,
-            0.25,
-            0.35,
+            0.2,
+            0.2,
+            0.3,
             0.4,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
-            0.45,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
             0.5,
             0.6,
             0.6,
@@ -419,19 +419,20 @@ public class Shooter extends SubsystemBase {
             1,
             1,
             1,
-            0.8,
-            0.8,
-            0.8,
-            0.8,
-            0.7,
-            0.7,
+            1,
+            1,
+            1,
+            1,
+            1,
             0.7,
             0.7,
             0.7,
             0.5,
             0.5,
             0.5,
-            0.5
+            0.5,
+            0.5,
+
 
 
     };
@@ -446,8 +447,8 @@ public class Shooter extends SubsystemBase {
             if (index < 0) {
                 index = 0;
             }
-            if (index > 10) {
-                index = 10;
+            if (index > 24) {
+                index = 24;
             }
             double slope = (shortrpm[index + 1] - shortrpm[index]) / 5.0;
             double target = slope * (dis - index * 5 -40) + shortrpm[index];
@@ -473,7 +474,7 @@ public class Shooter extends SubsystemBase {
 
         }
         else{
-            hood.setPosition(0.4);
+            hood.setPosition(0.5);
             transFactor = 1;
             return idleSpeed;
         }
@@ -490,8 +491,8 @@ public class Shooter extends SubsystemBase {
             if (index < 0) {
                 index = 0;
             }
-            if (index > 10) {
-                index = 10;
+            if (index > 24) {
+                index = 24;
             }
             double slope = (shortrpm[index + 1] - shortrpm[index]) / 5.0;
             double target = slope * (dis - index * 5 -40) + shortrpm[index];
@@ -510,7 +511,7 @@ public class Shooter extends SubsystemBase {
             transFactor = shorttrans[index];
         }
         else{
-            hood.setPosition(0.4);
+            hood.setPosition(0.5);
             transFactor = 1;
             setTargetRPM(idleSpeed);
         }
@@ -572,7 +573,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-        //hood.setPosition(hoodpos);
+ //       hood.setPosition(hoodpos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
@@ -592,6 +593,7 @@ public class Shooter extends SubsystemBase {
             rpmreached = false;
 //            if()
             setTargetRPM(calculateRPM());
+     //       setTargetRPM(2000);
             shootbarOn();
         }
     }
