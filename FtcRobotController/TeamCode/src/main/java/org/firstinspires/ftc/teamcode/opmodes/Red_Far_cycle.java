@@ -36,27 +36,16 @@ public class Red_Far_cycle extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(81.21237, 2.5016, 0); // Start Pose of our robot.
-    private final Pose ShootPose1 = new Pose(81.21, 8.7571,0);
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
+    private final Pose startPose = new Pose(80.77, 0.65, 0); // Start Pose of our robot.
+    private Pose ShootPose1 = new Pose(79.06, 10.98, 0.2);
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
-    private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
-    private final Pose GatePose = new Pose(122.5,59.2147, 0);
-    private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
 
-    private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
+    private final Pose PrepGather4 = new Pose(120.5531, 2.5016, 0);//accounted for overshoot
 
-    private final Pose PrepGather3 = new Pose(91.9908, 75.8070-8, 0);//accounted for overshoot
-
-    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
-
-    private final Pose PrepGather4 = new Pose(119.5531, 2.5016, 0);//accounted for overshoot
-
-    private final Pose FinishGather4 = new Pose(123.92, 2.5016, 0);
+    private final Pose FinishGather4 = new Pose(122.52, 2.5016, 0);
 
     private final Pose Park = new Pose(115.21, 8.7571,0);;
 
@@ -77,17 +66,17 @@ public class Red_Far_cycle extends OpMode {
     public double turretoff = 0;
 
     public static double stoptime = 2.8;
-    public static double shoottime = 3;
+    public static double shoottime = 1.2;
     public static double xpos = 129.67;
     public static double ypos = 134.01;
 
     public static double angle = 0;
 
-    public static double waittime = 0.7;
+    public static double waittime = 0.8;
     public static double intaketime = 0.7;
-    public static double checkcount = 10;
+    public static double checkcount = 5;
 
-    public static double followingtime = 2;
+    public static double followingtime = 1.5;
 
     public double checkcounter = checkcount;
 
@@ -105,8 +94,11 @@ public class Red_Far_cycle extends OpMode {
     public  PathChain simplePath(Pose a, Pose b){
         return drive.follower.pathBuilder()
                 .addPath(new BezierLine(a, b))
-                .setLinearHeadingInterpolation(a.getHeading(), b.getHeading())
 
+
+                .setLinearHeadingInterpolation(a.getHeading(), b.getHeading())
+                .setBrakingStrength(1)
+                .setTValueConstraint(0.95)
                 .build();
     }
     public void buildPaths() {
@@ -117,6 +109,8 @@ public class Red_Far_cycle extends OpMode {
         //prepGatherPath1 = simplePath(ShootPose1,PrepGather4);
         prepGatherPath1 = simplePath(startPose,PrepGather4);
         finishGatherPath1 = drive.follower.pathBuilder()
+                //   .setTValueConstraint(0.98)
+
                 .addPath(new BezierLine(PrepGather4, FinishGather4))
                 .setLinearHeadingInterpolation(PrepGather4.getHeading(), FinishGather4.getHeading())
                 .addPath(new BezierLine(FinishGather4,PrepGather4))
@@ -124,7 +118,8 @@ public class Red_Far_cycle extends OpMode {
 
                 .addPath(new BezierLine(PrepGather4, FinishGather4))
                 .setLinearHeadingInterpolation(PrepGather4.getHeading(), FinishGather4.getHeading())
-
+                .setBrakingStrength(1)
+                .setTValueConstraint(0.95)
                 .build();
         //finishGatherPath1 = simplePath(PrepGather4,FinishGather4);
 
@@ -141,55 +136,17 @@ public class Red_Far_cycle extends OpMode {
 //        prepGatherPath2 = simplePath(ShootPose1,PrepGather2);
 //
 //        finishGatherPath2 = simplePath(PrepGather2, FinishGather2);
-        prepGatherPath2 = drive.follower.pathBuilder()
-
-                .addPath(new BezierLine(ShootPose1, PrepGather3))
-                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather3.getHeading())
-                .addPath(new BezierLine(PrepGather3, FinishGather3))
-                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
-                .build();
-
-        GatePath = drive.follower.pathBuilder()
-
-                .addPath(new BezierLine(FinishGather2, GatePassby))
-                .setTValueConstraint(0.90)
-                .setLinearHeadingInterpolation(FinishGather2.getHeading(), GatePassby.getHeading())
-                .addPath(new BezierLine(GatePassby, GatePose))
-                .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .build();
-
-        Shootpath3 = simplePath(FinishGather3,ShootPose2);
-
-//        Shootpath3 =     drive.follower.pathBuilder()
-//                .addPath(new BezierLine(GatePose, Shoot2passby))
-//                .setLinearHeadingInterpolation(GatePose.getHeading(), Shoot2passby.getHeading())
-//                .addPath(new BezierLine(Shoot2passby, ShootPose2))
-//                .setLinearHeadingInterpolation(Shoot2passby.getHeading(), ShootPose2.getHeading())
-//                .build();
-
-//        prepGatherPath3 = simplePath(ShootPose2,PrepGather3);
-//
-//        finishGatherPath3 = simplePath(PrepGather3,FinishGather3);
-        prepGatherPath3 = drive.follower.pathBuilder()
-
-                .addPath(new BezierLine(ShootPose2, PrepGather2))
-                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather2.getHeading())
-                .addPath(new BezierLine(PrepGather2, FinishGather2))
-                .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
-                .build();
-
-        Shootpath4 = simplePath(FinishGather2,ShootPose2);
-
-//        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
 //
 //        finishGatherPath4 = simplePath(PrepGather4,FinishGather4);
         prepGatherPath4 = drive.follower.pathBuilder()
 
-                .addPath(new BezierLine(ShootPose2, PrepGather1))
-                .setLinearHeadingInterpolation(ShootPose2.getHeading(), PrepGather1.getHeading())
-                .setBrakingStrength(1.1)
+                .addPath(new BezierLine(ShootPose1, PrepGather1))
+                .setLinearHeadingInterpolation(ShootPose1.getHeading(), PrepGather1.getHeading())
+                //.setBrakingStrength(1.1)
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
+                .setBrakingStrength(1)
+                .setTValueConstraint(0.95)
                 .build();
 
         Shootpath5 = simplePath(FinishGather1,ShootPose1);
@@ -211,13 +168,11 @@ public class Red_Far_cycle extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                shooter.offset=10;
+                //  shooter.offset = 10;
                 fulltimer.resetTimer();
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 //drive.follower.followPath(Shootpath1,true);
-                shooter.autoLonger = true;
-                shooter.Autolong = 3160;
                 //turret.autopos = 313;
                 setPathState(1);
 
@@ -231,17 +186,17 @@ public class Red_Far_cycle extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()<(shoottime+0.5)){
+                        if(timer.getElapsedTimeSeconds()<(shoottime+2)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(1))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
                             checkcounter -=1;
                         }
                         else{
                             checkcounter = checkcount;
                         }
-                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime+2){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
                         }
@@ -254,10 +209,8 @@ public class Red_Far_cycle extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    //turret.autopos = 319;
-                    shooter.Autolong = 3135;
                     firstshooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     drive.follower.followPath(prepGatherPath1);
@@ -290,14 +243,14 @@ public class Red_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(1))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
                             checkcounter -=1;
                         }
                         else{
                             checkcounter = checkcount;
                         }
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(16);
                         }
@@ -313,7 +266,7 @@ public class Red_Far_cycle extends OpMode {
                 if(!drive.follower.isBusy()) {
                     //turret.autopos = 319;
                     firstshooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     drive.follower.followPath(prepGatherPath4);
@@ -332,14 +285,13 @@ public class Red_Far_cycle extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     drive.follower.followPath(Shootpath5);
                     setPathState(19);
-                    shooter.autoLonger = true;
+                    //shooter.autoLonger = true;
                 }
                 break;
             case 19:
                 if(!drive.follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-
                         timer.resetTimer();
                         firstshooting = true;
                     }
@@ -347,14 +299,14 @@ public class Red_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(1))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
                             checkcounter -=1;
                         }
                         else{
                             checkcounter = checkcount;
                         }
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(20);
                         }
@@ -379,12 +331,8 @@ public class Red_Far_cycle extends OpMode {
             case 22:
                 if(!drive.follower.isBusy()) {
                     intake.autoIntakeUp = true;
-                    //cyclecounter -=1;
-
-                    //turret.autopos = 319;
-                    shooter.Autolong = 3100;
                     firstshooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
                     //drive.follower.followPath(prepGatherPath6);
@@ -402,21 +350,20 @@ public class Red_Far_cycle extends OpMode {
                         break;
                     }
                     else {
-                        if (timer.getElapsedTimeSeconds() < followingtime) {
+                        if (timer.getElapsedTimeSeconds() < followingtime&&((!intake.hasballCheck(1))||(!intake.hasballCheck(2))||(!intake.hasballCheck(3)))) {
                             if(!drive.follower.isTeleopDrive()) {
                                 drive.follower.breakFollowing();
                                 drive.follower.startTeleopDrive();
 
 
                             }
-                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()<59) {
-                                if(drive.follower.getPose().getY()<10){
-                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(11-drive.follower.getPose().getY()));
-                                }
-                                else {
-                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
-                                }
-
+                            if(drive.follower.getPose().getX()<118&&drive.follower.getPose().getY()<55) {
+//                                if(drive.follower.getPose().getY()>-15){
+//                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(16+drive.follower.getPose().getY()));
+//                                }
+//                                else {
+                                drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+//                                }
                             }
                             else{
                                 drive.teleDrive(0, 0, 0);
@@ -432,6 +379,12 @@ public class Red_Far_cycle extends OpMode {
                             drive.follower.breakFollowing();
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            if(ShootPose1.getHeading() == 0.2){
+                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0);
+                            }
+                            else{
+                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0.2);;
+                            }
                             if(fulltimer.getElapsedTimeSeconds()<26) {
                                 drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
@@ -456,14 +409,14 @@ public class Red_Far_cycle extends OpMode {
                         if(timer.getElapsedTimeSeconds()<(shoottime)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(1))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
                             checkcounter -=1;
                         }
                         else{
                             checkcounter = checkcount;
                         }
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
                             if(fulltimer.getElapsedTimeSeconds()<26) {

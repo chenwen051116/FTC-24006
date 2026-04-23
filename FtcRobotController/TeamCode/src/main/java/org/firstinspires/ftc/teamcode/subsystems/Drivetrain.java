@@ -482,6 +482,8 @@ public void xposChange(double change){
             updateAngularVel();
             updateLastHeading();
         }
+//        xstaticpos = follower.getPose().getX();
+//        ystaticpos = follower.getPose().getY();
     }
 
 }

@@ -144,6 +144,9 @@ public void togglesafeMode(){
         }
     }
 }
+
+
+
     @SuppressLint("DefaultLocale")
     @Override
     public void run() {
