@@ -3,20 +3,24 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DigitalChannelController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
+import dev.frozenmilk.dairy.cachinghardware.CachingServo;
+
 
 // TODO: Adapt the system into our robot
 @Config
 public class Intake extends SubsystemBase {
 
-    private final DcMotor intake,trans;
-    private final Servo transferLeft;
-    private final Servo transferRight;
+    private final CachingDcMotorEx intake,trans;
+    private final CachingServo transferLeft;
+    private final CachingServo transferRight;
 
     public boolean autoIntakeUp = false;
 
@@ -50,10 +54,10 @@ public  double FarTeleTransFactor = 1;
 
     // Constructor for intake motors
     public Intake(HardwareMap hardwareMap) {
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        trans = hardwareMap.get(DcMotor.class, "trans");
-        transferLeft = hardwareMap.get(Servo.class, "transferL");
-        transferRight = hardwareMap.get(Servo.class, "transferR");
+        intake = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intake"));
+        trans = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "trans"));
+        transferLeft =new CachingServo( hardwareMap.get(Servo.class, "transferL"));
+        transferRight = new CachingServo(hardwareMap.get(Servo.class, "transferR"));
 
         breakbeam1 = hardwareMap.get(DigitalChannel.class, "breakbeam1");
         breakbeam1.setMode(DigitalChannel.Mode.INPUT);
@@ -86,37 +90,37 @@ public  double FarTeleTransFactor = 1;
 
     public void updatehasballCondi(){
         if(!breakbeam1.getState()){
-            hasball1sum= (hasball1sum*4+1)/5;
+            hasball1sum= (hasball1sum*2+1)/3;
             if(hasball1sum<0.09){
                 hasball1sum = 0;
             }
         }
         else{
-            hasball1sum= (hasball1sum*4)/5;
+            hasball1sum= (hasball1sum*2)/3;
             if(hasball1sum<0.09){
                 hasball1sum = 0;
             }
         }
         if(!breakbeam2.getState()){
-            hasball2sum= (hasball2sum*4+1)/5;
+            hasball2sum= (hasball2sum*2+1)/3;
             if(hasball2sum<0.09){
                 hasball2sum = 0;
             }
         }
         else{
-            hasball2sum= (hasball2sum*4)/5;
+            hasball2sum= (hasball2sum*2)/3;
             if(hasball2sum<0.09){
                 hasball2sum = 0;
             }
         }
         if(!breakbeam3.getState()){
-            hasball3sum= (hasball3sum*4+1)/5;
+            hasball3sum= (hasball3sum*2+1)/3;
             if(hasball3sum<0.09){
                 hasball3sum = 0;
             }
         }
         else{
-            hasball3sum= (hasball3sum*4)/5;
+            hasball3sum= (hasball3sum*2)/3;
             if(hasball3sum<0.09){
                 hasball3sum = 0;
             }
@@ -147,12 +151,12 @@ public  double FarTeleTransFactor = 1;
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
         Suck_In(1,1,0.72),
-        Split_Out(-0.8,-1,0.25),
-        Send_It_Up(1,1,0.25),
-        Intake_Steady(0,0,0.25),
+        Split_Out(-0.8,-1,0.32),
+        Send_It_Up(1,1,0.32),
+        Intake_Steady(0,0,0.32),
 
-        Suck_In_slow(0.5,0.5,0.25),
-        Send_It_Up_Slow(1,0.9,0.25);
+        Suck_In_slow(0.5,0.5,0.32),
+        Send_It_Up_Slow(1,0.9,0.32);
         private final double intakePower;
         private final double transPower;
         private final double transServer;

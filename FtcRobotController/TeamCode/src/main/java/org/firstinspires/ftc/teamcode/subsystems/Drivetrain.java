@@ -67,8 +67,8 @@ public class Drivetrain extends SubsystemBase {
     public Pose rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
     public Pose aimPos = bluenearAimPos;
 
-    public Pose blueInitpose = new Pose(0.14,-0.036,3.141);
-    public Pose redInitpose = new Pose(0.14,0.036,-3.141);
+    public Pose blueInitpose = new Pose(0.74,-0.036,3.141);
+    public Pose redInitpose = new Pose(0.74,0.036,-3.141);
 
     public static boolean TredFblue = false;
 
@@ -219,6 +219,13 @@ public double getaccel(){
 //    }
     return value;
 }
+
+public void xposChange(double change){
+    xpos+=change;
+}
+    public void yposChange(double change){
+        ypos+=change;
+    }
     private static double[] rotate(double x, double y, double angle) {
         double c = Math.cos(angle);
         double s = Math.sin(angle);

@@ -16,14 +16,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.List;
 
+import dev.frozenmilk.dairy.cachinghardware.CachingServo;
+
 public class Light extends SubsystemBase {
     // Hardware (motor servo...)
-    private final Servo LightLeft;
-    private final Servo LightRight;
+    private final CachingServo LightLeft;
+    private final CachingServo LightRight;
 
     public Light(HardwareMap hardwareMap) {
-        LightLeft = hardwareMap.get(Servo.class,"lightleft");
-        LightRight = hardwareMap.get(Servo.class,"lightright");
+        LightLeft = new CachingServo( hardwareMap.get(Servo.class,"lightleft"));
+        LightRight = new CachingServo( hardwareMap.get(Servo.class,"lightright"));
     }
 
     public enum Color{

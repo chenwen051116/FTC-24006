@@ -18,11 +18,14 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
+import dev.frozenmilk.dairy.cachinghardware.CachingServo;
+
 @Config
 public class Shooter extends SubsystemBase {
-    private final Servo shootLimit,hood;
-    private final DcMotorEx shooterLeft;
-    private final DcMotorEx shooterRight;
+    private final CachingServo shootLimit,hood;
+    private final CachingDcMotorEx shooterLeft;
+    private final CachingDcMotorEx shooterRight;
     private final PIDController pidController;
     private final VoltageSensor v;
 
@@ -117,11 +120,11 @@ public class Shooter extends SubsystemBase {
 
     public Shooter(HardwareMap hardwareMap) {
         v=hardwareMap.get(VoltageSensor.class,"Control Hub");
-        shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
-        shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
+        shooterLeft =new CachingDcMotorEx( hardwareMap.get(DcMotorEx.class, "shooterLeft"));
+        shooterRight = new CachingDcMotorEx( hardwareMap.get(DcMotorEx.class, "shooterRight"));
       //  distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
-        shootLimit = hardwareMap.get(Servo.class,"shootLimit");
-        hood = hardwareMap.get(Servo.class,"hood");
+        shootLimit = new CachingServo( hardwareMap.get(Servo.class,"shootLimit"));
+        hood = new CachingServo( hardwareMap.get(Servo.class,"hood"));
         shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
@@ -349,30 +352,31 @@ public class Shooter extends SubsystemBase {
 //            ,108.2516};
 
     public int[] shortrpm = {
+            1950,
             2000,
             2000,
-            2000,
+            2050,
             2100,
             2200,
             2300,
             2400,
-            2400,
-            2400,
+            2450,
             2500,
-            2500,
+            2550,
             2600,
             2650,
+            2700,
             2750,
-            2750,
-            2850,
+            2800,
+            2900,
             2950,
-            3050,
-            3050,
+            3000,
+            3030,
             3100,
             3150,
-            3150,
             3200,
-            3250
+            3300
+
 
 
     };
@@ -382,9 +386,9 @@ public class Shooter extends SubsystemBase {
             0.2,
             0.2,
             0.2,
-            0.3,
-            0.4,
-            0.5,
+            0.2,
+            0.35,
+            0.45,
             0.5,
             0.5,
             0.5,
@@ -405,6 +409,7 @@ public class Shooter extends SubsystemBase {
 
 
 
+
     };
 
     public double[] shorttrans = {
@@ -420,19 +425,18 @@ public class Shooter extends SubsystemBase {
             1,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
+            0.8,
+            0.8,
+            0.8,
+            0.8,
             0.7,
             0.7,
-            0.7,
             0.5,
             0.5,
             0.5,
             0.5,
             0.5,
-
+            0.5
 
 
     };
@@ -573,7 +577,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
- //       hood.setPosition(hoodpos);
+  //      hood.setPosition(hoodpos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){

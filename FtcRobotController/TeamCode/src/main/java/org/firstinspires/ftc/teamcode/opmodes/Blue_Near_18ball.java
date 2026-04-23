@@ -45,18 +45,18 @@ public class Blue_Near_18ball extends OpMode {
     private Timer looptimer;
 
 
-    private final Pose GatePrep2 = new Pose(110.53,-54.29,-0.375);
-    private final Pose GatePush2 = new Pose(116.91,-57.65,0.090);
+    private final Pose GatePrep2 = new Pose(115.6,-58.65,-0);
+    private final Pose GatePush2 = new Pose(115.6,-58.65,-0);
     private final Pose startPose = new Pose(118.85432686392717, -105.98108006274607, 0); //
-    private final Pose PrepGather1 = new Pose(91.9908, -28.6053-5, 0);
+    private final Pose PrepGather1 = new Pose(91.9908, -28.6053, 0);
     private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, -52.0297-5, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, -52.0297, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
+    private final Pose FinishGather2 = new Pose(112.9794, -52.0297, 0);
     private final Pose GatePassby = new Pose(118.1884092796506, -51.44941675381398, -0.7060);//;//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, -55.5252, -0.30050);//hit gate
-    private final Pose GatePose = new Pose(124.0884092796506, -51.44941675381398, -0.7060);//
+    private final Pose GatePose = new Pose(124.5884092796506, -50.84941675381398, -0.6560);//
     //private final Pose GatePose = new Pose(120.6561, -55.0, -0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
 
@@ -64,7 +64,7 @@ public class Blue_Near_18ball extends OpMode {
 
     private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose Park = new Pose(75.3860, -93.5130, 0.7830);;
+    private final Pose Park = new Pose(76.3860, -93.5130, 0.7830);;
 
     private boolean firstshooting = false;
 
@@ -81,8 +81,8 @@ public class Blue_Near_18ball extends OpMode {
 
     public Turret turret;
 
-    public static double stoptime = 1.2;
-    public static double shoottime = 1.65;
+    public static double stoptime = 1;
+    public static double shoottime = 0.8;
 
     public static double waittime = 0;
     public static double checkcount = 3;
@@ -126,8 +126,8 @@ public class Blue_Near_18ball extends OpMode {
         GatePushPath = drive.follower.pathBuilder()
                 .addPath(new BezierCurve(FinishGather2, GatePrep2))
                 .setLinearHeadingInterpolation(FinishGather2.getHeading(), GatePrep2.getHeading())
-                .addPath(new BezierCurve(GatePrep2, GatePush2))
-                .setLinearHeadingInterpolation(GatePrep2.getHeading(), GatePush2.getHeading())
+//                .addPath(new BezierCurve(GatePrep2, GatePush2))
+//                .setLinearHeadingInterpolation(GatePrep2.getHeading(), GatePush2.getHeading())
                 .addPath(new BezierCurve(GatePush2, FinishGather2))
                 .setLinearHeadingInterpolation(GatePush2.getHeading(), FinishGather2.getHeading())
                 .build();
@@ -236,7 +236,7 @@ public class Blue_Near_18ball extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                //shooter.autoLonger = false;
+                shooter.offset = 50;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,1,true);
                 setPathState(1);
@@ -288,10 +288,11 @@ public class Blue_Near_18ball extends OpMode {
                 break;
             case 3:
                 if(!drive.follower.isBusy()) {
+                    shooter.offset = 0;
                     // turret.isManeulCentering = true;
                     // turret.centeringDir = false;
-                       intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                     drive.follower.followPath(GatePushPath,0.6,false);
+                       //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                     drive.follower.followPath(GatePushPath,1,false);
 
                     setPathState(4);
                 }
@@ -319,7 +320,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
@@ -410,7 +411,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
@@ -464,7 +465,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
@@ -550,7 +551,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
@@ -637,7 +638,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
@@ -727,7 +728,7 @@ public class Blue_Near_18ball extends OpMode {
                         if(timer.getElapsedTimeSeconds()>(waittime)&&timer.getElapsedTimeSeconds()<(shoottime+0.5)){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
-                        if(!intake.hasballCheck(1)){
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
                             checkcounter -=1;
                         }
                         else{
