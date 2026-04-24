@@ -109,6 +109,16 @@ public class Turret extends SubsystemBase {
 
         }
         aimposition = -arcangle*arctoDegree;
+        if((0.5+ServoLoff+aimposition)>1){
+            turretServoLeft.setPosition(1);
+            turretServoRight.setPosition(1);
+            return;
+        }
+        else if ((0.5+ServoLoff+aimposition)<0){
+            turretServoLeft.setPosition(0);
+            turretServoRight.setPosition(0);
+            return;
+        }
         turretServoLeft.setPosition(0.5+ServoLoff+aimposition);
         turretServoRight.setPosition(0.5+aimposition);
         //turretMotor.setTargetPosition((int) floor(arcangle*arctoDegree));

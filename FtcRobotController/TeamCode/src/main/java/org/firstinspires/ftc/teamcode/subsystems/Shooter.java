@@ -353,11 +353,11 @@ public class Shooter extends SubsystemBase {
 
     public int[] shortrpm = {
             1950,
-            2000,
-            2000,
-            2050,
-            2100,
             2200,
+            2200,
+            2400,
+            2400,
+            2400,
             2300,
             2400,
             2450,
@@ -383,12 +383,12 @@ public class Shooter extends SubsystemBase {
 
     public double[] shorthood = {
             0.2,
-            0.2,
-            0.2,
-            0.2,
-            0.2,
-            0.35,
+            0.3,
+            0.4,
             0.45,
+            0.5,
+            0.5,
+            0.5,
             0.5,
             0.5,
             0.5,
@@ -545,7 +545,7 @@ public class Shooter extends SubsystemBase {
 //        else if(automode&&!autoLonger){
 //            setTargetRPM(Autoshort);
 //        }
-      //  setTargetRPM(aimRPM);
+ //       setTargetRPM(aimRPM);
     }
 
 
@@ -577,7 +577,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-  //      hood.setPosition(hoodpos);
+ //       hood.setPosition(hoodpos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){

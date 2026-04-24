@@ -151,12 +151,12 @@ public  double FarTeleTransFactor = 1;
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
         Suck_In(1,1,0.72),
-        Split_Out(-0.8,-1,0.28),
-        Send_It_Up(1,1,0.28),
-        Intake_Steady(0,0,0.28),
+        Split_Out(-0.8,-1,0.25),
+        Send_It_Up(1,1,0.25),
+        Intake_Steady(0,0,0.25),
 
-        Suck_In_slow(0.5,0.5,0.28),
-        Send_It_Up_Slow(1,0.9,0.28);
+        Suck_In_slow(0.5,0.5,0.25),
+        Send_It_Up_Slow(1,0.9,0.25);
         private final double intakePower;
         private final double transPower;
         private final double transServer;

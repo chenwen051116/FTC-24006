@@ -48,14 +48,14 @@ public class Drivetrain extends SubsystemBase {
 
     //public static double lookAheadTimeShooter = 0.2;
 
-    public static double turretAccelkP = 0.03;
+    public static double turretAccelkP = 0.05;
 
     public static double angle = 0;
 
 
     public static double xstaticpos = 129.67;
     public static double ystaticpos = -128.01;
-    public static double AccelInfluenceFactor = 6;
+    public static double AccelInfluenceFactor = 10;
 
     public static double bluexOffset = -0 ;
     public static double blueyOffset = 0;
@@ -78,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static double kPTurret = -0.6;
 
-    public static double kPShooter= -0.3;
+    public static double kPShooter= -0.2;
     public static double kPturretAngular = 0;
 
     public static double testspeedx = 0.2;
@@ -482,8 +482,8 @@ public void xposChange(double change){
             updateAngularVel();
             updateLastHeading();
         }
-//        xstaticpos = follower.getPose().getX();
-//        ystaticpos = follower.getPose().getY();
+        lastPose = follower.getPose();
+
     }
 
 }
