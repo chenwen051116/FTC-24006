@@ -47,8 +47,8 @@ public class Red_Near_21ball extends OpMode {
 
     private final Pose GatePrep2 = new Pose(110.53,54.29,0.375);
     private final Pose GatePush2 = new Pose(116.91,57.65,-0.090);
-    private final Pose startPose = new Pose(117.75432686392717, 104.78108006274607, 0); //
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+4, 0);
+    private final Pose startPose = new Pose(118.85432686392717, 105.98108006274607, 0); //
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297, 0);
@@ -84,7 +84,7 @@ public class Red_Near_21ball extends OpMode {
     public static double stoptime = 1.2;
     public static double shoottime = 1;
 
-    public static double waittime = 0;
+    public static double waittime = 0.2;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -165,7 +165,7 @@ public class Red_Near_21ball extends OpMode {
 //                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .setTValueConstraint(0.98)
+                .setTValueConstraint(0.80)
                 .build();
 
 //        GatePath2 = drive.follower.pathBuilder()
@@ -239,40 +239,42 @@ public class Red_Near_21ball extends OpMode {
                 //shooter.autoLonger = false;
                 //shooter.setShooterStatus(Shooter.ShooterStatus.);
                 drive.follower.followPath(Shootpath1,1,true);
+                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                 setPathState(1);
 
                 break;
             case 1:
                 if(!drive.follower.isBusy()) {
-                }
-                if (!firstshooting) {
-                    shooter.updateFocused(true);
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
 
-                    timer.resetTimer();
-                    firstshooting = true;
-                }
-                else{
-                    if(timer.getElapsedTimeSeconds()<0){
-                        shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    }
-                    else if(timer.getElapsedTimeSeconds()<(shoottime+5.5)){
-                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                    }
-                    if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
-                        checkcounter -=1;
+                        timer.resetTimer();
+                        firstshooting = true;
                     }
                     else{
-                        checkcounter = checkcount;
-                    }
-                    if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime+1.5){
-                        shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                        intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                        // turret.autopos = 0;
+                        if(timer.getElapsedTimeSeconds()<0){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                        }
+                        else if(timer.getElapsedTimeSeconds()<(shoottime+5.5)){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        }
+                        if((!intake.hasballCheck(3))&&(!intake.hasballCheck(2))&&(!intake.hasballCheck(1))){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime+1.5){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            // turret.autopos = 0;
 
-                        setPathState(2);
-                    }
+                            setPathState(2);
+                        }
 
+                    }
                 }
+
                 break;
             //1st shooting________________________________________________
             case 2:

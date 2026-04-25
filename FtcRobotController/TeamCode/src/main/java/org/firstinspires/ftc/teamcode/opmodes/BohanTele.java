@@ -25,6 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.commands.DriveInTeleOpCommand;
+import org.firstinspires.ftc.teamcode.commands.EndgameLockin;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -97,7 +98,7 @@ public class BohanTele extends CommandOpMode {
         }
 
         //Commands
-        LimelightLockInCommand limelightLock = new LimelightLockInCommand(drivetrain, limelight, gamepad1);
+        EndgameLockin limelightLock = new EndgameLockin(drivetrain, limelight, gamepad1);
         //Driver One - Button A toggles RPM (0→3000→4000→5000→0)
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).toggleWhenPressed(limelightLock);
@@ -109,8 +110,15 @@ public class BohanTele extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(()->light.setLight(Light.Color.Green, Light.Color.Green));
 
         //DRIVER TWO
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(()->drivetrain.xposChange(-0.5));
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(()->drivetrain.xposChange(0.5));
+        if(drivetrain.TredFblue) {
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(-0.5));
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(0.5));
+        }
+        else {
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(0.5));
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(-0.5));
+
+        }
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(()->light.setLight(Light.Color.Off, Light.Color.Orange));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Orange, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
@@ -127,14 +135,14 @@ public class BohanTele extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
 
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(()->togglesafeMode());
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(()->togglesafeMode());
     }
     public void updateMovingshooting(boolean flag){
         MovingshootingMode = flag;
     }
 
 public void togglesafeMode(){
-    if(gamepad2.left_stick_button){
+    if(gamepad1.left_stick_button){
         drivetrain.safeMode = !drivetrain.safeMode;
         if(drivetrain.safeMode){
             light.setLight(Light.Color.Red, Light.Color.Red);
@@ -280,7 +288,7 @@ public void togglesafeMode(){
             y2justpressed = false;
         }
 
-        if(gamepad1.left_stick_button&& gamepad1.right_stick_button){
+        if(gamepad2.left_stick_button&& gamepad2.right_stick_button){
             drivetrain.tilt();
         }
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());

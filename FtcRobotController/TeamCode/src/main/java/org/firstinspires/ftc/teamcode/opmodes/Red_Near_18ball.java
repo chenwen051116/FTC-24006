@@ -47,8 +47,8 @@ public class Red_Near_18ball extends OpMode {
 
     private final Pose GatePrep2 = new Pose(115.6,58.65,-0);
     private final Pose GatePush2 = new Pose(115.6,58.65,-0);
-    private final Pose startPose = new Pose(117.75432686392717, 104.78108006274607, 0); //
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053+4, 0);
+    private final Pose startPose = new Pose(118.85432686392717, 105.98108006274607, 0); //
+    private final Pose PrepGather1 = new Pose(91.9908, 28.6053, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297, 0);
@@ -165,7 +165,7 @@ public class Red_Near_18ball extends OpMode {
 //                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .setTValueConstraint(0.98)
+                .setTValueConstraint(0.8)
                 .build();
 
 //        GatePath2 = drive.follower.pathBuilder()
@@ -765,7 +765,7 @@ public class Red_Near_18ball extends OpMode {
             case 29:
                 intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
-                Drivetrain.TredFblue =true;
+                Drivetrain.TredFblue = true;
                 if(!drive.follower.isBusy()){
                     shooter.offset = 0;
                     resetSubsystemsForTeleop();

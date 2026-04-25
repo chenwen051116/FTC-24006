@@ -91,19 +91,19 @@ public  double FarTeleTransFactor = 1;
     public void updatehasballCondi(){
         if(!breakbeam1.getState()){
             hasball1sum= (hasball1sum*2+1)/3;
-            if(hasball1sum<0.09){
+            if(hasball1sum<0.2){
                 hasball1sum = 0;
             }
         }
         else{
             hasball1sum= (hasball1sum*2)/3;
-            if(hasball1sum<0.09){
+            if(hasball1sum<0.2){
                 hasball1sum = 0;
             }
         }
         if(!breakbeam2.getState()){
             hasball2sum= (hasball2sum*2+1)/3;
-            if(hasball2sum<0.09){
+            if(hasball2sum<0.2){
                 hasball2sum = 0;
             }
         }
@@ -151,12 +151,12 @@ public  double FarTeleTransFactor = 1;
     // Enum which stores all the power needed for each state of the intake motors
     public enum IntakeTransferState {
         Suck_In(1,1,0.72),
-        Split_Out(-0.8,-1,0.25),
-        Send_It_Up(1,1,0.25),
-        Intake_Steady(0,0,0.25),
+        Split_Out(-0.8,-1,0.23),
+        Send_It_Up(1,1,0.23),
+        Intake_Steady(0,0,0.23),
 
-        Suck_In_slow(0.5,0.5,0.25),
-        Send_It_Up_Slow(1,0.9,0.25);
+        Suck_In_slow(0.5,0.5,0.23),
+        Send_It_Up_Slow(1,0.9,0.23);
         private final double intakePower;
         private final double transPower;
         private final double transServer;

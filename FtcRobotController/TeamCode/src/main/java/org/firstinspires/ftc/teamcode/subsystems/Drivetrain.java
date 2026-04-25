@@ -465,7 +465,7 @@ public void xposChange(double change){
     }
 
     public void redinit(){
-        rednearAimPos = new Pose(xstaticpos,-ystaticpos,angle);
+        rednearAimPos = new Pose(xstaticpos,-ystaticpos+2,angle);
         xpos = rednearAimPos.getX();
         ypos = rednearAimPos.getY();
     }

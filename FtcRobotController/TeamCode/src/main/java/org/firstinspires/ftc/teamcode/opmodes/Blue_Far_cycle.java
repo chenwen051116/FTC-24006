@@ -100,6 +100,8 @@ public class Blue_Far_cycle extends OpMode {
         return drive.follower.pathBuilder()
                 .addPath(new BezierLine(a, b))
                 .setConstantHeadingInterpolation(b.getHeading())
+                .setTValueConstraint(0.99)
+                .setBrakingStrength(0.7)
                 .build();
     }
     public  PathChain simplePath(Pose a, Pose b){
@@ -361,14 +363,21 @@ public class Blue_Far_cycle extends OpMode {
                         break;
                     }
                     else {
-                        if (timer.getElapsedTimeSeconds() < followingtime&&((!intake.hasballCheck(1))||(!intake.hasballCheck(2))||(!intake.hasballCheck(3)))) {
+
+                        if (timer.getElapsedTimeSeconds() < followingtime&&checkcounter>0) {
+                            if((intake.hasballCheck(1))&&(intake.hasballCheck(2))&&(intake.hasballCheck(3))){
+                                checkcounter -=1;
+                            }
+                            else{
+                                checkcounter = checkcount;
+                            }
                             if(!drive.follower.isTeleopDrive()) {
                                 drive.follower.breakFollowing();
                                 drive.follower.startTeleopDrive();
 
 
                             }
-                            if(drive.follower.getPose().getX()<118&&drive.follower.getPose().getY()>-55) {
+                            if(drive.follower.getPose().getX()<120&&drive.follower.getPose().getY()>-55) {
 //                                if(drive.follower.getPose().getY()>-15){
 //                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(16+drive.follower.getPose().getY()));
 //                                }
@@ -388,19 +397,22 @@ public class Blue_Far_cycle extends OpMode {
 //                                    0);
 
                             drive.follower.breakFollowing();
+                            checkcounter = checkcount;
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            if(ShootPose1.getHeading() == 0.2){
+                            if(ShootPose1.getHeading() == -0.2){
                                 ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0);
                             }
                             else{
-                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0.2);;
+                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),-0.2);;
                             }
                             if(fulltimer.getElapsedTimeSeconds()<26) {
+                                checkcounter = checkcount;
                                 drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
                             }
                             else{
+                                checkcounter = checkcount;
                                 setPathState(26);
                             }
                             break;
@@ -431,9 +443,11 @@ public class Blue_Far_cycle extends OpMode {
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
                             if(fulltimer.getElapsedTimeSeconds()<26) {
+                                checkcounter = checkcount;
                                 setPathState(22);
                             }
                             else{
+                                checkcounter = checkcount;
                                 setPathState(26);
                             }
                         }

@@ -26,9 +26,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "Red_Far_cycle")
+@Autonomous(name = "Red_Far_Nopark")
 
-public class Red_Far_cycle extends OpMode {
+public class Red_Far_Nopark extends OpMode {
 
     private Follower follower;
     private Drivetrain drive;
@@ -406,7 +406,7 @@ public class Red_Far_cycle extends OpMode {
                             else{
                                 ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0.2);;
                             }
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
+                            if(fulltimer.getElapsedTimeSeconds()<28.5) {
                                 checkcounter = checkcount;
                                 drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
@@ -442,7 +442,7 @@ public class Red_Far_cycle extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
+                            if(fulltimer.getElapsedTimeSeconds()<28.5) {
                                 checkcounter = checkcount;
                                 setPathState(22);
                             }

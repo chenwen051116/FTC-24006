@@ -165,7 +165,7 @@ public class Blue_Near_18ball extends OpMode {
 //                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .setTValueConstraint(0.99)
+                .setTValueConstraint(0.8)
                 .build();
 
 //        GatePath2 = drive.follower.pathBuilder()

@@ -26,9 +26,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "Red_Far_cycle")
+@Autonomous(name = "Blue_Far_Nopark")
 
-public class Red_Far_cycle extends OpMode {
+public class Blue_Far_Nopark extends OpMode {
 
     private Follower follower;
     private Drivetrain drive;
@@ -36,31 +36,31 @@ public class Red_Far_cycle extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(80.77, 0.65, 0); // Start Pose of our robot.
-    private Pose ShootPose1 = new Pose(79.06, 10.98, 0.2);
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053, 0);
-    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
+    private final Pose startPose = new Pose(80.77, -0.65, 0); // Start Pose of our robot.
+    private Pose ShootPose1 = new Pose(79.06, -10.98, -0.2);
+    private final Pose PrepGather1 = new Pose(91.9908, -28.6053, 0);
+    private final Pose FinishGather1 = new Pose(114.9794, -28.6053, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
+    private final Pose PrepGather2 = new Pose(91.9908, -52.0297-5, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
-    private final Pose GatePassby = new Pose(112.6299, 59.2147, 0);
-    private final Pose GatePose = new Pose(122.5,59.2147, 0);
-    private final Pose ShootPose2 = new Pose(84.1620, 75.80 ,0);
+    private final Pose FinishGather2 = new Pose(114.9794, -52.0297, 0);
+    private final Pose GatePassby = new Pose(112.6299, -59.2147, 0);
+    private final Pose GatePose = new Pose(122.5,-59.2147, 0);
+    private final Pose ShootPose2 = new Pose(84.1620, -75.80 ,0);
 
-    private final Pose Shoot2passby = new Pose(95.7309,59.2147,0);
+    private final Pose Shoot2passby = new Pose(95.7309,-59.2147,0);
 
-    private final Pose PrepGather3 = new Pose(91.9908, 75.8070-8, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(91.9908, -75.8070+8, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
+    private final Pose FinishGather3 = new Pose(114.9794, -75.8070, 0);
 
-    private final Pose PrepGather4 = new Pose(120.5531, 2.5016, 0);//accounted for overshoot
+    private final Pose PrepGather4 = new Pose(120.5531, -2.5016, 0);//accounted for overshoot
 
-    private final Pose FinishGather4 = new Pose(122.52, 2.5016, 0);
+    private final Pose FinishGather4 = new Pose(122.52, -2.5016, 0);
 
-    private final Pose Park = new Pose(115.21, 8.7571,0);;
+    private final Pose Park = new Pose(115.21, -8.7571,0);;
 
-    private final Pose FinishGather5 = new Pose(121.42, -0.06455, 0);
+    private final Pose FinishGather5 = new Pose(121.42, 0.06455, 0);
 
     private boolean firstshooting = false;
     private PathChain GatePath, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
@@ -377,7 +377,7 @@ public class Red_Far_cycle extends OpMode {
 
 
                             }
-                            if(drive.follower.getPose().getX()<120&&drive.follower.getPose().getY()<55) {
+                            if(drive.follower.getPose().getX()<120&&drive.follower.getPose().getY()>-55) {
 //                                if(drive.follower.getPose().getY()>-15){
 //                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(16+drive.follower.getPose().getY()));
 //                                }
@@ -400,13 +400,13 @@ public class Red_Far_cycle extends OpMode {
                             checkcounter = checkcount;
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            if(ShootPose1.getHeading() == 0.2){
+                            if(ShootPose1.getHeading() == -0.2){
                                 ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0);
                             }
                             else{
-                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),0.2);;
+                                ShootPose1 = new Pose(ShootPose1.getX(),ShootPose1.getY(),-0.2);;
                             }
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
+                            if(fulltimer.getElapsedTimeSeconds()<28.5) {
                                 checkcounter = checkcount;
                                 drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
                                 setPathState(24);
@@ -442,7 +442,7 @@ public class Red_Far_cycle extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             firstshooting = false;
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
+                            if(fulltimer.getElapsedTimeSeconds()<28.5) {
                                 checkcounter = checkcount;
                                 setPathState(22);
                             }
@@ -479,11 +479,11 @@ public class Red_Far_cycle extends OpMode {
             case 27:
                 intake.autoIntakeUp = false;
                 Drivetrain.lastPose = drive.follower.getPose();
-                Drivetrain.TredFblue = true;
+                Drivetrain.TredFblue = false;
                 if(!drive.follower.isBusy()){
                     resetSubsystemsForTeleop();
                     Drivetrain.lastPose = drive.follower.getPose();
-                    Drivetrain.TredFblue = true;
+                    Drivetrain.TredFblue = false;
                     //setPathState(28);
                     break;
 
@@ -593,7 +593,7 @@ public class Red_Far_cycle extends OpMode {
         buildPaths();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
-        drive.redinit();
+        drive.blueinit();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
@@ -623,7 +623,7 @@ public class Red_Far_cycle extends OpMode {
     public void stop() {
         resetSubsystemsForTeleop();
         Drivetrain.lastPose = drive.follower.getPose();
-        Drivetrain.TredFblue = true;
+        Drivetrain.TredFblue = false;
     }
 
     /**
