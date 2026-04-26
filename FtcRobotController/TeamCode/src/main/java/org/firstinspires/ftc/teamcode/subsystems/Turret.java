@@ -109,14 +109,14 @@ public class Turret extends SubsystemBase {
 
         }
         aimposition = -arcangle*arctoDegree;
-        if((0.5+ServoLoff+aimposition)>1){
-            turretServoLeft.setPosition(1);
-            turretServoRight.setPosition(1);
+        if((0.5+ServoLoff+aimposition)>0.995){
+            turretServoLeft.setPosition(0.995);
+            turretServoRight.setPosition(0.995);
             return;
         }
-        else if ((0.5+ServoLoff+aimposition)<0){
-            turretServoLeft.setPosition(0);
-            turretServoRight.setPosition(0);
+        else if ((0.5+ServoLoff+aimposition)<0.005){
+            turretServoLeft.setPosition(0.005);
+            turretServoRight.setPosition(0.005);
             return;
         }
         turretServoLeft.setPosition(0.5+ServoLoff+aimposition);

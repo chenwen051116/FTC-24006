@@ -56,7 +56,7 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
     private final Pose FinishGather2 = new Pose(112.19, -48.62, 1.57);
     private final Pose GatePassby = new Pose(118.1884092796506, -51.44941675381398, -0.7060);//;//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, -55.5252, -0.30050);//hit gate
-    private final Pose GatePose = new Pose(124.5884092796506, -50.84941675381398, -0.6560);//
+    private final Pose GatePose = new Pose(123.5884092796506, -50.84941675381398, -0.6560);//
     //private final Pose GatePose = new Pose(120.6561, -55.0, -0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
     private final Pose ShootPose_Near = new Pose(96.2372, -97.6927 ,1.57);
@@ -166,7 +166,7 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
 //                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .setTValueConstraint(0.8)
+                .setTValueConstraint(0.1)
                 .build();
 
 //        GatePath2 = drive.follower.pathBuilder()
@@ -845,7 +845,7 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
             hub.clearBulkCache();
         }
 //        // Feedback to Driver Hub for debugging
-
+        telemetry.addData("state", pathState);
         telemetry.addData("looptime", looptimer.getElapsedTime());
         looptimer.resetTimer();
 //        telemetry.addData("turret aim", turret.aimposition);
@@ -888,11 +888,11 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.blueinit();
-//        telemetry.addData("turret target", turret.currentpos);
+        telemetry.addData("state", pathState);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
 //        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
-//        telemetry.update();
+        telemetry.update();
 
     }
 

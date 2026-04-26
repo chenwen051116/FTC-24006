@@ -165,7 +165,7 @@ public class Red_Near_21ball extends OpMode {
 //                .setTValueConstraint(0.997)
                 .addPath(new BezierLine(GatePassby, GatePose))
                 .setLinearHeadingInterpolation(GatePassby.getHeading(), GatePose.getHeading())
-                .setTValueConstraint(0.80)
+                .setTValueConstraint(0.5)
                 .build();
 
 //        GatePath2 = drive.follower.pathBuilder()
