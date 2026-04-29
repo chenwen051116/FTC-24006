@@ -111,8 +111,8 @@ public class BohanTele extends CommandOpMode {
 
         //DRIVER TWO
         if(drivetrain.TredFblue) {
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(-0.5));
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(0.5));
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(0.5));
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(-0.5));
         }
         else {
             gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(0.5));
