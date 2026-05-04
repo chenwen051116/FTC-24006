@@ -143,7 +143,7 @@ public class Shooter extends SubsystemBase {
 
         // Set PID tolerance (adjustable via static parameter)
         pidController.setTolerance(tolerance);
-        shootbarOn();
+        //shootbarOn();
 
         focused = false;
 

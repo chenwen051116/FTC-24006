@@ -465,12 +465,14 @@ public void xposChange(double change){
     }
 
     public void redinit(){
+    TredFblue = true;
         rednearAimPos = new Pose(xstaticpos,-ystaticpos+2,angle);
         xpos = rednearAimPos.getX();
         ypos = rednearAimPos.getY();
     }
 
     public void blueinit(){
+    TredFblue = false;
         bluenearAimPos = new Pose(xstaticpos+bluexOffset,ystaticpos+blueyOffset,angle);
         xpos = bluenearAimPos.getX();
         ypos = bluenearAimPos.getY();

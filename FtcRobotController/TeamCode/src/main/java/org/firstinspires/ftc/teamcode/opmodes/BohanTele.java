@@ -110,15 +110,11 @@ public class BohanTele extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(()->light.setLight(Light.Color.Green, Light.Color.Green));
 
         //DRIVER TWO
-        if(drivetrain.TredFblue) {
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(-0.5));
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(0.5));
-        }
-        else {
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> drivetrain.xposChange(0.5));
-            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> drivetrain.xposChange(-0.5));
 
-        }
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> trimvalue(true));
+            gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> trimvalue(false));
+
+
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(()->light.setLight(Light.Color.Off, Light.Color.Orange));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(()->light.setLight(Light.Color.Orange, Light.Color.Off));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(()->light.setLight(Light.Color.Off, Light.Color.Off));
@@ -140,7 +136,6 @@ public class BohanTele extends CommandOpMode {
     public void updateMovingshooting(boolean flag){
         MovingshootingMode = flag;
     }
-
 public void togglesafeMode(){
     if(gamepad1.left_stick_button){
         drivetrain.safeMode = !drivetrain.safeMode;
@@ -150,6 +145,24 @@ public void togglesafeMode(){
         else{
             light.setLight(Light.Color.Off, Light.Color.Off);
         }
+    }
+}
+
+public void trimvalue(boolean isleft) {
+    if (drivetrain.TredFblue) {
+        if (isleft) {
+            drivetrain.xposChange(-0.5);
+        } else {
+            drivetrain.xposChange(0.5);
+        }
+    }
+    else {
+        if (isleft) {
+            drivetrain.xposChange(0.5);
+        } else {
+            drivetrain.xposChange(-0.5);
+        }
+
     }
 }
 

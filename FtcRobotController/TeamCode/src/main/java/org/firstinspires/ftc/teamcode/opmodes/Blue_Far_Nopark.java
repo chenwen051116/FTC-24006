@@ -594,6 +594,7 @@ public class Blue_Far_Nopark extends OpMode {
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.blueinit();
+        turret.autoreset();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());

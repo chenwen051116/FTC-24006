@@ -38,8 +38,8 @@ public class Red_Far_cycle extends OpMode {
     private int pathState = 0;
     private final Pose startPose = new Pose(80.77, 0.65, 0); // Start Pose of our robot.
     private Pose ShootPose1 = new Pose(79.06, 10.98, 0.2);
-    private final Pose PrepGather1 = new Pose(91.9908, 28.6053, 0);
-    private final Pose FinishGather1 = new Pose(114.9794, 28.6053, 0);
+    private final Pose PrepGather1 = new Pose(91.9908, 26.6053, 0);
+    private final Pose FinishGather1 = new Pose(116.9794, 28.6053, 0);
 
     private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
 
@@ -100,8 +100,8 @@ public class Red_Far_cycle extends OpMode {
         return drive.follower.pathBuilder()
                 .addPath(new BezierLine(a, b))
                 .setConstantHeadingInterpolation(b.getHeading())
-                .setTValueConstraint(0.99)
-                .setBrakingStrength(0.7)
+                .setTValueConstraint(0.96)
+                .setBrakingStrength(0.8)
                 .build();
     }
     public  PathChain simplePath(Pose a, Pose b){
@@ -591,6 +591,7 @@ public class Red_Far_cycle extends OpMode {
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
         turret = new Turret(hardwareMap,false);
         buildPaths();
+        turret.autoreset();
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.redinit();

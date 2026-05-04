@@ -56,10 +56,10 @@ public class Red_Near_21ball_Gateholding extends OpMode {
     private final Pose FinishGather2 = new Pose(112.19, 48.62, -1.57);
     private final Pose GatePassby = new Pose(118.1884092796506, 51.44941675381398, 0.7060);//;//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, 55.5252, 0.30050);//hit gate
-    private final Pose GatePose = new Pose(124.5884092796506, 50.84941675381398, 0.6560);//
+    private final Pose GatePose = new Pose(124.5884092796506, 51.24941675381398, 0.6360);//
     //private final Pose GatePose = new Pose(120.6561, -55.0, -0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
-    private final Pose ShootPose_Near = new Pose(96.2372, 97.6927 ,-1.57);
+    private final Pose ShootPose_Near = new Pose(90.2372, 90.6927 ,-1.57);
 
     private final Pose PrepGather3 = new Pose(109.61, 90.64, -1.57);//accounted for overshoot
 
@@ -83,9 +83,9 @@ public class Red_Near_21ball_Gateholding extends OpMode {
     public Turret turret;
 
     public static double stoptime = 1;
-    public static double shoottime = 0.8;
+    public static double shoottime = 1;
 
-    public static double waittime = 0;
+    public static double waittime = 0.2;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -888,6 +888,7 @@ public class Red_Near_21ball_Gateholding extends OpMode {
         //drive.follower.setStartingPose(startPose);
         drive.follower.setPose(startPose);
         drive.redinit();
+        turret.autoreset();
 //        telemetry.addData("turret target", turret.currentpos);
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());

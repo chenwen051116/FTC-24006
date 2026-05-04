@@ -72,6 +72,10 @@ public class Turret extends SubsystemBase {
     
 
     // Constructor for intake motors
+    public void autoreset(){
+                turretServoLeft.setPosition(0.5+ServoLoff);
+        turretServoRight.setPosition(0.5);
+    }
 
     public Turret(HardwareMap hardwareMap, boolean isTele) {
 
@@ -83,8 +87,8 @@ public class Turret extends SubsystemBase {
         // We do not have distance sensor thus the following object should be removed
         // in future updates
         // The intake does not need to necessarily move at steady
-        turretServoLeft.setPosition(0.5+ServoLoff);
-        turretServoRight.setPosition(0.5);
+//        turretServoLeft.setPosition(0.5+ServoLoff);
+//        turretServoRight.setPosition(0.5);
         // The transfer has to be steady for the case where there are already balls in the
         // transfer stage
         automode = false;

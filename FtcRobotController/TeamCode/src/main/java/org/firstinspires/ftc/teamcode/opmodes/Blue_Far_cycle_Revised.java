@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes; // make sure this aligns with class location
 
 import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -10,14 +9,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
@@ -26,9 +23,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Config
-@Autonomous(name = "Blue_Far_cycle")
+@Autonomous(name = "Blue_Far_cycle_Elims_Revised")
 
-public class Blue_Far_cycle extends OpMode {
+public class Blue_Far_cycle_Revised extends OpMode {
 
     private Follower follower;
     private Drivetrain drive;
@@ -111,7 +108,7 @@ public class Blue_Far_cycle extends OpMode {
 
                 .setLinearHeadingInterpolation(a.getHeading(), b.getHeading())
                 .setBrakingStrength(1)
-                 .setTValueConstraint(0.95)
+                .setTValueConstraint(0.95)
                 .build();
     }
     public void buildPaths() {
@@ -122,7 +119,7 @@ public class Blue_Far_cycle extends OpMode {
         //prepGatherPath1 = simplePath(ShootPose1,PrepGather4);
         prepGatherPath1 = simplePath(startPose,PrepGather4);
         finishGatherPath1 = drive.follower.pathBuilder()
-             //   .setTValueConstraint(0.98)
+                //   .setTValueConstraint(0.98)
 
                 .addPath(new BezierLine(PrepGather4, FinishGather4))
                 .setLinearHeadingInterpolation(PrepGather4.getHeading(), FinishGather4.getHeading())
@@ -181,7 +178,7 @@ public class Blue_Far_cycle extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-              //  shooter.offset = 10;
+                //  shooter.offset = 10;
                 fulltimer.resetTimer();
                 //shooter.autoLonger = false;
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -197,6 +194,12 @@ public class Blue_Far_cycle extends OpMode {
 
                         timer.resetTimer();
                         firstshooting = true;
+                        if((!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            firstshooting = false;
+                            setPathState(2);
+                        }
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()<(shoottime+2)){
@@ -251,6 +254,13 @@ public class Blue_Far_cycle extends OpMode {
 
                         timer.resetTimer();
                         firstshooting = true;
+                        if((!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            firstshooting = false;
+                            setPathState(16);
+                        }
+
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
@@ -307,6 +317,12 @@ public class Blue_Far_cycle extends OpMode {
                         shooter.updateFocused(true);
                         timer.resetTimer();
                         firstshooting = true;
+                        if((!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            firstshooting = false;
+                            setPathState(20);
+                        }
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
@@ -360,6 +376,7 @@ public class Blue_Far_cycle extends OpMode {
                     if (!firstshooting) {
                         timer.resetTimer();
                         firstshooting = true;
+
                         break;
                     }
                     else {
@@ -382,7 +399,7 @@ public class Blue_Far_cycle extends OpMode {
 //                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(16+drive.follower.getPose().getY()));
 //                                }
 //                                else {
-                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
+                                drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
 //                                }
                             }
                             else{
@@ -427,6 +444,19 @@ public class Blue_Far_cycle extends OpMode {
 
                         timer.resetTimer();
                         firstshooting = true;
+                        if((!intake.hasballCheck(2))&&(!intake.hasballCheck(3))){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            firstshooting = false;
+                            if(fulltimer.getElapsedTimeSeconds()<26) {
+                                checkcounter = checkcount;
+                                setPathState(22);
+                            }
+                            else{
+                                checkcounter = checkcount;
+                                setPathState(26);
+                            }
+                        }
                     }
                     else{
                         if(timer.getElapsedTimeSeconds()<(shoottime)){

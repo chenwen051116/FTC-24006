@@ -56,10 +56,10 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
     private final Pose FinishGather2 = new Pose(112.19, -48.62, 1.57);
     private final Pose GatePassby = new Pose(118.1884092796506, -51.44941675381398, -0.7060);//;//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, -55.5252, -0.30050);//hit gate
-    private final Pose GatePose = new Pose(123.5884092796506, -50.84941675381398, -0.6560);//
+    private final Pose GatePose = new Pose(124.0884092796506, -51.84941675381398, -0.6560);//
     //private final Pose GatePose = new Pose(120.6561, -55.0, -0.30050);//pickup
     private final Pose ShootPose = new Pose(79.1620, -70.80 ,0);
-    private final Pose ShootPose_Near = new Pose(96.2372, -97.6927 ,1.57);
+    private final Pose ShootPose_Near = new Pose(80.2372, -85.6927 ,1.57);
 
     private final Pose PrepGather3 = new Pose(109.61, -90.64, 1.57);//accounted for overshoot
 
@@ -83,9 +83,9 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
     public Turret turret;
 
     public static double stoptime = 1;
-    public static double shoottime = 0.8;
+    public static double shoottime = 1.2;
 
-    public static double waittime = 0;
+    public static double waittime = 0.4;
     public static double checkcount = 3;
 
     public static double followingtime = 1.5;
@@ -204,21 +204,21 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
                 .addPath(new BezierLine(PrepGather1, FinishGather1))
                 .setLinearHeadingInterpolation(PrepGather1.getHeading(), FinishGather1.getHeading())
                 .setTValueConstraint(0.85)
-                .setBrakingStrength(0.8)
+                .setBrakingStrength(0.85)
                 .build();
 
         Shootpath3 = drive.follower.pathBuilder()
                 .addPath(new BezierLine(FinishGather3,ShootPose_Near))
 //                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
                 .setConstantHeadingInterpolation(ShootPose_Near.getHeading())
-                .setBrakingStrength(0.8)
+                .setBrakingStrength(0.85)
                 .build();
 
         Shootpath4 = drive.follower.pathBuilder()
                 .addPath(new BezierLine(GatePose,Park))
 //                .setLinearHeadingInterpolation(FinishGather1.getHeading(),Park.getHeading())
                 .setConstantHeadingInterpolation(Park.getHeading())
-                .setBrakingStrength(0.8)
+                .setBrakingStrength(0.85)
                 .build();
 
 //        prepGatherPath4 = simplePath(ShootPose2,PrepGather4);
@@ -889,6 +889,7 @@ public class Blue_Near_21ball_Gateholding extends OpMode {
         drive.follower.setPose(startPose);
         drive.blueinit();
         telemetry.addData("state", pathState);
+        turret.autoreset();
 //        telemetry.addData("turret aim", turret.aimposition);
 //        telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
 //        telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
