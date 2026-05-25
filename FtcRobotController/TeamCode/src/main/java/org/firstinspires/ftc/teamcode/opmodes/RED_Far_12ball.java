@@ -37,7 +37,7 @@ public class RED_Far_12ball extends OpMode {
     private final Pose PrepGather3 = PrepGather1;
 
     private final Pose FinishGather3 = FinishGather1;
-
+    private boolean cycleflag = false;
     private final Pose endPose = new Pose(4.64556,-44.66559,-1.5623);
 
     private boolean firstshooting = false;
@@ -308,7 +308,12 @@ public class RED_Far_12ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(14);
+                            if(!cycleflag){
+                                cycleflag = true;
+                                setPathState(10);
+                            }else {
+                                setPathState(14);
+                            }
                         }
 
 

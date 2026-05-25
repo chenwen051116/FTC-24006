@@ -44,6 +44,7 @@ public class BLUE_Far_12ball extends OpMode {
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
 
+    private boolean cycleflag = false;
     public Intake intake;
     public Shooter shooter;
     public MyLimelight limelight;
@@ -274,10 +275,6 @@ public class BLUE_Far_12ball extends OpMode {
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     intake.periodic();
                 }
-                else if (follower.getPose().getY()< -25){
-                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-                    intake.periodic();
-                }
                 if(!follower.isBusy()) {
                     setPathState(12);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
@@ -309,7 +306,12 @@ public class BLUE_Far_12ball extends OpMode {
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(14);
+                            if(!cycleflag){
+                                cycleflag = true;
+                                setPathState(10);
+                            }else {
+                                setPathState(14);
+                            }
                         }
 
 
