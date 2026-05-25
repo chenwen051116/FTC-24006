@@ -42,8 +42,7 @@ public class BLUE_Near_12ballgate extends OpMode {
     private final Pose Park = new Pose(-26.0954, 52.5732, -0.83604);
     private boolean firstshooting = false;
 
-    public static double shoottime = 2;
-    public static double waittime = 1;
+    public static double shootingtime = 3;
     private PathChain Shootpath1, Shootpath2, Shootpath3,Shootpath4, lastOutPath;
     private PathChain prepGatherPath1, prepGatherPath2, prepGatherPath3;
 
@@ -131,22 +130,21 @@ public class BLUE_Near_12ballgate extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> shootingtime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<shootingtime){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -191,22 +189,21 @@ public class BLUE_Near_12ballgate extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> shootingtime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<shootingtime){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -249,22 +246,21 @@ public class BLUE_Near_12ballgate extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> shootingtime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(10);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<shootingtime){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -307,22 +303,21 @@ public class BLUE_Near_12ballgate extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> shootingtime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(14);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2 && timer.getElapsedTimeSeconds()<shootingtime){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;

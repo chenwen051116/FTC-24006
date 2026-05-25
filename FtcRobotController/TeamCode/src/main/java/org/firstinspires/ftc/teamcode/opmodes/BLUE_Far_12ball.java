@@ -49,9 +49,6 @@ public class BLUE_Far_12ball extends OpMode {
     public MyLimelight limelight;
     public Scheduler scheduler;
 
-    public double waittime = 1;
-    public double shoottime = 2;
-
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
 
@@ -122,22 +119,21 @@ public class BLUE_Far_12ball extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                       //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(2);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -182,22 +178,21 @@ public class BLUE_Far_12ball extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(6);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -239,22 +234,21 @@ public class BLUE_Far_12ball extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(10);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -296,22 +290,21 @@ public class BLUE_Far_12ball extends OpMode {
                 if(!follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
-                        //shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         timer.resetTimer();
 
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()>waittime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(timer.getElapsedTimeSeconds()> shoottime){
+                        if(timer.getElapsedTimeSeconds()> 4.2){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setSwingBarPos(0.4);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                             setPathState(14);
                         }
-
+                        if(timer.getElapsedTimeSeconds()>2.3 && timer.getElapsedTimeSeconds()<4.2){
+                            intake.setSwingBarPos(0);
+                        }
 
                     }
                     break;
@@ -353,7 +346,6 @@ public class BLUE_Far_12ball extends OpMode {
         if(shooter.shooterStatus == Shooter.ShooterStatus.Shooting){
             intake.updateAutoshoot(true);
             intake.updateautotranse(shooter.isAtTargetRPM());
-            shooter.forceShooting = true;
             shooter.updateDis(limelight.getDis());
             shooter.updateFocused(true);
         }
