@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        shooterLeft.setDirection(DcMotor.Direction.REVERSE);
+        shooterLeft.setDirection(DcMotor.Direction.FORWARD);
         shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
@@ -206,7 +206,7 @@ public class Shooter extends SubsystemBase {
             if (abs(rpmDifference) <= pidThreshold) {
                 // Use PID control for fine-tuning within ±pidThreshold RPM
                 pidOutput = pidController.calculate(pidinput)+kv*targetRPM;
-                power = Math.max(-1.0, Math.min(1.0, pidOutput)); //smart
+                power = Math.max(-1.0, Math.min(1.0, pidOutput)); //smart brahhh
             } else if (rpmDifference < pidThreshold) {
                 // Large speed increase needed - use full power
                 power = 1.0;
@@ -222,7 +222,7 @@ public class Shooter extends SubsystemBase {
             currentPIDOutput = pidOutput;
 
             // Apply power to both motors
-            shooterLeft.setPower(power);
+            shooterLeft.setPower(-power);
             shooterRight.setPower(power);
         } else {
             // Stop motors if no target set
@@ -238,7 +238,7 @@ public class Shooter extends SubsystemBase {
      * Set flywheel power directly (bypasses PID)
      */
     public void setFlywheelPower(double power) {
-        shooterLeft.setPower(-power);
+        shooterLeft.setPower(power);
         shooterRight.setPower(power);
         // Reset target when using manual power
         targetRPM = 0;
