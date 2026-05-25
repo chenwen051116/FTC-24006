@@ -213,7 +213,7 @@ public class RED_Far_12ball extends OpMode {
                 break;
             case 8:
                 shooter.autoLonger = true;
-                follower.followPath(Shootpath3);
+                follower.followPath(Shootpath3,0.8,false);
                 firstshooting = false;
                 setPathState(9);
 
