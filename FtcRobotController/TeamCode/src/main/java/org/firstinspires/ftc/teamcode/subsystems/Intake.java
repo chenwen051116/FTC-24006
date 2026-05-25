@@ -91,7 +91,7 @@ public class Intake extends SubsystemBase {
                 }
                 else{
                     intake.setPower(IntakeTransferState.Send_It_Up.intakePower);
-                    transfer.setPower(IntakeTransferState.Send_It_Up.transferPower);
+                    transfer.setPower(0.7);
                 }
             }
             else {
@@ -126,10 +126,10 @@ public class Intake extends SubsystemBase {
     public void periodic() { // FTC 0.001s cycle
 
         if(!breakbeam_Mid.getState()){
-            bbmidCount=(bbmidCount*4+1)/5.0;
+            bbmidCount=(bbmidCount*2+1)/3.0;
         }
         else{
-            bbmidCount=(bbmidCount*4+0)/5.0;
+            bbmidCount=(bbmidCount*2+0)/3.0;
         }
         midHasBallFlag = (bbmidCount>=breakBeamThresh);
         
@@ -142,7 +142,7 @@ public class Intake extends SubsystemBase {
                 }
                 else{
                     intake.setPower(IntakeTransferState.Send_It_Up.intakePower);
-                    transfer.setPower(IntakeTransferState.Send_It_Up.transferPower);
+                    transfer.setPower(0.7);
                 }
             }
             else {
