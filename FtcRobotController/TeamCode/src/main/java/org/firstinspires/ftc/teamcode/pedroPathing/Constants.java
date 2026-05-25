@@ -65,7 +65,7 @@ public class    Constants {
     public static PathConstraints pathConstraints = new PathConstraints(
             0.997,
             50,
-            0.5,
+            0.4,
             1
     );
 
