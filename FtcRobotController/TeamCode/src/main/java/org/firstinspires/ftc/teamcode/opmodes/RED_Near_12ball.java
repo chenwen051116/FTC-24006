@@ -158,7 +158,7 @@ public class RED_Near_12ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(prepGatherPath1,false);
+                    follower.followPath(prepGatherPath1,true);
                     setPathState(3);
                 }
                 break;
@@ -240,7 +240,7 @@ public class RED_Near_12ball extends OpMode {
                 break;
             case 8:
                 shooter.autoLonger = false;
-                follower.followPath(Shootpath3,true);
+                follower.followPath(Shootpath3,0.8,false);
                 firstshooting = false;
                 setPathState(9);
 
