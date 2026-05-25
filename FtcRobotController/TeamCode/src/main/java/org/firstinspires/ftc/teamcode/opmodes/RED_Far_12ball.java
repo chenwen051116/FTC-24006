@@ -148,7 +148,7 @@ public class RED_Far_12ball extends OpMode {
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    follower.followPath(prepGatherPath1);
+                    follower.followPath(prepGatherPath1,true);
                     setPathState(3);
                 }
                 break;
