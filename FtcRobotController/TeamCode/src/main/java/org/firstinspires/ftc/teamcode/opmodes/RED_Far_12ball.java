@@ -153,15 +153,6 @@ public class RED_Far_12ball extends OpMode {
                 }
                 break;
             case 3:
-                if(follower.getPose().getY()<-34){
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    intake.periodic();
-                }
-                else if (follower.getPose().getY()< -25){
-                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-                    intake.periodic();
-                }
-
 
                 if(!follower.isBusy()) {
                     setPathState(4);
@@ -212,14 +203,7 @@ public class RED_Far_12ball extends OpMode {
                 }
                 break;
             case 7:
-                if(follower.getPose().getY()<-34){
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    intake.periodic();
-                }
-                else if (follower.getPose().getY()< -25){
-                    intake.setIntakeState(Intake.IntakeTransferState.Send_It_Up);
-                    intake.periodic();
-                }
+
                 if(!follower.isBusy()) {
                     setPathState(8);
                     shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
