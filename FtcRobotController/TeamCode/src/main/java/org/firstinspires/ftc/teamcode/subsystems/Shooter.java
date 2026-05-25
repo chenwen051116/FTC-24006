@@ -55,6 +55,7 @@ public class Shooter extends SubsystemBase {
     public boolean forceShooting = false;
 
     public boolean rpmreached = false;
+    public int offset = 0;
 
 
     public enum ShooterStatus {
@@ -96,6 +97,9 @@ public class Shooter extends SubsystemBase {
         autoLonger = true;
     }
 
+    public void adjustoff(int change){
+        offset+=change;
+    }
     /**
      * Get current flywheel velocity in rad/s
      * Uses shooterLeft (the motor with encoder) for velocity feedback
@@ -259,13 +263,13 @@ public class Shooter extends SubsystemBase {
     public void updateAim() {
 //        distance = abs(distance);
         if (distance < 2.4){
-            setTargetRPM(156*distance+1493.4-50);
+            setTargetRPM(156*distance+1493.4-50+offset);
         }
 //        else if (distance < 1.2){
 //            setTargetRPM(2400);
 //        }
         else{
-           setTargetRPM(226*distance+1453.4);
+           setTargetRPM(226*distance+1453.4+offset);
        }
 //
 //
