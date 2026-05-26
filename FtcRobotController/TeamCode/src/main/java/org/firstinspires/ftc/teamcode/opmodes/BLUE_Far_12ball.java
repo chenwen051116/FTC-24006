@@ -50,7 +50,7 @@ public class BLUE_Far_12ball extends OpMode {
     public MyLimelight limelight;
     public Scheduler scheduler;
 
-    public double waittime = 1;
+    public double waittime = 0.5;
     public double shoottime = 2;
 
     public void buildPaths() {
