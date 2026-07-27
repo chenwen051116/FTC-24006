@@ -77,6 +77,8 @@ public class TeleOnedriver extends CommandOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> limelightLock.addoff(-0.5));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> shooter.adjustoff(10));
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> shooter.adjustoff(-10));
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()->shooter.setclose());
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()->shooter.setfar());
         //DRIVER TWO
     }
 

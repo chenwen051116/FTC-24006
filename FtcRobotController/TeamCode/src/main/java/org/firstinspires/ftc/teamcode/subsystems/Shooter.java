@@ -52,6 +52,9 @@ public class Shooter extends SubsystemBase {
 
     public static double Autoshort = 1720;
     public static double Autolong = 2080;
+
+    public double idlespeed = 1600;
+    //public boolean far = false;
     public boolean forceShooting = false;
 
     public boolean rpmreached = false;
@@ -171,7 +174,12 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Stop;
     }
 
-
+public void setfar(){
+        idlespeed = 2100;
+}
+    public void setclose(){
+        idlespeed = 1700;
+    }
     public void settoIdle(){
         shooterStatus = ShooterStatus.Idling;
     }    public void updateFlywheelPID() {
@@ -262,16 +270,19 @@ public class Shooter extends SubsystemBase {
 
     public void updateAim() {
 //        distance = abs(distance);
-        if (distance < 2.4){
-            setTargetRPM(156*distance+1493.4-50+offset);
-        }
+        if(distance!=0) {
+            if (distance < 2.4) {
+                setTargetRPM(156 * distance + 1493.4 - 50 + offset);
+            }
 //        else if (distance < 1.2){
 //            setTargetRPM(2400);
 //        }
-        else{
-           setTargetRPM(226*distance+1453.4+offset);
-       }
-//
+            else {
+                setTargetRPM(226 * distance + 1453.4 + offset);
+            }
+        }
+
+//}
 //
         if(automode&&autoLonger){
             setTargetRPM(Autolong);
@@ -312,7 +323,7 @@ public class Shooter extends SubsystemBase {
         }
         else if(shooterStatus == ShooterStatus.Idling) {
             rpmreached = false;
-            setTargetRPM(1800);
+            setTargetRPM(idlespeed);
         }
     }
     public void updateTelemetry() {

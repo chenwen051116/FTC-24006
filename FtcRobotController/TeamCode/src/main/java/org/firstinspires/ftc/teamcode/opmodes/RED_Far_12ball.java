@@ -340,6 +340,7 @@ public class RED_Far_12ball extends OpMode {
             intake.updateautotranse(shooter.isAtTargetRPM());
             shooter.updateDis(limelight.getDis());
             shooter.updateFocused(true);
+            shooter.forceShooting = true;
         }
         else{
             intake.updateAutoshoot(false);
