@@ -61,7 +61,7 @@ public class Turret extends SubsystemBase {
 
     public double tolerance = 1;
 
-    public double arctoDegree = 8184.9497;
+    public double arctoDegree = 4297.183;
 
     public double llbar = 8;
 
@@ -133,7 +133,7 @@ public class Turret extends SubsystemBase {
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         if(isIndexing){
-            turretpidController.setSetPoint(25500);
+            turretpidController.setSetPoint(13388);
         }
         else {
             turretpidController.setSetPoint((int) -floor(arcangle * arctoDegree) + zerooff);
@@ -160,7 +160,7 @@ public class Turret extends SubsystemBase {
     }
 
     public boolean isfocuedTu(){
-        return posDiff()<200;
+        return posDiff()<105;
     }
     public void focusMode(){
 

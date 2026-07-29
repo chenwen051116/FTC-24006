@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -35,7 +36,7 @@ public class Shooter extends SubsystemBase {
 
     public static double Kf = 0;    // Friction gain
 
-    public static double kv = 0.000210; // FeedForward velocity gain
+    public static double kv = 0.000230; // FeedForward velocity gain
 
     public double kvoff  = 0;
     public static double pidThreshold = 300.0; // RPM threshold for PID vs full power control
@@ -125,7 +126,7 @@ public class Shooter extends SubsystemBase {
        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-       shooterLeft.setDirection(DcMotor.Direction.FORWARD);
+       shooterLeft.setDirection(DcMotor.Direction.REVERSE);
         shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
@@ -215,11 +216,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(0.95);
+        shootLimit.setPosition(0.725);
     }
 
     public void shootbarOff(){
-        shootLimit.setPosition(0.725);
+        shootLimit.setPosition(0.95);
     }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
