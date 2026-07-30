@@ -285,7 +285,7 @@ public void togglesafeMode(){
 //////        telemetry.addData("Apriltag(PoI) Tx", limelight.getTx());
 //////        telemetry.addData("Apriltag ID", limelight.getAprilTagID());
 //////        telemetry.addData("Pitch", limelight.getPitch());
-//        telemetry.addData("Shooterdis", shooter.ododis);
+        telemetry.addData("Shooterdis", shooter.ododis);
 ////        telemetry.addData("DRIVETRAIN GIVE ANGLE", drivetrain.getturretangle());
         telemetry.addData("turretpos", turret.getPos());
         telemetry.addData("turretaimpos", turret.aimposition);

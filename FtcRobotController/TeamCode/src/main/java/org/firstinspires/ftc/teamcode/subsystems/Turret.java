@@ -39,9 +39,9 @@ public class Turret extends SubsystemBase {
 
     public double kf = 0;
 
-    public static double encoderkp = -0.00035;
+    public static double encoderkp = -0.00038;
     public static double encoderkd = -0.000012;
-    public static double encoderki = -0.00;
+    public static double encoderki = -0.0;
 
     public static double encoderkf = -0.00000;
 
@@ -62,6 +62,7 @@ public class Turret extends SubsystemBase {
     public double tolerance = 1;
 
     public double arctoDegree = 4297.183;
+    public static double maxTurretAngle = Math.toRadians(140);
 
     public double llbar = 8;
 
@@ -128,6 +129,11 @@ public class Turret extends SubsystemBase {
     }
 
     public void settoangle(double arcangle){
+        // 反转点仍然是 ±180°
+        arcangle = Math.atan2(Math.sin(arcangle), Math.cos(arcangle));
+
+        // 实际输出限制在 ±140°
+        arcangle = Math.max(-maxTurretAngle, Math.min(maxTurretAngle, arcangle));
 
         if(turretMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER){
             turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase {
     public  double Autoshort = 2580;
     public  double Autolong = 3110;
 
-    public double idleSpeed = 2600;
+    public double idleSpeed = 2000;
 
     public boolean isfocused = false;
 
@@ -348,18 +348,18 @@ public class Shooter extends SubsystemBase {
             ,108.2516};
 
     public int[] shortrpm = {
-        2670,
-        2640,
-        2610,
-        2550,
-        2570,
-        2590,
-        2610,
-        2590,
-        2600,
-        2630,
-        2695,
-        2780
+        2090,
+        2090,
+        2100,
+        2115,
+        2150,
+        2200,
+        2225,
+        2250,
+        2255,
+        2255,
+        2305,
+        2350
     };
 
     public double[] longdis = {123.6751,
@@ -372,14 +372,14 @@ public class Shooter extends SubsystemBase {
             158.6143};
 
     public int[] longrpm = {
-            3060,
-            3085,
-            3100,
-            3140,
-            3200,
-            3270,
-            3375,
-            3430
+            2750,
+            2750,
+            2780,
+            2780,
+            2790,
+            2800,
+            2810,
+            2910
     };
 
     public void updateAim() {
@@ -420,7 +420,7 @@ public class Shooter extends SubsystemBase {
         else if(automode&&!autoLonger){
             setTargetRPM(Autoshort);
         }
-        //setTargetRPM(aimRPM);
+//        setTargetRPM(aimRPM);
     }
 
 
