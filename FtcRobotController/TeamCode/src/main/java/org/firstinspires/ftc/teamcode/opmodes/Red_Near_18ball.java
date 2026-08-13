@@ -37,26 +37,26 @@ public class Red_Near_18ball extends OpMode {
     //private final ElapsedTime timer  = new ElapsedTime();
 
     private int pathState = 0;
-    private final Pose startPose = new Pose(116.6709, 114.2514, -1.00580); // Start Pose of our robot.
+    private final Pose startPose = new Pose(120.0481, 101.6225, 0); // Start Pose of our robot.
     private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053-1, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
+    private final Pose PrepGather2 = new Pose(94.5284, 50.1627, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
+    private final Pose FinishGather2 = new Pose(115.3709, 50.1627, 0);
     private final Pose GatePassby = new Pose(104.9794, 55.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, 55.5252, 0.30050);//hit gate
-    private final Pose GatePose = new Pose(120.6561, 52.5, 0.30050);//pickup
-    private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
+    private final Pose GatePose = new Pose(122.7751, 50.42112, 0.4920);//pickup
+    private final Pose ShootPose = new Pose(82.0559, 71.1033 ,0.0053);
 
-    private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(94.5284, 74.6169, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
+    private final Pose FinishGather3 = new Pose(114.9794, 74.6169, 0);
 
-    private final Pose Park = new Pose(75.3860, 95.5130, -0.7830);
+    private final Pose Park = new Pose(78.8262, 95.5130, -0.8687);
     private boolean firstshooting = false;
 
-    public double turretoff = 0;
+    public double turretoff = 6;
     private double gatePathPower = 1;
     private PathChain GateShoot,GatePath1,GatePath2, Shootpath1,Shootpath2, Shootpath3,Shootpath4,Shootpath5, lastOutPath;
     private PathChain prepGatherPath6,prepGatherPath1,finishGatherPath6,Shootpath6, prepGatherPath2, prepGatherPath3, prepGatherPath4;
@@ -64,7 +64,7 @@ public class Red_Near_18ball extends OpMode {
     private PathChain finishGatherPath1,finishGatherPath2,finishGatherPath3,finishGatherPath4;
     public Intake intake;
     public Shooter shooter;
-    public MyLimelight limelight;
+//    public MyLimelight limelight;
     public Scheduler scheduler;
 
     public Turret turret;
@@ -124,7 +124,10 @@ public class Red_Near_18ball extends OpMode {
                 .setLinearHeadingInterpolation(PrepGather3.getHeading(), FinishGather3.getHeading())
                 .build();
 
-        Shootpath3 = simplePath(FinishGather3,ShootPose);
+        Shootpath3 = drive.follower.pathBuilder()
+                .addPath(new BezierCurve(FinishGather3, Park))
+                .setLinearHeadingInterpolation(FinishGather3.getHeading(), Park.getHeading())
+                .build();
 
 //        GatePath1 = drive.follower.pathBuilder()
 ////                .setTValueConstraint(0.95)
@@ -246,7 +249,7 @@ public class Red_Near_18ball extends OpMode {
             //1st shooting________________________________________________
             case 2:
                 if(!drive.follower.isBusy()) {
-                    turretoff = 0;
+                    turretoff = 6;
                     shooter.offset = -25;
                     //  turret.autopos = 0;
                     firstshooting = false;
@@ -443,7 +446,7 @@ public class Red_Near_18ball extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            setPathState(24);
+//                            setPathState(24);
                         }
 
                     }
@@ -628,72 +631,6 @@ public class Red_Near_18ball extends OpMode {
 
 
 
-            case 24:
-                if(!drive.follower.isBusy()) {
-                    //  turret.autopos = 0;
-                    intake.autoIntakeUp = true;
-                    firstshooting = false;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                    shooter.periodic();
-                    drive.follower.followPath(prepGatherPath3);
-                    setPathState(25);
-                }
-                break;
-            case 25:
-                if(!drive.follower.isBusy()) {
-                    // turret.isManeulCentering = true;
-                    // turret.centeringDir = false;
-                    //drive.follower.followPath(finishGatherPath1,1,false);
-                    setPathState(26);
-                }
-                break;
-            case 26:
-                if(!drive.follower.isBusy()){
-                    //  turret.isManeulCentering = false;
-                    // turret.centeringDir = false;
-                    shooter.offset = -25;
-                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                    intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
-                    drive.follower.followPath(Shootpath4,1,true);
-                    firstshooting = false;
-                    setPathState(27);
-                }
-                break;
-            case 27:
-                if(!drive.follower.isBusy()) {
-                    if (!firstshooting) {
-                        shooter.updateFocused(true);
-
-                        timer.resetTimer();
-                        firstshooting = true;
-                    }
-                    else{
-                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                        }
-                        if(shooter.getTransDis()>18){
-                            checkcounter -=1;
-                        }
-                        else{
-                            checkcounter = checkcount;
-                        }
-                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            firstshooting = false;
-                            setPathState(29);
-                        }
-
-                    }
-                    break;
-
-                }
-                break;
-
-
-
-
 
 
 //
@@ -745,7 +682,7 @@ public class Red_Near_18ball extends OpMode {
         drive.follower.update();
         shooter.periodic();
         turret.periodic();
-        limelight.periodic();
+//        limelight.periodic();
         intake.periodic();
         // turret.automode = true;
 //        if(shooter.autoLonger){
@@ -811,9 +748,9 @@ public class Red_Near_18ball extends OpMode {
         drive = new Drivetrain(hardwareMap,false);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
-        limelight = new MyLimelight(hardwareMap);
-        limelight.initPatternPipeline();
-        limelight.startDetect();
+//        limelight = new MyLimelight(hardwareMap);
+//        limelight.initPatternPipeline();
+//        limelight.startDetect();
         //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
         turret = new Turret(hardwareMap,false);

@@ -191,7 +191,7 @@ public class Shooter extends SubsystemBase {
         return targetRPM;
     }
     public boolean isAtTargetRPM() {
-        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM!=2600&&targetRPM>2500){
+        if(getTargetRPM() < getFlyWheelRPM()+RPMThresh&& getTargetRPM() > getFlyWheelRPM()-RPMThresh&& targetRPM!=1800&&targetRPM>1810){
             rpmreached = true;
         }
 //        reverIntake = shootTimer.getElapsedTimeSeconds() < shootInterval;
@@ -348,18 +348,18 @@ public class Shooter extends SubsystemBase {
             ,108.2516};
 
     public int[] shortrpm = {
-        2090,
-        2090,
-        2100,
-        2115,
-        2150,
-        2200,
-        2225,
+        1900,
+        1950,
+        1970,
+        1975,
+        1990,
+        2000,
+        2015,
+        2060,
+        2120,
+        2185,
         2250,
-        2255,
-        2255,
-        2305,
-        2350
+        2300
     };
 
     public double[] longdis = {123.6751,
@@ -372,11 +372,11 @@ public class Shooter extends SubsystemBase {
             158.6143};
 
     public int[] longrpm = {
+            2470,
+            2520,
+            2535,
+            2590,
             2750,
-            2750,
-            2780,
-            2780,
-            2790,
             2800,
             2810,
             2910

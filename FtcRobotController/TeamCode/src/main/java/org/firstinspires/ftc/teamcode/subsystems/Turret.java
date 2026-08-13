@@ -40,7 +40,7 @@ public class Turret extends SubsystemBase {
     public double kf = 0;
 
     public static double encoderkp = -0.00038;
-    public static double encoderkd = -0.000012;
+    public static double encoderkd = -0.000018;
     public static double encoderki = -0.0;
 
     public static double encoderkf = -0.00000;
@@ -62,7 +62,7 @@ public class Turret extends SubsystemBase {
     public double tolerance = 1;
 
     public double arctoDegree = 4297.183;
-    public static double maxTurretAngle = Math.toRadians(140);
+    public static double maxTurretAngle = Math.toRadians(179);
 
     public double llbar = 8;
 

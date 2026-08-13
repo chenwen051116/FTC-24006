@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.commands.LimelightLockInCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.MyLimelight;
+
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
@@ -69,7 +69,7 @@ public class Blue_Far_cycle extends OpMode {
     private PathChain finishGatherPath1,finishGatherPath2,finishGatherPath3,finishGatherPath4;
     public Intake intake;
     public Shooter shooter;
-    public MyLimelight limelight;
+
     public Scheduler scheduler;
 
     public Turret turret;
@@ -367,83 +367,31 @@ public class Blue_Far_cycle extends OpMode {
             //5th shooting________________________________________________
             case 20:
                 if(!drive.follower.isBusy()) {
-//                    drive.follower.followPath(lastOutPath);
-                    setPathState(21);
-                }
-                break;
-            case 21:
-                if(!drive.follower.isBusy()){
-                    setPathState(22);
-                }
-                break;
-            case 22:
-                if(!drive.follower.isBusy()) {
-                    intake.autoIntakeUp = true;
-                    //cyclecounter -=1;
-
                     //turret.autopos = 319;
-                    shooter.Autolong = 3100;
+                    shooter.Autolong = 3135;
                     firstshooting = false;
                     shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                     intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
                     shooter.periodic();
-                    //drive.follower.followPath(prepGatherPath6);
-                    //drive.follower.breakFollowing();
-                    firstshooting = false;
-
+                    drive.follower.followPath(prepGatherPath1);
+                    setPathState(21);
+                }
+                break;
+            case 21:
+                if(!drive.follower.isBusy()) {
+                    drive.follower.followPath(finishGatherPath1);
+                    setPathState(22);
+                }
+                break;
+            case 22:
+                if(!drive.follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    drive.follower.followPath(Shootpath2);
                     setPathState(23);
                 }
                 break;
             case 23:
-                if(!drive.follower.isBusy()) {
-                    if (!firstshooting) {
-                        timer.resetTimer();
-                        firstshooting = true;
-                        break;
-                    }
-                    else {
-                        if (timer.getElapsedTimeSeconds() < followingtime) {
-                            if(!drive.follower.isTeleopDrive()) {
-                                drive.follower.breakFollowing();
-                                drive.follower.startTeleopDrive();
-
-
-                            }
-                            if(drive.follower.getPose().getX()<125&&drive.follower.getPose().getY()>-59) {
-                                if(drive.follower.getPose().getY()>-10){
-                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx()/(11+drive.follower.getPose().getY()));
-                                }
-                                else {
-                                    drive.teleDrive(0.4, 0, LimelightLockInCommand.Kp * limelight.getpatterTx());
-                                }
-                            }
-                            else{
-                                drive.teleDrive(0, 0, 0);
-                            }
-                            autoflag = true;
-                        }
-                        else{
-                            firstshooting = false;
-                            autoflag = false;
-//                            teleDrive(0, 0,
-//                                    0);
-
-                            drive.follower.breakFollowing();
-                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In_slow);
-                            shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
-                                drive.follower.followPath(simpleConstPath(drive.follower.getPose(),ShootPose1));
-                                setPathState(24);
-                            }
-                            else{
-                                setPathState(26);
-                            }
-                            break;
-                        }
-                    }
-                }
-                break;
-            case 24:
                 if(!drive.follower.isBusy()) {
                     if (!firstshooting) {
                         shooter.updateFocused(true);
@@ -452,7 +400,7 @@ public class Blue_Far_cycle extends OpMode {
                         firstshooting = true;
                     }
                     else{
-                        if(timer.getElapsedTimeSeconds()<(shoottime)){
+                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
                         }
                         if(shooter.getTransDis()>18){
@@ -464,13 +412,7 @@ public class Blue_Far_cycle extends OpMode {
                         if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
                             shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
                             intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
-                            firstshooting = false;
-                            if(fulltimer.getElapsedTimeSeconds()<26) {
-                                setPathState(22);
-                            }
-                            else{
-                                setPathState(26);
-                            }
+                            setPathState(30);
                         }
 
                     }
@@ -480,7 +422,61 @@ public class Blue_Far_cycle extends OpMode {
                 break;
 
 
+            case 30:
+                if(!drive.follower.isBusy()) {
+                    //turret.autopos = 319;
+                    shooter.Autolong = 3135;
+                    firstshooting = false;
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                    intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                    shooter.periodic();
+                    drive.follower.followPath(prepGatherPath1);
+                    setPathState(31);
+                }
+                break;
+            case 31:
+                if(!drive.follower.isBusy()) {
+                    drive.follower.followPath(finishGatherPath1);
+                    setPathState(32);
+                }
+                break;
+            case 32:
+                if(!drive.follower.isBusy()){
+                    shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                    //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
+                    drive.follower.followPath(Shootpath2);
+                    setPathState(33);
+                }
+                break;
+            case 33:
+                if(!drive.follower.isBusy()) {
+                    if (!firstshooting) {
+                        shooter.updateFocused(true);
 
+                        timer.resetTimer();
+                        firstshooting = true;
+                    }
+                    else{
+                        if(timer.getElapsedTimeSeconds()>waittime&&timer.getElapsedTimeSeconds()<shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                        }
+                        if(shooter.getTransDis()>18){
+                            checkcounter -=1;
+                        }
+                        else{
+                            checkcounter = checkcount;
+                        }
+                        if(checkcounter<0||timer.getElapsedTimeSeconds()> shoottime){
+                            shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
+                            intake.setIntakeState(Intake.IntakeTransferState.Suck_In);
+                            setPathState(26);
+                        }
+
+                    }
+                    break;
+
+                }
+                break;
 
 
 
@@ -536,7 +532,6 @@ public class Blue_Far_cycle extends OpMode {
         drive.follower.update();
         shooter.periodic();
         turret.periodic();
-        limelight.periodic();
         intake.periodic();
         // turret.automode = true;
 //        if(shooter.autoLonger){
@@ -605,9 +600,6 @@ public class Blue_Far_cycle extends OpMode {
         drive = new Drivetrain(hardwareMap,false);
         intake = new Intake(hardwareMap);
         shooter = new Shooter(hardwareMap);
-        limelight = new MyLimelight(hardwareMap);
-        limelight.initPatternPipeline();
-        limelight.startDetect();
         //intake.setIntakeState(Intake.IntakeTransferState.Intake_Steady);
         shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
         turret = new Turret(hardwareMap,false);

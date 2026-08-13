@@ -293,7 +293,7 @@ public void togglesafeMode(){
 //////        telemetry.addData("ShotterForce?", shooter.forceShooting);
 //       telemetry.addData("accel", drivetrain.angularVelnum);
         telemetry.addData("pidoutput", turret.output);
-////        telemetry.addData("TransferDis", shooter.getTransDis());
+        telemetry.addData("TransferDis", shooter.getTransDis());
         telemetry.addData("Looptime", drivetrain.looptime);
         telemetry.addData("shootervel", drivetrain.getdis_TWO());
         telemetry.addData("turret",drivetrain.getturretangle_TWO());

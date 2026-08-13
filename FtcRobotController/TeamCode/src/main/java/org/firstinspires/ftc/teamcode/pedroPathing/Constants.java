@@ -17,19 +17,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class    Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.524)
-            .forwardZeroPowerAcceleration(-31.203684649136637)
-            .lateralZeroPowerAcceleration(-76.08349200453131)
+            .forwardZeroPowerAcceleration(-80.237575321159)
+            .lateralZeroPowerAcceleration(-74.3403778262462)
             .useSecondaryTranslationalPIDF(true)
             .useSecondaryHeadingPIDF(true)
             .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.00023)
+            .centripetalScaling(0.00039)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.025, 0.15))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.3, 0.001, 0.002, 0.1))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.001, 0.005, 0.1))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0009, 0.6, 0.001))
             .secondaryTranslationalPIDFCoefficients(
-                    new PIDFCoefficients(0.05, 0.0001, 0, 0.02)
+                    new PIDFCoefficients(0.1, 0.0001, 0, 0.03)
             )
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.7, 0.006, 0.05, 0.02))
+            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.6, 0.00, 0.09, 0.06))
             .secondaryDrivePIDFCoefficients(
                     new FilteredPIDFCoefficients(0.0005, 0.0001, 0.0009, 0.6, 0.0)
             );
@@ -45,8 +45,8 @@ public class    Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(81.48237237404652)
-            .yVelocity(63.01307209645669)
+            .xVelocity(68.11599226823942)
+            .yVelocity(46.531298059178155)
             .nominalVoltage(13.3)
             .useVoltageCompensation(true);
 

@@ -40,23 +40,23 @@ public class Red_Near_21ball extends OpMode {
 
     private final Pose GatePrep2 = new Pose(110.53,54.29,0.375);
     private final Pose GatePush2 = new Pose(116.91,57.65,-0.090);
-    private final Pose startPose = new Pose(116.6709, 114.2514, -1.00580); // Start Pose of our robot.
+    private final Pose startPose = new Pose(120.0481, 101.6225, 0); // Start Pose of our robot.
     private final Pose PrepGather1 = new Pose(91.9908, 28.6053+5, 0);
     private final Pose FinishGather1 = new Pose(114.9794, 28.6053-1, 0);
 
-    private final Pose PrepGather2 = new Pose(91.9908, 52.0297+5, 0);
+    private final Pose PrepGather2 = new Pose(94.5284, 50.1627, 0);
 
-    private final Pose FinishGather2 = new Pose(114.9794, 52.0297, 0);
+    private final Pose FinishGather2 = new Pose(115.3709, 50.1627, 0);
     private final Pose GatePassby = new Pose(104.9794, 55.7386, 0);//real pass by
     private final Pose GatePassby2 = new Pose(118.6561, 55.5252, 0.30050);//hit gate
-    private final Pose GatePose = new Pose(120.6561, 52.5, 0.30050);//pickup
-    private final Pose ShootPose = new Pose(79.1620, 70.80 ,0);
+    private final Pose GatePose = new Pose(122.7751, 50.42112, 0.4920);//pickup
+    private final Pose ShootPose = new Pose(82.0559, 70.1033 ,0.0053);
 
-    private final Pose PrepGather3 = new Pose(91.9908, 75.8070, 0);//accounted for overshoot
+    private final Pose PrepGather3 = new Pose(94.5284, 74.6169, 0);//accounted for overshoot
 
-    private final Pose FinishGather3 = new Pose(114.9794, 75.8070, 0);
+    private final Pose FinishGather3 = new Pose(114.9794, 74.6169, 0);
 
-    private final Pose Park = new Pose(75.3860, 95.5130, -0.7830);
+    private final Pose Park = new Pose(78.8262, 95.5130, -0.8687);
     private boolean firstshooting = false;
 
     public double turretoff = 0;
