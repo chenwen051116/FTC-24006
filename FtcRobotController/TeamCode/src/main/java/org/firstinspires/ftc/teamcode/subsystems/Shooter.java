@@ -6,7 +6,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.util.Timer;
+// Pedro 3 no longer provides this unused timer.
+// import com.pedropathing.util.Timer;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,17 +16,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 public class Shooter extends SubsystemBase {
     private final Servo shootLimit;
+    private final Servo hoodShifter;
     private final DcMotorEx shooterLeft;
     private final DcMotorEx shooterRight;
     private final PIDController pidController;
-    private final VoltageSensor v;
 
     private final DistanceSensor distanceSensor;
 
@@ -83,9 +83,10 @@ public class Shooter extends SubsystemBase {
 
     public double lastrpm = 0;
     public boolean reverIntake = false;
-    public Timer shootTimer;
+    // public Timer shootTimer;
 
     public double shootlimitpos = 0;
+    public static double hoodShiftPos = 0;
 
     public double ododis = 0;
 
@@ -95,7 +96,6 @@ public class Shooter extends SubsystemBase {
 
     public boolean Movingshooting = false;
 
-    public double vol = 14;
 
     public double offset = 10;
 
@@ -113,12 +113,14 @@ public class Shooter extends SubsystemBase {
 
 
     public Shooter(HardwareMap hardwareMap) {
-        v=hardwareMap.get(VoltageSensor.class,"Control Hub");
         shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
-        shootLimit = hardwareMap.get(Servo.class,"shootLimit");
-        shootTimer = new Timer();
+        hoodShifter = hardwareMap.get(Servo.class,"hoodShifter");
+        // distanceSensor = hardwareMap.get(DistanceSensor.class, "transferdis");
+        distanceSensor = null;
+        // shootLimit = hardwareMap.get(Servo.class,"shootLimit");
+        shootLimit = null;
+        // shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
 
@@ -126,7 +128,7 @@ public class Shooter extends SubsystemBase {
        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-       shooterLeft.setDirection(DcMotor.Direction.REVERSE);
+       shooterLeft.setDirection(DcMotor.Direction.FORWARD);
         shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
@@ -143,8 +145,6 @@ public class Shooter extends SubsystemBase {
         automode = false;
 
         autoLonger = true;
-        vol = v.getVoltage();
-        kv = 0.00020-0.0000086666667*(vol-12.7);
 
     }
 
@@ -185,7 +185,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTransDis(){
-        return distanceSensor.getDistance(DistanceUnit.CM);
+        return distanceSensor == null ? 0 : distanceSensor.getDistance(DistanceUnit.CM);
     }
     public double getTargetRPM() {
         return targetRPM;
@@ -216,12 +216,20 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shootbarOn(){
-        shootLimit.setPosition(0.725);
+
+        if (shootLimit != null){
+            shootLimit.setPosition(0.725);
+        }
     }
 
     public void shootbarOff(){
-        shootLimit.setPosition(0.95);
+        if (shootLimit != null) shootLimit.setPosition(0.45);
     }
+    public void hoodPollen(){
+        if (hoodShifter != null) hoodShifter.setPosition(0.45);
+    }
+
+    public void hoodNectar(){if (hoodShifter != null) hoodShifter.setPosition(0.86);}
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
     private double currentPIDOutput = 0.0;
@@ -452,6 +460,7 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
+//        hoodShifter.setPosition(hoodShiftPos);
 //        shootLimit.setPosition(shootlimitpos);
         updateFlywheelPID();
         if(shooterStatus == ShooterStatus.Shooting){
