@@ -113,7 +113,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static double aimKp = 2.0;             // turn power per radian of heading error
     public static double aimKd = 0.15;            // damping on angular velocity
-    public static double aimMaxTurn = 0.6;        // turn power clamp while aiming
+    public static double aimMaxTurn = 1;        // turn power clamp while aiming
     public static double aimHeadingOffset = 0.0;  // 0 = shooter fires out the front, Math.PI = out the back
 
     public Timer looptimer;
@@ -283,9 +283,13 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** CCW-positive turn command that rotates the robot onto the aim heading. */
-    private double aimTurnCommand() {
+    public double aimTurnCommand() {
         double cmd = aimKp * aimError() - aimKd * velOmega();
         return Math.max(-aimMaxTurn, Math.min(aimMaxTurn, cmd));
+    }
+
+    public boolean aimed(){
+        return Math.abs((Math.toDegrees(aimError())))<(5);
     }
 
     public void yposChange(double change) {

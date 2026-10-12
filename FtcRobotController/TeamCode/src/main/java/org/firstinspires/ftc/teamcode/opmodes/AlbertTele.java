@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -46,7 +47,10 @@ public class AlbertTele extends CommandOpMode {
         drivetrain.setDefaultCommand(new DriveInTeleOpCommand(gamepad1, drivetrain));
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.INTAKING));
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.INTAKING_FLOWER));
+        new Trigger(() -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1)
+                .whenActive(() -> intake.setIntakeState(Intake.IntakeState.INTAKING))
+                .whenInactive(() -> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.OUTTAKING));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
                 ()-> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
@@ -132,7 +136,7 @@ public class AlbertTele extends CommandOpMode {
         if (shooter.shooterStatus == Shooter.ShooterStatus.Shooting) {
             shooter.forceShooting = true;
             intake.updateAutoshoot(true);
-            intake.updateautotranse(shooter.isAtTargetRPM());
+            intake.updateautotranse(shooter.isAtTargetRPM() && drivetrain.aimed());
         } else {
             intake.updateAutoshoot(false);
         }
@@ -183,6 +187,7 @@ public class AlbertTele extends CommandOpMode {
         telemetry.addData("Aim pos", String.format("(%.2f, %.2f)", drivetrain.aimX(), drivetrain.aimY()));
         telemetry.addData("Aim statics", String.format("(%.2f, %.2f)", Drivetrain.aimPointX, Drivetrain.aimPointY));
         telemetry.addData("Aim err (deg)", String.format("%.1f", Math.toDegrees(drivetrain.aimError())));
+        telemetry.addData("aimcommand", drivetrain.aimTurnCommand());
         telemetry.update();
 
         // live pose on the FTC Dashboard field view (http://192.168.43.1:8080)
