@@ -296,93 +296,32 @@ public class Shooter extends SubsystemBase {
         shooterStatus = ShooterStatus.Shooting;
     }
 
-    public double[] shortdis = {53.3992
-            ,58.0312
-            ,63.6934
-            ,68.3024
-            ,73.3103
-            ,78.3967
-            ,83.3191
-            ,88.4699
-            ,93.2528
-            ,98.4668
-            ,103.132
-            ,108.2516};
+    // Distance vs RPM chart (new robot). updateAim() linearly interpolates
+    // between the nearest two points; outside the table it extrapolates
+    // using the first/last segment's slope.
+    public double[] shortdis = {70.0, 75.0, 80.0, 85.0, 90.0, 95.0};
 
     public int[] shortrpm = {
-        1900,
-        1950,
-        1970,
-        1975,
-        1990,
-        2000,
-        2015,
-        2060,
-        2120,
-        2185,
-        2250,
-        2300
-    };
-
-    public double[] longdis = {123.6751,
-            128.7674,
-            133.5043,
-            138.4454,
-            143.3385,
-            148.7577,
-            153.3198,
-            158.6143};
-
-    public int[] longrpm = {
-            2470,
-            2520,
-            2535,
-            2590,
-            2750,
-            2800,
-            2810,
-            2910
+        2050,
+        2110,
+        2180,
+        2260,
+        2360,
+        2430
     };
 
     public void updateAim() {
-//        double dis = abs(ododis);
-//        if (dis <120){
-//            int index = (int)floor((dis-53)/5.0);
-//            if(index<0){
-//                index = 0;
-//            }
-//            if(index >10){
-//                index = 10;
-//            }
-//            double slope = (shortrpm[index+1]-shortrpm[index])/(shortdis[index+1]-shortdis[index]);
-//            double target = slope*(dis-shortdis[index])+shortrpm[index];
-//            setTargetRPM(target+offset);
-//        }
-//        else {
-//            int index = (int)floor((dis-123)/5.0);
-//            if(index<0){
-//                index = 0;
-//            }
-//            if(index >6){
-//                index = 6;
-//            }
-//            double slope = (longrpm[index+1]-longrpm[index])/(longdis[index+1]-longdis[index]);
-//            double target = slope*(dis-longdis[index])+longrpm[index]+20;
-//                setTargetRPM(target + offset + 20);
-//
-//        }
-//
-//
-//        if(sortingMode){
-//            setTargetRPM(sortingSpeed);
-//        }
-//        if(automode&&autoLonger){
-//            setTargetRPM(Autolong);
-//        }
-//        else if(automode&&!autoLonger){
-//            setTargetRPM(Autoshort);
-//        }
-        setTargetRPM(aimRPM);
+        double dis = abs(ododis);
+        int index = (int) floor((dis - shortdis[0]) / (shortdis[1] - shortdis[0]));
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > shortdis.length - 2) {
+            index = shortdis.length - 2;
+        }
+        double slope = (shortrpm[index + 1] - shortrpm[index]) / (shortdis[index + 1] - shortdis[index]);
+        double target = slope * (dis - shortdis[index]) + shortrpm[index];
+        setTargetRPM(target + offset);
     }
 
 

@@ -125,10 +125,6 @@ public class AlbertTele extends CommandOpMode {
             y2justpressed = false;
         }
 
-        if (shooter.shooterStatus == Shooter.ShooterStatus.Shooting) {
-            shooter.setTargetRPM(Shooter.aimRPM);
-        }
-
         // shooter <-> intake auto-feed correlation:
         // forceShooting defaults on while Shooting, so once the flywheel
         // reaches target RPM once (rpmreached latch), isAtTargetRPM() stays
@@ -140,6 +136,18 @@ public class AlbertTele extends CommandOpMode {
         } else {
             intake.updateAutoshoot(false);
         }
+
+        // live distance to the aim point feeds the shooter's RPM lookup.
+        // Uses the 3D distance (includes the 1.51 m aim height) to match
+        // the "aim dis (in)" telemetry the RPM chart was recorded against.
+        if (shooter.shooterStatus != Shooter.ShooterStatus.Stop) {
+            shooter.ododis = drivetrain.getdis3D();
+        }
+
+        // run the subsystem state machines (flywheel PID, updateAim,
+        // shoot bar, intake auto-feed) -- nothing runs without these
+        shooter.periodic();
+        intake.periodic();
 
         // aim assist: dpad_down toggles the master switch;
         // the drivetrain auto-aims while the shooter is Shooting

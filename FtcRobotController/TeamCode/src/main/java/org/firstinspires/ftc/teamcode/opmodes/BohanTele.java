@@ -238,6 +238,11 @@ public class BohanTele extends CommandOpMode {
             y2justpressed = false;
         }
 
+        // run the subsystem state machines (flywheel PID, updateAim,
+        // shoot bar, intake auto-feed) -- nothing runs without these
+        shooter.periodic();
+        intake.periodic();
+
         telemetry.addData("Shooter Target RPM", shooter.getTargetRPM());
         telemetry.addData("Shooter Current RPM", shooter.getFlyWheelRPM());
         telemetry.addData("Pidoutput", shooter.getCurrentPIDOutput());
