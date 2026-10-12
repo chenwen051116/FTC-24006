@@ -25,8 +25,8 @@ public class Intake extends SubsystemBase {
     public boolean autoTrans = false;
 
     public Intake(HardwareMap hardwareMap) {
-        intakeL = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeL"));
-        intakeR = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeR"));
+        intakeL = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeLeft"));
+        intakeR = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeRight"));
 
         // Explicitly register our @Config statics with the dashboard
         // (the automatic DEX scan misses secondary dex files in large apps).
@@ -35,9 +35,9 @@ public class Intake extends SubsystemBase {
     }
 
     public enum IntakeState {
-        INTAKING(0.8),
+        INTAKING(-0.8),
         INTAKE_STOP(0),
-        OUTTAKING(-0.6);
+        OUTTAKING(0.6);
         private final double intakeMotorPower;
 
         IntakeState(double intakeMotorPower) {

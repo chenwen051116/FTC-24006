@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -29,7 +30,7 @@ public class Shooter extends SubsystemBase {
     public static double shootLimitClosed = 0.340;  // forbid shooting (bar holding balls)
     public static double shootLimitOpen = 0.560;    // open to shoot (bar feeding balls)
     private final CachingDcMotorEx shooterLeft;
-    private final CachingDcMotorEx shooterRight;
+   // private final CachingDcMotorEx shooterRight;
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
@@ -114,23 +115,23 @@ public class Shooter extends SubsystemBase {
 
 
     public Shooter(HardwareMap hardwareMap) {
-        shooterLeft = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooterLeft"));
-        shooterRight = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooterRight"));
-        shootLimit = new CachingServo(hardwareMap.get(Servo.class, "shootLimit"));
+        shooterLeft = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooter"));
+        //shooterRight = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooterRight"));
+        shootLimit = new CachingServo(hardwareMap.get(Servo.class, "gate"));
         shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
 
         // Configure motors
        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+       // shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-       shooterLeft.setDirection(DcMotor.Direction.FORWARD);
-        shooterRight.setDirection(DcMotor.Direction.FORWARD);
+       shooterLeft.setDirection(DcMotor.Direction.REVERSE);
+       // shooterRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Configure motor modes - only shooterLeft has encoder
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // Has encoder
-        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
+       // shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // No encoder
 
 
         // Set PID tolerance (adjustable via static parameter)
@@ -264,13 +265,13 @@ public class Shooter extends SubsystemBase {
 
             // Apply power to both motors
             shooterLeft.setPower(power);
-            shooterRight.setPower(-power);
+            //shooterRight.setPower(-power);
         } else {
             // Stop motors if no target set
             currentMotorPower = 0.0;
             currentPIDOutput = 0.0;
             shooterLeft.setPower(0);
-            shooterRight.setPower(0);
+            //shooterRight.setPower(0);
         }
     }
 
@@ -279,7 +280,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setFlywheelPower(double power) {
         shooterLeft.setPower(power);
-        shooterRight.setPower(power);
+        //shooterRight.setPower(power);
         // Reset target when using manual power
         targetRPM = 0;
     }
@@ -311,17 +312,18 @@ public class Shooter extends SubsystemBase {
     };
 
     public void updateAim() {
-        double dis = abs(ododis);
-        int index = (int) floor((dis - shortdis[0]) / (shortdis[1] - shortdis[0]));
-        if (index < 0) {
-            index = 0;
-        }
-        if (index > shortdis.length - 2) {
-            index = shortdis.length - 2;
-        }
-        double slope = (shortrpm[index + 1] - shortrpm[index]) / (shortdis[index + 1] - shortdis[index]);
-        double target = slope * (dis - shortdis[index]) + shortrpm[index];
-        setTargetRPM(target + offset);
+//        double dis = abs(ododis);
+//        int index = (int) floor((dis - shortdis[0]) / (shortdis[1] - shortdis[0]));
+//        if (index < 0) {
+//            index = 0;
+//        }
+//        if (index > shortdis.length - 2) {
+//            index = shortdis.length - 2;
+//        }
+//        double slope = (shortrpm[index + 1] - shortrpm[index]) / (shortdis[index + 1] - shortdis[index]);
+//        double target = slope * (dis - shortdis[index]) + shortrpm[index];
+//        setTargetRPM(target + offset);
+        setTargetRPM(aimRPM);
     }
 
 
