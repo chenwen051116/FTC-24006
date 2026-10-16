@@ -302,7 +302,7 @@ public class Drivetrain extends SubsystemBase {
 
     /** Reset the current pose to (0, 0, 0). */
     public void zeroPose() {
-        setPose(new Pose(0, 0, 0));
+        setPose(new Pose(0-1.41732283, 0, 0));
     }
 
     // height of the aim point above the ball exit (1.51 m)

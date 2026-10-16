@@ -51,7 +51,9 @@ public class AlbertTele extends CommandOpMode {
         new Trigger(() -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1)
                 .whenActive(() -> intake.setIntakeState(Intake.IntakeState.INTAKING))
                 .whenInactive(() -> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.OUTTAKING));
+        new Trigger(() -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1)
+                .whenActive(() -> intake.setIntakeState(Intake.IntakeState.OUTTAKING))
+                .whenInactive(() -> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
                 ()-> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(
