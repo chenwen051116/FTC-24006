@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import static java.lang.Math.abs;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -177,7 +179,7 @@ public class AlbertTele extends CommandOpMode {
             gamepad1.rumble(150);
             dDownJustPressed = false;
         }
-        drivetrain.aimingMode = aimAssistOn && shooter.shooterStatus == Shooter.ShooterStatus.Shooting;
+        drivetrain.aimingMode =(abs(drivetrain.velAngle())<0.001) &&aimAssistOn && shooter.shooterStatus == Shooter.ShooterStatus.Shooting;
 
         if (gamepad1.dpad_up) {
             drivetrain.zeroPose();
