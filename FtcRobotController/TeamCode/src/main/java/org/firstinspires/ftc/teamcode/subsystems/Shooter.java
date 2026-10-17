@@ -27,8 +27,8 @@ public class Shooter extends SubsystemBase {
     // shoot bar servo positions -- find them with the "ShootLimit Servo Test" opmode
     // CLOSED = bar holding balls (used when not shooting)
     // OPEN   = bar released, feeding balls (used only while Shooting)
-    public static double shootLimitClosed = 0.340;  // forbid shooting (bar holding balls)
-    public static double shootLimitOpen = 0.560;    // open to shoot (bar feeding balls)
+    public static double shootLimitClosed = 0.360;  // forbid shooting (bar holding balls)
+    public static double shootLimitOpen = 0.500;    // open to shoot (bar feeding balls)
     private final CachingDcMotorEx shooterLeft;
    // private final CachingDcMotorEx shooterRight;
     private final PIDController pidController;

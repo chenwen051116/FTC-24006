@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.reflection.ReflectionConfig;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 
@@ -13,6 +14,7 @@ import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 public class Intake extends SubsystemBase {
     private final CachingDcMotorEx intakeL;
     private final CachingDcMotorEx intakeR;
+    private final Servo drop;
 
     public IntakeState intakeCurrentState = IntakeState.INTAKE_STOP;
 
@@ -25,6 +27,7 @@ public class Intake extends SubsystemBase {
     public boolean autoTrans = false;
 
     public Intake(HardwareMap hardwareMap) {
+        drop = hardwareMap.get(Servo.class, "drop");
         intakeL = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeLeft"));
         intakeR = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeRight"));
 
@@ -48,6 +51,13 @@ public class Intake extends SubsystemBase {
     /** True while the intake should auto-feed balls into the shooter. */
     public boolean autoFeeding() {
         return shooterAuto && autoTrans;
+    }
+
+    public void dropup(){
+        drop.setPosition(0.135);
+    }
+    public void dropdown(){
+        drop.setPosition(0.645);
     }
 
     public void updateAutoshoot(boolean auto) {

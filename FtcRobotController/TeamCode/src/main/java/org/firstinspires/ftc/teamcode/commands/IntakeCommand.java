@@ -16,7 +16,14 @@ public class IntakeCommand extends CommandBase {
     }
 
     public void execute() {
-        if (gamepad1.right_trigger > 0.3) {
+
+        if(gamepad1.right_bumper){
+            intake.dropdown();
+        }
+        else{
+            intake.dropup();
+        }
+        if (gamepad1.right_trigger > 0.3||gamepad1.right_bumper) {
             intake.setIntakeState(Intake.IntakeState.INTAKING);
         } else if (gamepad1.left_trigger > 0.3) {
             intake.setIntakeState(Intake.IntakeState.OUTTAKING);

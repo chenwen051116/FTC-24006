@@ -31,7 +31,7 @@ public class ShootLimitTest extends OpMode {
 
     @Override
     public void init() {
-        shootLimit = hardwareMap.get(Servo.class, "gate");
+        shootLimit = hardwareMap.get(Servo.class, "drop");
         pos = Shooter.shootLimitClosed;
         shootLimit.setPosition(pos);
 

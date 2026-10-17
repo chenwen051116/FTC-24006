@@ -60,6 +60,12 @@ public class AlbertTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
 
+        if(gamepad1.right_trigger>0.3){
+            intake.dropdown();
+        }
+        else{
+            intake.dropup();
+        }
         if (gamepad2.left_trigger > 0.5) {
             shooter.idleSpeed = 2600;
         }
