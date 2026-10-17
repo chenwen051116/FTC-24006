@@ -122,7 +122,7 @@ public class AutoTest extends OpMode {
             .setStart(() -> {
                 shooter.resetTeleop();
                 intake.resetTeleop();
-
+                Drivetrain.lastPose = follower.pose();
             })
             .setDone(() ->
                     true
