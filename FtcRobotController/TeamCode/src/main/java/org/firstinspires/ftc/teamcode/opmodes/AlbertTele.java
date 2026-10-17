@@ -196,6 +196,7 @@ public class AlbertTele extends CommandOpMode {
         telemetry.addData("Aim statics", String.format("(%.2f, %.2f)", Drivetrain.aimPointX, Drivetrain.aimPointY));
         telemetry.addData("Aim err (deg)", String.format("%.1f", Math.toDegrees(drivetrain.aimError())));
         telemetry.addData("aimcommand", drivetrain.aimTurnCommand());
+        telemetry.addData("velAngle", drivetrain.velAngle());
         telemetry.update();
 
         // live pose on the FTC Dashboard field view (http://192.168.43.1:8080)

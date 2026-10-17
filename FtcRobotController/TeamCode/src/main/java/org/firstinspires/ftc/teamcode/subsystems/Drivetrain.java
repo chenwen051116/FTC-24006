@@ -109,7 +109,7 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedrx = 0.2;
 
     // Distance from robot center to the ball exit point along the robot heading
-    public double shooterCenterDis = 1.496;
+    public static double shooterCenterDis = 1.496;
 
     public boolean safeMode = false;
 
@@ -227,6 +227,9 @@ public class Drivetrain extends SubsystemBase {
     public double velY() {
         double c = cos(originHeading), s = sin(originHeading);
         return pinVX * s + pinVY * c;
+    }
+    public double velAngle(){
+        return (pose().heading() - lastPose.heading())/looptime;
     }
 
     public double velOmega() {
