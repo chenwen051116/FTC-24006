@@ -59,6 +59,18 @@ public class AlbertTele extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(
                 ()-> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         shooter.resetTeleop();
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(
+                ()-> drivetrain.offsetchange(-0.5,0));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenReleased(
+                ()-> drivetrain.offsetchange(0.5,0));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(
+                ()-> drivetrain.offsetchange(0,-0.5));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenReleased(
+                ()-> drivetrain.offsetchange(0,0.5));
+
 
     }
 
@@ -66,12 +78,6 @@ public class AlbertTele extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
 
-        if (gamepad2.left_trigger > 0.5) {
-            shooter.idleSpeed = 2600;
-        }
-        if (gamepad2.right_trigger > 0.5) {
-            shooter.idleSpeed = 3200;
-        }
 
         if (gamepad1.x) {
             if (!xholding) {

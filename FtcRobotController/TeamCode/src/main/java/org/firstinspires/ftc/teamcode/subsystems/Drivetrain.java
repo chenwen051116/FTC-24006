@@ -92,6 +92,13 @@ public class Drivetrain extends SubsystemBase {
         return aimPointY + aimTrimY;
     }
 
+
+    public void offsetchange(double dx, double dy){
+        aimPointY+=dy;
+        aimPoint2Y+=dy;
+        aimPointX+=dx;
+        aimPoint2X+=dx;
+    }
     public Pose2d predictedPose = new Pose2d();
     public static double lookAheadTime = 0.03;
 
