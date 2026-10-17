@@ -36,6 +36,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit
 public class Drivetrain extends SubsystemBase {
 
     // ---- drive motors ----
+    //public static double shooterCenterDis = 0;
     private final DcMotorEx frontLeft, frontRight, backLeft, backRight;
 
     // ---- pinpoint odometry ----
@@ -102,7 +103,7 @@ public class Drivetrain extends SubsystemBase {
     public static double testspeedrx = 0.2;
 
     // Distance from robot center to the ball exit point along the robot heading
-    public double shooterCenterDis = 1.496;
+    public static double shooterCenterDis = 1.496;
 
     public boolean safeMode = false;
 
