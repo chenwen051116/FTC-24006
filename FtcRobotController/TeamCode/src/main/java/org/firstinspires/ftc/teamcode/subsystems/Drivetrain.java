@@ -42,9 +42,9 @@ public class Drivetrain extends SubsystemBase {
     public final GoBildaPinpointDriver pinpoint;
 
     // Pinpoint pod offsets in inches (from the Pedro Pinpoint AutoTuner)
-    public static double pinpointXOffset =-3.9570 ;
+    public static double pinpointXOffset =1.4173 ;
     public static double pinpointYOffset = 
-            -6.6142;
+            -3.7795;
 
     // world -> pinpoint frame transform (updated by setPose)
     private double originX = 0, originY = 0, originHeading = 0;
