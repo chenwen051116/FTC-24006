@@ -137,13 +137,13 @@ public class AutoTest extends OpMode {
     @Override
     public void init() {
         Scheduler.reset();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        follower = Constants.createFollower(hardwareMap);
+        drive = new Drivetrain(hardwareMap,true);
+//        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        drive = new Drivetrain(hardwareMap,true);
+        follower = Constants.createFollower(hardwareMap);
         follower.setPose(startPose);
         drive.localizerInit(startPose.x(),startPose.y(), startPose.heading());
         follower.update();
@@ -151,6 +151,24 @@ public class AutoTest extends OpMode {
 
     @Override
     public void start() {
+        follower.update();
+
+        if (drive.pinpoint.getDeviceStatus()
+                != com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.DeviceStatus.READY) {
+            telemetry.addLine("Pinpoint ain't ready, Re INIT");
+            telemetry.update();
+            return;
+        }
+
+        // 校准完成后，再写入真正的全场起点。
+        follower.setPose(startPose);
+        follower.update();
+
+        // 同步现有 Drivetrain 的软件坐标。
+        drive.updatePinpoint();
+        drive.localizerInit(
+                startPose.x(), startPose.y(), startPose.heading());
+
         schedule(autoRoutine());
     }
 
