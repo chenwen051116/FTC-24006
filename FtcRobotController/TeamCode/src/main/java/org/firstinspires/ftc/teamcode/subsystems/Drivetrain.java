@@ -150,8 +150,8 @@ public class Drivetrain extends SubsystemBase {
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         pinpoint.setOffsets(pinpointXOffset, pinpointYOffset, DistanceUnit.INCH);
         pinpoint.setEncoderDirections(
-                GoBildaPinpointDriver.EncoderDirection.FORWARD,
-                GoBildaPinpointDriver.EncoderDirection.REVERSED);
+                GoBildaPinpointDriver.EncoderDirection.FORWARD, // X
+                GoBildaPinpointDriver.EncoderDirection.REVERSED); // Y
         try {
             pinpoint.recalibrateIMU();
             Thread.sleep(500); // let the IMU calibration settle
