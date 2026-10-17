@@ -167,7 +167,7 @@ public class Drivetrain extends SubsystemBase {
         }
         pinpoint.resetPosAndIMU();
 
-        setPose(new Pose(0, 0, 0));
+        setPose(lastPose);
         looptimer = new Timer();
 
         // Explicitly register our @Config statics with the dashboard.

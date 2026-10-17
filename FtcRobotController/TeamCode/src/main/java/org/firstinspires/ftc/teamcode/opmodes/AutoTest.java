@@ -70,6 +70,7 @@ public class AutoTest extends OpMode {
                 // executed on start
                 shootTimer.reset();
                 shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
+                Drivetrain.lastPose = follower.pose();
 
             })
             .setExecute(() -> {
