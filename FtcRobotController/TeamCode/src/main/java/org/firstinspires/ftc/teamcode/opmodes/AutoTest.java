@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes; // This should match the file lo
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.utils.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
 import static com.pedropathing.api.Paths.*;
+import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
@@ -35,16 +37,16 @@ public class AutoTest extends OpMode {
     private Drivetrain drive;
 
     private FtcDashboard dashboard;
-    private final PoseFactory p = PoseFactory.degrees(); // add this
+    private final PoseFactory p = PoseFactory.radians(); // add this
 
-    private final Pose startPose = p.of(-45.9878973, 126.53807717647904, 4.706-3.1415926);
+    private final Pose startPose = p.of(-45.9878973, 126.53807717647904, 4.706);
     private final Pose shootPose = startPose;
-    private final Pose park = p.of(-6.89, 38.94, 4.706-3.1415926);
+    private final Pose park = p.of(-6.89, 38.94, 4.706);
 
 
-    private Path startToScore() {
-        return line(startPose, shootPose).linear(startPose, shootPose);
-    }
+//    private Path startToScore() {
+//        return line(startPose, shootPose).linear(startPose, shootPose);
+//    }
     private Path park(){
         return line(shootPose, park).linear(shootPose, park);
     }
@@ -52,7 +54,7 @@ public class AutoTest extends OpMode {
 
     private Command autoRoutine() {
         return sequential(
-                follow(follower, startToScore()),
+                //follow(follower, startToScore()),
                 ShootCommand,
                 StopS,
                 // Add mechanism commands here.
@@ -130,21 +132,27 @@ public class AutoTest extends OpMode {
 
     @Override
     public void init() {
+        Scheduler.reset();
         follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         drive = new Drivetrain(hardwareMap,true);
+        follower.setPose(startPose);
+        drive.localizerInit(startPose.x(),startPose.y(), startPose.heading());
+        follower.update();
     }
 
     @Override
     public void start() {
-        follower.setPose(startPose);
+        schedule(autoRoutine());
     }
 
     @Override
     public void loop() {
+        follower.update();
+        Scheduler.execute();
         if (shooter.shooterStatus == Shooter.ShooterStatus.Shooting) {
             shooter.forceShooting = true;
             intake.updateAutoshoot(true);
