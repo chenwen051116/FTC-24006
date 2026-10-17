@@ -28,6 +28,9 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import com.pedropathing.paths.Path;
 @Autonomous
 public class AutoTest extends OpMode {
@@ -75,7 +78,7 @@ public class AutoTest extends OpMode {
             })
             .setDone(() ->
                 // return true to end the command
-                shootTimer.seconds()>1
+                shootTimer.seconds()>3
 
             )
             .setEnd(endCondition -> {
@@ -85,7 +88,7 @@ public class AutoTest extends OpMode {
     Command IdlingS = Command.build()
             .setStart(() -> {
                 // executed on start
-              //  shootTimer.reset();
+                shootTimer.reset();
                 shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
 
             })
@@ -95,7 +98,7 @@ public class AutoTest extends OpMode {
             })
             .setDone(() ->
                     // return true to end the command
-                    true
+                    shootTimer.seconds()>2
 
             )
             .setEnd(endCondition -> {
@@ -133,6 +136,7 @@ public class AutoTest extends OpMode {
     @Override
     public void init() {
         Scheduler.reset();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
@@ -172,6 +176,13 @@ public class AutoTest extends OpMode {
         // shoot bar, intake auto-feed) -- nothing runs without these
         shooter.periodic();
         intake.periodic();
+
+        telemetry.addData("X", follower.pose().x());
+        telemetry.addData("Y", follower.pose().y());
+        telemetry.addData("Heading", Math.toDegrees(follower.pose().heading()));
+        telemetry.addData("Follower Mode", follower.mode());
+        telemetry.addData("dis", shooter.ododis);
+        telemetry.update();
 
     }
 
