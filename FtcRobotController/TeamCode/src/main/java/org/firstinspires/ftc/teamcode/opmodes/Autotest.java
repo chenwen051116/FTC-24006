@@ -152,7 +152,7 @@ public class Autotest extends OpMode {
     @Override
     public void start() {
         follower.update();
-
+        intake.dropup();
         if (drive.pinpoint.getDeviceStatus()
                 != com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.DeviceStatus.READY) {
             telemetry.addLine("Pinpoint ain't ready, Re INIT");

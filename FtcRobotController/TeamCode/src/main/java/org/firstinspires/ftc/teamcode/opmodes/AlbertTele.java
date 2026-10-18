@@ -138,7 +138,7 @@ public class AlbertTele extends CommandOpMode {
         if (shooter.shooterStatus == Shooter.ShooterStatus.Shooting) {
             shooter.forceShooting = true;
             intake.updateAutoshoot(true);
-            intake.updateautotranse(shooter.isAtTargetRPM());
+            intake.updateautotranse(shooter.isAtTargetRPM()&& drivetrain.aimed());
         } else {
             intake.updateAutoshoot(false);
         }

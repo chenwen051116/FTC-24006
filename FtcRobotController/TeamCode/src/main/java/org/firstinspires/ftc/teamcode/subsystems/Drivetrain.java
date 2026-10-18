@@ -161,7 +161,7 @@ public class Drivetrain extends SubsystemBase {
         }
         pinpoint.resetPosAndIMU();
 
-        setPose(new Pose(0, 0, 0));
+        setPose(lastPose);
         looptimer = new Timer();
 
         // Explicitly register our @Config statics with the dashboard.
@@ -320,7 +320,9 @@ public class Drivetrain extends SubsystemBase {
             localizerInit(blueInitpose.x(), blueInitpose.y(), blueInitpose.heading());
         }
     }
-
+    public boolean aimed(){
+        return Math.abs((Math.toDegrees(aimError())))<(5);
+    }
     public double getdis() {
         ifMovingShooting = false;
         if (safeMode) {
