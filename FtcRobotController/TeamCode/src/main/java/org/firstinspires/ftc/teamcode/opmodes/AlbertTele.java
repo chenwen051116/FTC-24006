@@ -47,12 +47,24 @@ public class AlbertTele extends CommandOpMode {
         shooter = new Shooter(hardwareMap);
         intake = new Intake(hardwareMap);
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.INTAKING));
+
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> intake.setIntakeState(Intake.IntakeState.OUTTAKING));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
                 ()-> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenReleased(
                 ()-> intake.setIntakeState(Intake.IntakeState.INTAKE_STOP));
         shooter.resetTeleop();
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenReleased(
+                ()-> drivetrain.offsetchange(-0.5,0));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenReleased(
+                ()-> drivetrain.offsetchange(0.5,0));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenReleased(
+                ()-> drivetrain.offsetchange(0,-0.5));
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenReleased(
+                ()-> drivetrain.offsetchange(0,0.5));
 
     }
 
@@ -62,8 +74,10 @@ public class AlbertTele extends CommandOpMode {
 
         if(gamepad1.right_trigger>0.3){
             intake.dropdown();
+            intake.setIntakeState(Intake.IntakeState.INTAKING);
         }
         else{
+
             intake.dropup();
         }
         if (gamepad2.left_trigger > 0.5) {
