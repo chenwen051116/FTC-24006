@@ -190,6 +190,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** Current field pose = worldOrigin ∘ pinpointReading. */
+
     public Pose pose() {
         double c = cos(originHeading), s = sin(originHeading);
         return new Pose(
@@ -226,6 +227,7 @@ public class Drivetrain extends SubsystemBase {
     public double velOmega() {
         return pinW;
     }
+    
 
     // ------------------------------------------------------------------
     // Driving

@@ -58,30 +58,32 @@ public class Constants {
 
     // TODO: replace with the output of the Foresight AutoTuner.
     // The values below are generic placeholders, NOT tuned for this robot.
-    public static ForesightConfig foresightConfig = new ForesightConfig(c -> {
-        Controller primaryTranslationalForward = Controller.proportional(0.3);
-        Controller secondaryTranslationalForward = Controller.proportional(0.1);
-        Controller primaryTranslationalLateral = Controller.proportional(0.3);
-        Controller secondaryTranslationalLateral = Controller.proportional(0.1);
 
-        c.forwardTranslational.set(Controller.piecewise(secondaryTranslationalForward).put(2.5, primaryTranslationalForward));
-        c.strafeTranslational.set(Controller.piecewise(secondaryTranslationalLateral).put(2.5, primaryTranslationalLateral));
+    public static ForesightConfig foresightConfig = new ForesightConfig(
+            c -> {
+                Controller primaryTranslationalForward = Controller.proportional(0.32065810274789963);
+                Controller secondaryTranslationalForward = Controller.proportional(0.11847460082304175);
+                Controller primaryTranslationalLateral = Controller.proportional(0.5925391169367593);
+                Controller secondaryTranslationalLateral = Controller.proportional(0.21892737077132868);
 
-        c.coast.set(Controller.proportionalFeedforward(0.011));
-        c.brake.set(Controller.proportionalFeedforward(0.009));
+                c.forwardTranslational.set(Controller.piecewise(secondaryTranslationalForward).put(2.5, primaryTranslationalForward));
+                c.strafeTranslational.set(Controller.piecewise(secondaryTranslationalLateral).put(2.5, primaryTranslationalLateral));
 
-        c.headingFeedback.set(Controller.proportional(5.0));
-        c.headingBrakeCoefficients.set(Vector2D.cartesian(0.05, 0.006));
+                c.coast.set(Controller.proportionalFeedforward(0.012770282032157047));
+                c.brake.set(Controller.proportionalFeedforward(0.010854739727333489));
 
-        c.linearBrakeCoefficients.set(Matrix.diag(0.1, 0.09));
-        c.quadraticBrakeCoefficients.set(Matrix.diag(0.0015, 0.0014));
+                c.headingFeedback.set(Controller.proportional(5.268779667719755));
+                c.headingBrakeCoefficients.set(Vector2D.cartesian(0.046067322695098105, 0.005554808292441821));
 
-        c.maxAchievableForwardVelocity.set(70.0);
-        c.maxAchievableStrafeVelocity.set(50.0);
-        c.naturalForwardDeceleration.set(80.0);
-        c.naturalStrafeDeceleration.set(100.0);
-    });
+                c.linearBrakeCoefficients.set(Matrix.diag(0.11899024708846057, 0.05107559444359703));
+                c.quadraticBrakeCoefficients.set(Matrix.diag(8.334242374255856E-4, 0.0019602491986134385));
 
+                c.maxAchievableForwardVelocity.set(78.1162579989469);
+                c.maxAchievableStrafeVelocity.set(62.46030653073429);
+                c.naturalForwardDeceleration.set(31.212995247412422);
+                c.naturalStrafeDeceleration.set(64.9688626312708);
+            }
+    );
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new Follower(
                 new PinpointLocalizer(hardwareMap, localizerConfig),
