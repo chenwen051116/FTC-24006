@@ -188,6 +188,12 @@ public class Drivetrain extends SubsystemBase {
             pinW = pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.RADIANS);
         }
     }
+    public void offsetchange(double dx, double dy){
+        aimPointY+=dy;
+        aimPoint2Y+=dy;
+        aimPointX+=dx;
+        aimPoint2X+=dx;
+    }
 
     /** Current field pose = worldOrigin ∘ pinpointReading. */
 
