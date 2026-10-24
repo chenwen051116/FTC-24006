@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes; // This should match the file lo
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pedropathing.algorithm.ForesightConfig;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.utils.Timer;
@@ -58,10 +59,16 @@ public class Garden_2Tip_Park extends OpMode {
 //        return line(startPose, shootPose).linear(startPose, shootPose);
 //    }
     private Path gardenP(Pose startPose){
-        return line(startPose, GardenPrep).linear(startPose, GardenPrep);
+        return line(startPose, GardenPrep).linear(startPose, GardenPrep)
+                .with(Constants.foresightConfig.translationalConstraint.at(1.0)
+                ,Constants.foresightConfig.timeoutConstraint.at(1000.0),
+                        Constants.foresightConfig.parametricTConstraint.at(0.08));
     }
     private Path gardenF(Pose startPose){
-        return line(startPose, GardenFin).linear(startPose, GardenFin);
+        return line(startPose, GardenFin).linear(startPose, GardenFin)
+                .with(Constants.foresightConfig.translationalConstraint.at(1.0)
+                        ,Constants.foresightConfig.timeoutConstraint.at(1000.0),
+                        Constants.foresightConfig.parametricTConstraint.at(0.08));
     }
 
     private Path FAP(Pose startPose){
