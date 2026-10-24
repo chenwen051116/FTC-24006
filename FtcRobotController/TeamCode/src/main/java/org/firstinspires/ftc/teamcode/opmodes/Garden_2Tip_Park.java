@@ -43,142 +43,118 @@ public class Garden_2Tip_Park extends OpMode {
     private final PoseFactory p = PoseFactory.radians(); // add this
 
     private final Pose startPose = p.of(-45.9878973, 126.53807717647904, 4.706);
-    private final Pose GardenPrep = p.of(0,0,0);
-    private final Pose FlowerAudience = p.of(0,0,0);
+    private final Pose FlowerAudienceP = p.of(-39.77,16.500,4.6977);
+    private final Pose FlowerAudienceF = p.of(-40.14 ,7.712,4.659);
+    private final Pose GardenPrep = p.of(2.92,117.288,1.53817);
+    private final Pose GardenFin = p.of(2.92,123.27,1.554);
     private final Pose FlowerDrive = p.of(0,0,0);
     private final Pose PreLoadShoot = startPose;
-    private final Pose Shoot2 = p.of(0,0,0);
-    private final Pose Shoot3 = p.of(0,0,0);
-    private final Pose Shoot4 = p.of(0,0,0);
+    private final Pose Shoot = p.of(-27.275,15.787,2.210);
+
     private final Pose park = p.of(-6.89, 38.94, 4.706);
 
 
     //    private Path startToScore() {
 //        return line(startPose, shootPose).linear(startPose, shootPose);
 //    }
-    private Path park(){
-        return line(PreLoadShoot, park).linear(PreLoadShoot, park);
+    private Path gardenP(Pose startPose){
+        return line(startPose, GardenPrep).linear(startPose, GardenPrep);
+    }
+    private Path gardenF(Pose startPose){
+        return line(startPose, GardenFin).linear(startPose, GardenFin);
+    }
+
+    private Path FAP(Pose startPose){
+        return line(startPose, FlowerAudienceP).linear(startPose, FlowerAudienceP);
+    }
+    private Path FAF(Pose startPose){
+        return line(startPose, FlowerAudienceF).linear(startPose, FlowerAudienceF);
+    }
+
+    private Path toShoot(Pose startPose){
+        return line(startPose, Shoot).linear(startPose, Shoot);
+    }
+
+    private Path park(Pose startPose){
+        return line(startPose, park).linear(startPose, park);
     }
     private Timer shootTimer = new Timer();
 
     private Command autoRoutine() {
         return sequential(
                 //follow(follower, startToScore()),
-                ShootCommand,
-                StopS,
+                ShootCommand(Shooter.ShooterStatus.Idling,1.5, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
+
                 // Add mechanism commands here.
-                follow(follower, park()),
+                follow(follower, gardenP(PreLoadShoot)),
+                setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
+                follow(follower, gardenF(GardenPrep)),
+                follow(follower, gardenP(GardenFin)),
+                follow(follower, gardenF(GardenPrep)),
+                ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
+                setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
+                follow(follower, toShoot(GardenFin)),
+                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Idling),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0, Intake.IntakeState.INTAKING_FLOWER),
+                follow(follower, FAP(Shoot)),
+                follow(follower, FAF(FlowerAudienceP)),
+                follow(follower, toShoot(FlowerAudienceF)),
+                setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
+                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
+                follow(follower, park(Shoot)),
                 ResetTele
         );
     }
-    Command ShootCommand = Command.build()
-            .setStart(() -> {
-                // executed on start
-                shootTimer.reset();
-                shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
 
-            })
-            .setExecute(() -> {
-                // executed on execute
 
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    shootTimer.seconds()>3
+    private Command ShootCommand(Shooter.ShooterStatus status, double t, Shooter.ShooterStatus endstatus) {
+        Timer shootTimer = new Timer();
+        return Command.build()
+                .setStart(() -> {
+                    // executed on start
+                    shootTimer.reset();
+                    shooter.setShooterStatus(status);
 
-            )
-            .setEnd(endCondition -> {
-                // executed on end
-                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-            });
-    Command IdlingS = Command.build()
-            .setStart(() -> {
-                // executed on start
-                shootTimer.reset();
-                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
+                })
+                .setExecute(() -> {
+                    // executed on execute
 
-            })
-            .setExecute(() -> {
-                // executed on execute
+                })
+                .setDone(() ->
+                        // return true to end the command
+                        shootTimer.seconds() > t
 
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    shootTimer.seconds()>2
+                )
+                .setEnd(endCondition -> {
+                    // executed on end
+                    shooter.setShooterStatus(endstatus);
+                })
+                .requiring(shooter);
 
-            )
-            .setEnd(endCondition -> {
-                // executed on end
-                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-            });
-    Command StopS = Command.build()
-            .setStart(() -> {
-                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
 
-            })
-            .setDone(() ->
-                    true
-            )
-            .setEnd(endCondition -> {
-                // executed on end
-                shooter.setShooterStatus(Shooter.ShooterStatus.Stop);
-            });
-    private Command flowerIntake = Command.build()
-            .setStart(() -> {
-                // executed on start
-                intake.setIntakeState(Intake.IntakeState.INTAKING_FLOWER);
-            }).setExecute(() -> {
-                follow(follower,park());
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    true
+    }
+    private Command setIntake(Intake.IntakeState state, double t, Intake.IntakeState endstate) {
+        Timer intaketimer = new Timer();
+        return Command.build()
+                .setStart(() -> {
+                    // executed on start
+                    intaketimer.reset();
+                    intake.setIntakeState(state);
+                }).setExecute(() -> {
 
-            )
-            .setEnd(endCondition -> {
+                })
+                .setDone(() ->
+                        // return true to end the command
+                        intaketimer.seconds()>t
 
-            });
-    Command IntakeStop = Command.build()
-            .setStart(() -> {
-                // executed on start
-                intake.setIntakeState(Intake.IntakeState.INTAKE_STOP);
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    true
+                )
+                .setEnd(endCondition -> {
+                    intake.setIntakeState(endstate);
+                })
+                .requiring(intake);
 
-            );
-    Command Outtake = Command.build()
-            .setStart(() -> {
-                // executed on start
-                intake.setIntakeState(Intake.IntakeState.OUTTAKING);
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    true
-
-            );
-    Command gardenIntake = Command.build()
-            .setStart(() -> {
-                // executed on start
-                shootTimer.reset();
-                shooter.setShooterStatus(Shooter.ShooterStatus.Shooting);
-                Drivetrain.lastPose = follower.pose();
-
-            })
-            .setExecute(() -> {
-                // executed on execute
-
-            })
-            .setDone(() ->
-                    // return true to end the command
-                    shootTimer.seconds()>3
-
-            )
-            .setEnd(endCondition -> {
-                // executed on end
-                shooter.setShooterStatus(Shooter.ShooterStatus.Idling);
-            });
+    }
     Command ResetTele = Command.build()
             .setStart(() -> {
                 shooter.resetTeleop();
