@@ -246,6 +246,7 @@ public class Garden_2Tip_Park extends OpMode {
 
 
     public double getdisAuto() {
+        drive.setPose(follower.pose());
         double heading = follower.pose().heading();
         double realx =  follower.pose().x();
         double realy =  follower.pose().y();
