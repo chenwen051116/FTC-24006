@@ -23,6 +23,7 @@ public class Intake extends SubsystemBase {
     // full speed once the flywheel has reached its target RPM (autoTrans).
     // The Shooter's rpmreached latch keeps isAtTargetRPM() true after the first
     // time at RPM, so the feed stays on until shooting stops.
+    public boolean flowerTesting = false;
     public boolean shooterAuto = false;
     public boolean autoTrans = false;
     public static double flowerPos = 0;
@@ -42,10 +43,10 @@ public class Intake extends SubsystemBase {
     }
 
     public enum IntakeState {
-        INTAKING(0.8,1),
-        INTAKING_FLOWER(0.8,0),
-        INTAKE_STOP(0,1),
-        OUTTAKING(-0.6,1);
+        INTAKING(0.8,0.8),
+        INTAKING_FLOWER(0.8,0.18),
+        INTAKE_STOP(0,0.8),
+        OUTTAKING(-0.6,0.8);
         private final double intakeMotorPower, flowerPoseL;
 
         IntakeState(double intakeMotorPower, double flowerPoseL) {
@@ -74,8 +75,10 @@ public class Intake extends SubsystemBase {
 
     public void setIntakeState(IntakeState intakeState) {
         intakeCurrentState = intakeState;
-        flowerL.setPosition(intakeState.flowerPoseL);
-        flowerR.setPosition(intakeState.flowerPoseL + flowerOffset);
+        if (!flowerTesting){
+            flowerL.setPosition(intakeState.flowerPoseL);
+            flowerR.setPosition(intakeState.flowerPoseL + flowerOffset);
+        }
         // manual control applies, except while auto-feeding
         // (OUTTAKING always works so the driver can clear jams)
         if (intakeState == IntakeState.OUTTAKING || !autoFeeding()) {
@@ -86,7 +89,9 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        flowerL.setPosition(flowerPos);
+        if (flowerTesting){
+            flowerL.setPosition(flowerPos);
+        }
 //        flowerR.setPosition(flowerPos + flowerOffset);
         // auto-feed at full intake speed while the shooter is ready
         if (autoFeeding() && intakeCurrentState != IntakeState.OUTTAKING) {
@@ -94,6 +99,7 @@ public class Intake extends SubsystemBase {
             intakeR.setPower(IntakeState.INTAKING.intakeMotorPower);
         }
     }
+
 
     /**
      * Clear state and stop motors for a clean TeleOp start.
