@@ -43,8 +43,8 @@ public class Garden_2Tip_Park extends OpMode {
     private final PoseFactory p = PoseFactory.radians(); // add this
 
     private final Pose startPose = p.of(-45.9878973, 126.53807717647904, 4.706);
-    private final Pose FlowerAudienceP = p.of(-39.77,16.500,4.6977);
-    private final Pose FlowerAudienceF = p.of(-40.14 ,7.712,4.659);
+    private final Pose FlowerAudienceP = p.of(-38.27,16.500,4.6977);
+    private final Pose FlowerAudienceF = p.of(-38.14 ,7.712,4.659);
     private final Pose GardenPrep = p.of(2.92,117.288,1.53817);
     private final Pose GardenFin = p.of(2.92,123.27,1.554);
     private final Pose FlowerDrive = p.of(0,0,0);
