@@ -102,7 +102,7 @@ public class Garden_2Tip_Park extends OpMode {
                 ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 follow(follower, toShoot(GardenFin)),
-                setIntake(Intake.IntakeState.INTAKING_FLOWER,0.5, Intake.IntakeState.INTAKING_FLOWER),
+               // setIntake(Intake.IntakeState.INTAKING_FLOWER,0.5, Intake.IntakeState.INTAKING_FLOWER),
                 ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Idling),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,1, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, FAP(Shoot)),
