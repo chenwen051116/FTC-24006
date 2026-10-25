@@ -39,11 +39,11 @@ public class Shooter extends SubsystemBase {
 
     public static double Kf = 0;    // Friction gain
 
-    public static double kv = 0.000230; // FeedForward velocity gain
+    public static double kv = 0.000200; // FeedForward velocity gain
 
     public double kvoff  = 0;
     public static double pidThreshold = 300.0; // RPM threshold for PID vs full power control
-    public static double tolerance = 0.3; // RPM tolerance for "at target" determination
+    public static double tolerance = 0.26; // RPM tolerance for "at target" determination
 
     public static double aimRPM = 0;
 

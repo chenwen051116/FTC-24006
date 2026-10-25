@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
 
     // second aim point, used while the robot's y is above aimSwitchY
     public static double aimPoint2X = -51.70;
-    public static double aimPoint2Y = 81.2377;
+    public static double aimPoint2Y = 82.4377;
     public static double aimSwitchY = 62.0;
 
     public static double bluexOffset = -0;

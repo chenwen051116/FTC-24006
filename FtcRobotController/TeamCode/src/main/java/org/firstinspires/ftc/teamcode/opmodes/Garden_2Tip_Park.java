@@ -48,16 +48,17 @@ public class Garden_2Tip_Park extends OpMode {
     private final Pose FlowerAudienceF = p.of(-38.14 ,5.712,4.659);
     private final Pose GardenPrep = p.of(2.92,117.288,1.53817);
     private final Pose GardenFin = p.of(2.92,123.27,1.554);
-    private final Pose FlowerDrive = p.of(0,0,0);
-    private final Pose PreLoadShoot = startPose;
+    private final Pose FlowerDriveP = p.of(-15.6162,84.0904,0);
+    private final Pose FlowerDriveF = p.of(-4.006,85.047,0);
+    private final Pose PreLoadShoot = p.of(-49.9878973, 124.53807717647904, 4.706);;
     private final Pose Shoot = p.of(-26.819,5.6057,2.0763);
 
-    private final Pose park = p.of(-6.89, 38.94, 4.706);
+    private final Pose park = p.of(-6.89, 38.94, 4.706-Math.PI);
 
 
-    //    private Path startToScore() {
-//        return line(startPose, shootPose).linear(startPose, shootPose);
-//    }
+        private Path preloadShoot() {
+        return line(startPose, PreLoadShoot).linear(startPose, PreLoadShoot);
+    }
     private Path gardenP(Pose startPose){
         return line(startPose, GardenPrep).linear(startPose, GardenPrep)
                 .with(Constants.foresightConfig.translationalConstraint.at(1.0)
@@ -66,16 +67,30 @@ public class Garden_2Tip_Park extends OpMode {
     }
     private Path gardenF(Pose startPose){
         return line(startPose, GardenFin).linear(startPose, GardenFin)
-                .with(Constants.foresightConfig.translationalConstraint.at(1.0)
+                .with(Constants.foresightConfig.translationalConstraint.at(0.5)
                         ,Constants.foresightConfig.timeoutConstraint.at(1000.0),
-                        Constants.foresightConfig.parametricTConstraint.at(0.08));
+                        Constants.foresightConfig.parametricTConstraint.at(0.2));
     }
 
     private Path FAP(Pose startPose){
-        return line(startPose, FlowerAudienceP).linear(startPose, FlowerAudienceP);
+        return line(startPose, FlowerAudienceP).linear(startPose, FlowerAudienceP)
+                .with(Constants.foresightConfig.translationalConstraint.at(1.0),
+                        Constants.foresightConfig.parametricTConstraint.at(0.08));
     }
     private Path FAF(Pose startPose){
-        return line(startPose, FlowerAudienceF).linear(startPose, FlowerAudienceF);
+        return line(startPose, FlowerAudienceF).linear(startPose, FlowerAudienceF)
+                .with(Constants.foresightConfig.translationalConstraint.at(1.0),
+                        Constants.foresightConfig.parametricTConstraint.at(0.08));
+    }
+    private Path FDP(Pose startPose){
+        return line(startPose, FlowerDriveP).linear(startPose, FlowerDriveP)
+                .with(Constants.foresightConfig.translationalConstraint.at(1.0),
+                        Constants.foresightConfig.parametricTConstraint.at(0.08));
+    }
+    private Path FDF(Pose startPose){
+        return line(startPose, FlowerDriveF).linear(startPose, FlowerDriveF)
+                .with(Constants.foresightConfig.translationalConstraint.at(0.7),
+                        Constants.foresightConfig.parametricTConstraint.at(0.1));
     }
 
     private Path toShoot(Pose startPose){
@@ -89,10 +104,10 @@ public class Garden_2Tip_Park extends OpMode {
 
     private Command autoRoutine() {
         return sequential(
-                //follow(follower, startToScore()),
+                ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
+                follow(follower,preloadShoot()),
                 ShootCommand(Shooter.ShooterStatus.Idling,1.5, Shooter.ShooterStatus.Idling),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
-
+                ShootCommand(Shooter.ShooterStatus.Shooting,0.7, Shooter.ShooterStatus.Stop),
                 // Add mechanism commands here.
                 follow(follower, gardenP(PreLoadShoot)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
@@ -103,16 +118,28 @@ public class Garden_2Tip_Park extends OpMode {
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 follow(follower, toShoot(GardenFin)),
                // setIntake(Intake.IntakeState.INTAKING_FLOWER,0.5, Intake.IntakeState.INTAKING_FLOWER),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Idling),
-                setIntake(Intake.IntakeState.INTAKING_FLOWER,1, Intake.IntakeState.INTAKING_FLOWER),
+                ShootCommand(Shooter.ShooterStatus.Idling,0.8, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,0.7, Shooter.ShooterStatus.Idling),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0.3, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, FAP(Shoot)),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,0, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, FAF(FlowerAudienceP)),
-                setIntake(Intake.IntakeState.INTAKING_FLOWER,3, Intake.IntakeState.INTAKING_FLOWER),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0.7, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, toShoot(FlowerAudienceF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
-                ShootCommand(Shooter.ShooterStatus.Idling,2, Shooter.ShooterStatus.Idling),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
+                ShootCommand(Shooter.ShooterStatus.Idling,1, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,0.7, Shooter.ShooterStatus.Stop),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0.3, Intake.IntakeState.INTAKING_FLOWER),
+                follow(follower,FDP(Shoot)),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0, Intake.IntakeState.INTAKING_FLOWER),
+                follow(follower,FDF(FlowerDriveP)),
+                setIntake(Intake.IntakeState.INTAKING_FLOWER,0.7, Intake.IntakeState.INTAKING_FLOWER),
+                setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
+                ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
+                follow(follower,toShoot(FlowerDriveF)),
+                setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
+                ShootCommand(Shooter.ShooterStatus.Idling,0.5, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,0.7, Shooter.ShooterStatus.Stop),
                 follow(follower, park(Shoot)),
                 ResetTele
         );
