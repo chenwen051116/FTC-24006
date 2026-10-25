@@ -26,14 +26,14 @@ public class Shooter extends SubsystemBase {
     // shoot bar servo positions -- find them with the "ShootLimit Servo Test" opmode
     // CLOSED = bar holding balls (used when not shooting)
     // OPEN   = bar released, feeding balls (used only while Shooting)
-    public static double shootLimitClosed = 0.340;  // forbid shooting (bar holding balls)
+    public static double shootLimitClosed = 0.290;  // forbid shooting (bar holding balls)
     public static double shootLimitOpen = 0.560;    // open to shoot (bar feeding balls)
     private final CachingDcMotorEx shooterLeft;
     private final CachingDcMotorEx shooterRight;
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.30;  // Proportional gain
+    public static double Kp = 0.26;  // Proportional gain
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
