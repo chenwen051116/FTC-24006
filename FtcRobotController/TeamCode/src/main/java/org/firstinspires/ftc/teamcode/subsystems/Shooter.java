@@ -34,13 +34,13 @@ public class Shooter extends SubsystemBase {
     private final PIDController pidController;
 
     // Tunable PID parameters - can be adjusted via FTC Dashboard
-    public static double Kp = 0.30;  // Proportional gain
+    public static double Kp = 0.27;  // Proportional gain
     public static double Ki = 0; // Integral gain
     public static double Kd = 0;    // Derivative gain
 
     public static double Kf = 0;    // Friction gain
 
-    public static double kv = 0.000230; // FeedForward velocity gain
+    public static double kv = 0.000200; // FeedForward velocity gain
 
     public double kvoff  = 0;
     public static double pidThreshold = 300.0; // RPM threshold for PID vs full power control
