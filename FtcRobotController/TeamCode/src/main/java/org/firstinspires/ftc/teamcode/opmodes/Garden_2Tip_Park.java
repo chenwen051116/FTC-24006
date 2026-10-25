@@ -50,7 +50,7 @@ public class Garden_2Tip_Park extends OpMode {
     //private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
     private final Pose FlowerOtherF = p.of(-6.03 ,85.53,0.004);
     private final Pose FlowerDrive = p.of(0,0,0);
-    private final Pose PreLoadShoot = startPose;
+    private final Pose PreLoadShoot =  p.of(-40.624, 124.612, 4.712);
     private final Pose Shoot = p.of(-22.212,3.016,2.020);
 
     private final Pose park = p.of(-4.941, 36.102, 3.134);
@@ -74,6 +74,10 @@ public class Garden_2Tip_Park extends OpMode {
     private Path Passby1(Pose startPose){
         return line(startPose, PassbyOne).linear(startPose, PassbyOne);
     }
+    private Path toPShoot(Pose startPose){
+        return line(startPose, PreLoadShoot).linear(startPose, PreLoadShoot);
+    }
+
     private Path FAP(Pose startPose){
         return line(startPose, FlowerAudienceP).linear(startPose, FlowerAudienceP);
     }
@@ -102,11 +106,13 @@ public class Garden_2Tip_Park extends OpMode {
                 //follow(follower, startToScore()),
                 setDrop(false,0,false),
                 ShootCommand(Shooter.ShooterStatus.Idling,1.5, Shooter.ShooterStatus.Idling),
+                follow(follower, toPShoot(startPose)),
                 ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Stop),
 
                 // Add mechanism commands here.
                 //follow(follower,Passby1(startPose)),
-                follow(follower, gardenP(startPose)),
+                
+                follow(follower, gardenP(PreLoadShoot)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 follow(follower, gardenF(GardenPrep)),
                 follow(follower, gardenP(GardenFin)),
@@ -123,7 +129,7 @@ public class Garden_2Tip_Park extends OpMode {
                 follow(follower, FAP(Shoot)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 follow(follower, FAF(FlowerAudienceP)),
-                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKING),
+                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKE_STOP),
                 follow(follower, toShoot(FlowerAudienceF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 setDrop(false,0,false),
@@ -133,7 +139,7 @@ public class Garden_2Tip_Park extends OpMode {
                 setDrop(true,0,true),
                 follow(follower,FOP(Shoot)),
                 follow(follower,FOF(FlowerOtherP)),
-                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKING),
+                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKE_STOP),
                 follow(follower,toShoot(FlowerOtherF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 setDrop(false,0,false),
