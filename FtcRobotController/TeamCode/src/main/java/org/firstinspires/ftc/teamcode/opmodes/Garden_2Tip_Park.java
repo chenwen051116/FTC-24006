@@ -50,7 +50,7 @@ public class Garden_2Tip_Park extends OpMode {
     //private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
     private final Pose FlowerOtherF = p.of(-6.03 ,85.53,0.004);
     private final Pose FlowerDrive = p.of(0,0,0);
-    private final Pose PreLoadShoot =  p.of(-40.624, 124.612, 4.712);
+    private final Pose PreLoadShoot =  p.of(-48.624, 124.612, 4.712);
     private final Pose Shoot = p.of(-22.212,3.016,2.020);
 
     private final Pose park = p.of(-4.941, 36.102, 3.134);
@@ -105,13 +105,14 @@ public class Garden_2Tip_Park extends OpMode {
         return sequential(
                 //follow(follower, startToScore()),
                 setDrop(false,0,false),
-                ShootCommand(Shooter.ShooterStatus.Idling,1.5, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
                 follow(follower, toPShoot(startPose)),
+                ShootCommand(Shooter.ShooterStatus.Idling,1, Shooter.ShooterStatus.Idling),
                 ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Stop),
 
                 // Add mechanism commands here.
                 //follow(follower,Passby1(startPose)),
-                
+
                 follow(follower, gardenP(PreLoadShoot)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 follow(follower, gardenF(GardenPrep)),
