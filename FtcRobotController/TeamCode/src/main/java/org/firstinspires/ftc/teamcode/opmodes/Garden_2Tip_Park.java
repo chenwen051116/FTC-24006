@@ -39,23 +39,28 @@ public class Garden_2Tip_Park extends OpMode {
     private FtcDashboard dashboard;
     private final PoseFactory p = PoseFactory.radians(); // add this
 
-    private final Pose startPose = p.of(-45.9878973, 126.53807717647904, 4.706);
-    private final Pose FlowerAudienceP = p.of(-38.27,16.500,4.6977);
-    private final Pose FlowerAudienceF = p.of(-38.14 ,5.712,4.659);
-    private final Pose GardenPrep = p.of(2.92,117.288,1.53817);
-    private final Pose GardenFin = p.of(2.92,123.27,1.554);
+    private final Pose startPose = p.of(-44.624, 126.612, 4.712);
+    private final Pose FlowerAudienceP = p.of(-38.53,14.363,4.704);
+    private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
+    private final Pose FlowerAudienceF = p.of(-38.712 ,6.6745,4.710);
+    private final Pose GardenPrep = p.of(0.742,117.288,1.53817);
+    private final Pose GardenFin = p.of(0.742,123.27,1.554);
+
+    private final Pose FlowerOtherP = p.of(-19.591,86.05,0.0363);
+    //private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
+    private final Pose FlowerOtherF = p.of(-6.03 ,85.53,0.004);
     private final Pose FlowerDrive = p.of(0,0,0);
     private final Pose PreLoadShoot = startPose;
-    private final Pose Shoot = p.of(-26.819,5.6057,2.0763);
+    private final Pose Shoot = p.of(-22.212,3.016,2.020);
 
-    private final Pose park = p.of(-6.89, 38.94, 4.706);
+    private final Pose park = p.of(-4.941, 36.102, 3.134);
 
 
     //    private Path startToScore() {
 //        return line(startPose, shootPose).linear(startPose, shootPose);
 //    }
     private Path gardenP(Pose startPose){
-        return line(startPose, GardenPrep).linear(startPose, GardenPrep)
+        return line(startPose, GardenPrep).linear(startPose,GardenPrep)
                 .with(Constants.foresightConfig.translationalConstraint.at(1.0)
                         ,Constants.foresightConfig.timeoutConstraint.at(1000.0),
                         Constants.foresightConfig.parametricTConstraint.at(0.08));
@@ -66,12 +71,21 @@ public class Garden_2Tip_Park extends OpMode {
                         ,Constants.foresightConfig.timeoutConstraint.at(1000.0),
                         Constants.foresightConfig.parametricTConstraint.at(0.08));
     }
-
+    private Path Passby1(Pose startPose){
+        return line(startPose, PassbyOne).linear(startPose, PassbyOne);
+    }
     private Path FAP(Pose startPose){
         return line(startPose, FlowerAudienceP).linear(startPose, FlowerAudienceP);
     }
     private Path FAF(Pose startPose){
         return line(startPose, FlowerAudienceF).linear(startPose, FlowerAudienceF);
+    }
+
+    private Path FOP(Pose startPose){
+        return line(startPose, FlowerOtherP).linear(startPose, FlowerOtherP);
+    }
+    private Path FOF(Pose startPose){
+        return line(startPose, FlowerOtherF).linear(startPose, FlowerOtherF);
     }
 
     private Path toShoot(Pose startPose){
@@ -86,11 +100,13 @@ public class Garden_2Tip_Park extends OpMode {
     private Command autoRoutine() {
         return sequential(
                 //follow(follower, startToScore()),
+                setDrop(false,0,false),
                 ShootCommand(Shooter.ShooterStatus.Idling,1.5, Shooter.ShooterStatus.Idling),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
+                ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Stop),
 
                 // Add mechanism commands here.
-                follow(follower, gardenP(PreLoadShoot)),
+                //follow(follower,Passby1(startPose)),
+                follow(follower, gardenP(startPose)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 follow(follower, gardenF(GardenPrep)),
                 follow(follower, gardenP(GardenFin)),
@@ -99,19 +115,30 @@ public class Garden_2Tip_Park extends OpMode {
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 follow(follower, toShoot(GardenFin)),
                 // setIntake(Intake.IntakeState.INTAKING_FLOWER,0.5, Intake.IntakeState.INTAKING_FLOWER),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Idling,1, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Idling),
 
                 setIntake(Intake.IntakeState.INTAKING,1, Intake.IntakeState.INTAKING),
                 setDrop(true,0,true),
                 follow(follower, FAP(Shoot)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 follow(follower, FAF(FlowerAudienceP)),
-                setIntake(Intake.IntakeState.INTAKING,3, Intake.IntakeState.INTAKING),
+                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKING),
                 follow(follower, toShoot(FlowerAudienceF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 setDrop(false,0,false),
-                ShootCommand(Shooter.ShooterStatus.Idling,2, Shooter.ShooterStatus.Idling),
-                ShootCommand(Shooter.ShooterStatus.Shooting,2, Shooter.ShooterStatus.Stop),
+                ShootCommand(Shooter.ShooterStatus.Idling,1, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Stop),
+                setIntake(Intake.IntakeState.INTAKING,1, Intake.IntakeState.INTAKING),
+                setDrop(true,0,true),
+                follow(follower,FOP(Shoot)),
+                follow(follower,FOF(FlowerOtherP)),
+                setIntake(Intake.IntakeState.INTAKING,1.5, Intake.IntakeState.INTAKING),
+                follow(follower,toShoot(FlowerOtherF)),
+                setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
+                setDrop(false,0,false),
+                ShootCommand(Shooter.ShooterStatus.Idling,1, Shooter.ShooterStatus.Idling),
+                ShootCommand(Shooter.ShooterStatus.Shooting,1, Shooter.ShooterStatus.Stop),
                 follow(follower, park(Shoot)),
                 ResetTele
         );
