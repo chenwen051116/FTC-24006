@@ -40,20 +40,20 @@ public class Garden_2Tip_Park extends OpMode {
     private final PoseFactory p = PoseFactory.radians(); // add this
 
     private final Pose startPose = p.of(-44.624, 126.612, 4.712);
-    private final Pose FlowerAudienceP = p.of(-38.53,14.363,4.704);
+    private final Pose FlowerAudienceP = p.of(-38.23,14.363,4.704);
     private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
-    private final Pose FlowerAudienceF = p.of(-38.712 ,6.6745,4.710);
+    private final Pose FlowerAudienceF = p.of(-38.212 ,5.6745,4.710);
     private final Pose GardenPrep = p.of(0.742,117.288,1.53817);
     private final Pose GardenFin = p.of(0.742,123.27,1.554);
 
-    private final Pose FlowerOtherP = p.of(-19.591,86.05,0.0363);
+    private final Pose FlowerOtherP = p.of(-19.591,87.05,0.0363);
     //private final Pose PassbyOne = p.of(-28.583,102.773,1.532);
-    private final Pose FlowerOtherF = p.of(-6.03 ,85.53,0.004);
+    private final Pose FlowerOtherF = p.of(-5.03 ,87.53,0.004);
     private final Pose FlowerDrive = p.of(0,0,0);
     private final Pose PreLoadShoot =  p.of(-48.624, 124.612, 4.712);
     private final Pose Shoot = p.of(-22.212,3.016,2.020);
 
-    private final Pose park = p.of(-4.941, 36.102, 3.134);
+    private final Pose park = p.of(-2.941, 36.102, 3.134);
 
 
     //    private Path startToScore() {
