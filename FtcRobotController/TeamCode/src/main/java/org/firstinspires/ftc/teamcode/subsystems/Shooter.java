@@ -303,12 +303,13 @@ public class Shooter extends SubsystemBase {
     public double[] shortdis = {70.0, 75.0, 80.0, 85.0, 90.0, 95.0};
 
     public int[] shortrpm = {
-        2165,
-        2225,
         2200,
+        2250,
         2300,
-        2400,
-        2450
+        2350,
+        2650,
+        2750
+
     };
 
     public void updateAim() {
@@ -323,7 +324,7 @@ public class Shooter extends SubsystemBase {
         double slope = (shortrpm[index + 1] - shortrpm[index]) / (shortdis[index + 1] - shortdis[index]);
         double target = slope * (dis - shortdis[index]) + shortrpm[index];
         setTargetRPM(target + offset);
-       // setTargetRPM(aimRPM);
+        //setTargetRPM(aimRPM);
     }
 
 
