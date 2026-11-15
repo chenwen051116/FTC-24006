@@ -42,6 +42,10 @@ public class Turret extends SubsystemBase {
 
     /** Servo position change per degree of turret arc. */
     public static double arctoDegree = 0.155019;
+
+    /** Commands within +/- this many degrees of the servo wrap point (straight
+     *  backward, +/-180 from front) snap to the nearest end of the range. */
+    public static double deadZoneDeg = 5.0;
     /** Left servo center trim (compensates mounting difference between the two servos). */
     public static double ServoLoff = 0;
 
@@ -65,6 +69,14 @@ public class Turret extends SubsystemBase {
 
     /** Aim the turret to an arc angle in degrees (0 = straight ahead). */
     public void settoangle(double arcangle) {
+        // normalize to (-180, 180] so any input convention works (0..360 or signed)
+        arcangle = wrapDeg(arcangle);
+        // dead zone at the turning point (servo 0 <-> 1, aiming straight
+        // backward): commands within deadZoneDeg of +/-180 snap to the near
+        // end so the turret pins at the wrap instead of swinging a full turn
+        if (Math.abs(arcangle) > 180.0 - deadZoneDeg) {
+            arcangle = Math.signum(arcangle) * 180.0;
+        }
         aimposition = -arcangle * arctoDegree;
         double left = 0.5 + ServoLoff + aimposition;
         if (left > 0.995) {
@@ -77,6 +89,13 @@ public class Turret extends SubsystemBase {
             turretServoLeft.setPosition(left);
             turretServoRight.setPosition(0.5 + aimposition);
         }
+    }
+
+    /** Wrap an angle in degrees into (-180, 180]. */
+    private static double wrapDeg(double a) {
+        double w = (a + 180.0) % 360.0;
+        if (w < 0) w += 360.0;
+        return w - 180.0;
     }
 
     /** Return the turret to center. */

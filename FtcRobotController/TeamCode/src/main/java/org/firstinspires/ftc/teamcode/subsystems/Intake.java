@@ -28,6 +28,12 @@ public class Intake extends SubsystemBase {
     public boolean autoTrans = false;
     public static double flowerPos = 0;
     public static double flowerOffset = 0;
+    // Runtime flower positions per intake state (tune with "Servo Tune" or the
+    // dashboard -- these are what matches actually use).
+    public static double flowerPosIntaking = 0.8;
+    public static double flowerPosIntakingFlower = 0.18;
+    public static double flowerPosStop = 0.8;
+    public static double flowerPosOuttaking = 0.8;
 
     public Intake(HardwareMap hardwareMap) {
         intakeL = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "intakeL"));
@@ -43,15 +49,25 @@ public class Intake extends SubsystemBase {
     }
 
     public enum IntakeState {
-        INTAKING(0.8,0.8),
-        INTAKING_FLOWER(0.8,0.18),
-        INTAKE_STOP(0,0.8),
-        OUTTAKING(-0.6,0.8);
-        private final double intakeMotorPower, flowerPoseL;
+        INTAKING(0.8),
+        INTAKING_FLOWER(0.8),
+        INTAKE_STOP(0),
+        OUTTAKING(-0.6);
+        private final double intakeMotorPower;
 
-        IntakeState(double intakeMotorPower, double flowerPoseL) {
+        IntakeState(double intakeMotorPower) {
             this.intakeMotorPower = intakeMotorPower;
-            this.flowerPoseL = flowerPoseL;
+        }
+    }
+
+    /** Flower servo position for a given intake state (from the tunables). */
+    private double flowerPoseFor(IntakeState s) {
+        switch (s) {
+            case INTAKING: return flowerPosIntaking;
+            case INTAKING_FLOWER: return flowerPosIntakingFlower;
+            case OUTTAKING: return flowerPosOuttaking;
+            case INTAKE_STOP:
+            default: return flowerPosStop;
         }
     }
 
@@ -76,8 +92,7 @@ public class Intake extends SubsystemBase {
     public void setIntakeState(IntakeState intakeState) {
         intakeCurrentState = intakeState;
         if (!flowerTesting){
-            flowerL.setPosition(intakeState.flowerPoseL);
-            flowerR.setPosition(intakeState.flowerPoseL + flowerOffset);
+            setFlowers(flowerPoseFor(intakeState));
         }
         // manual control applies, except while auto-feeding
         // (OUTTAKING always works so the driver can clear jams)
@@ -87,12 +102,18 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    /** Command both flower servos to a position (right gets + flowerOffset). */
+    public void setFlowers(double pos) {
+        flowerL.setPosition(pos);
+        flowerR.setPosition(pos + flowerOffset);
+    }
+
     @Override
     public void periodic() {
         if (flowerTesting){
             flowerL.setPosition(flowerPos);
+            flowerR.setPosition(flowerPos + flowerOffset);
         }
-//        flowerR.setPosition(flowerPos + flowerOffset);
         // auto-feed at full intake speed while the shooter is ready
         if (autoFeeding() && intakeCurrentState != IntakeState.OUTTAKING) {
             intakeL.setPower(IntakeState.INTAKING.intakeMotorPower);
