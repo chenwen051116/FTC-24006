@@ -35,8 +35,8 @@ import sys
 
 import numpy as np
 
-H = 8           # hidden units per layer
-HIDDEN_LAYERS = 6  # tanh hidden layers between input and linear output
+H = 6           # hidden units per layer
+HIDDEN_LAYERS = 3  # tanh hidden layers between input and linear output
 EPOCHS = 4000   # full-batch epochs (tiny data, converges fast)
 LR = 2e-3
 WD = 1e-4       # weight decay -- the main overfitting defense with tiny N

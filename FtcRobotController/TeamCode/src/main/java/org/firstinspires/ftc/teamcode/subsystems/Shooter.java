@@ -22,12 +22,15 @@ import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 @Config
 public class Shooter extends SubsystemBase {
     private final CachingServo shootLimit;
+    private final CachingServo hood;
 
     // shoot bar servo positions -- find them with the "ShootLimit Servo Test" opmode
     // CLOSED = bar holding balls (used when not shooting)
     // OPEN   = bar released, feeding balls (used only while Shooting)
     public static double shootLimitClosed = 0.290;  // forbid shooting (bar holding balls)
     public static double shootLimitOpen = 0.560;    // open to shoot (bar feeding balls)
+    /** Default hood servo position (0..1), tuned per distance by the aim model. */
+    public static double hoodPos = 0.5;
     private final CachingDcMotorEx shooterLeft;
     private final CachingDcMotorEx shooterRight;
     private final PIDController pidController;
@@ -117,6 +120,8 @@ public class Shooter extends SubsystemBase {
         shooterLeft = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooterLeft"));
         shooterRight = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "shooterRight"));
         shootLimit = new CachingServo(hardwareMap.get(Servo.class, "shootLimit"));
+        hood = new CachingServo(hardwareMap.get(Servo.class, "hood"));
+        hood.setPosition(hoodPos);
         shootTimer = new Timer();
         // Initialize PID controller
         pidController = new PIDController(Kp, Ki, Kd);
@@ -204,6 +209,16 @@ public class Shooter extends SubsystemBase {
 
     public void shootbarOff(){
         shootLimit.setPosition(shootLimitOpen);
+    }
+
+    /**
+     * Command the hood servo to a position (clamped to 0..1). The commanded
+     * value is stored back into the hoodPos static so the dashboard shows it
+     * and the aim model can pick it up.
+     */
+    public void setHood(double pos) {
+        hoodPos = Math.max(0.0, Math.min(1.0, pos));
+        hood.setPosition(hoodPos);
     }
     // Store current motor power for telemetry/graphing
     private double currentMotorPower = 0.0;
@@ -390,5 +405,6 @@ public class Shooter extends SubsystemBase {
         rpmreached = false;
         setShooterStatus(ShooterStatus.Stop);
         completeStop();
+        setHood(hoodPos);
     }
 }
