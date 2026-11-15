@@ -47,7 +47,7 @@ public class Garden_2Tip_Park extends OpMode {
     private final Pose FlowerAudienceP = p.of(-38.27,16.500,4.6977);
     private final Pose FlowerAudienceF = p.of(-38.14 ,5.812,4.659);
     private final Pose GardenPrep = p.of(3.02,117.288,1.53817);
-    private final Pose GardenFin = p.of(3.02,124.77,1.554);
+    private final Pose GardenFin = p.of(3.02,124.27,1.554);
     private final Pose FlowerDriveP = p.of(-15.6162,84.0904,0);
     private final Pose FlowerDriveF = p.of(-4.006,85.047,0);
     private final Pose PreLoadShoot = p.of(-49.9878973, 124.53807717647904, 4.706);;
@@ -136,10 +136,9 @@ public class Garden_2Tip_Park extends OpMode {
                 follow(follower,FDF(FlowerDriveP)),
                 pushForward(0.5, 1.0),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,1.0, Intake.IntakeState.INTAKING_FLOWER),
-                follow(follower,FDP(FlowerDriveF)),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
-                follow(follower,toShoot(FlowerDriveP)),
+                follow(follower,toShoot(FlowerDriveF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
                 ShootCommand(Shooter.ShooterStatus.Idling,0.5, Shooter.ShooterStatus.Idling),
                 ShootCommand(Shooter.ShooterStatus.Shooting,0.7, Shooter.ShooterStatus.Stop),
