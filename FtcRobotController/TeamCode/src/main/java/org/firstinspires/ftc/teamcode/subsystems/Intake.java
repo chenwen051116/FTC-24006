@@ -54,9 +54,9 @@ public class Intake extends SubsystemBase {
     }
 
     public void dropup(){
-        drop.setPosition(0.18);
+        drop.setPosition(0);
     }
-    public void dropdown(){ drop.setPosition(0.595);
+    public void dropdown(){ drop.setPosition(0.59);
     }
 
     public void updateAutoshoot(boolean auto) {
