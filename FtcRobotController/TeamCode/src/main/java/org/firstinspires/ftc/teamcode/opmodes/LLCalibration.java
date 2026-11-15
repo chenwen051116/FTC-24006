@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,19 +14,28 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Limelight tag-space calibration tool.
+ * Limelight field-space calibration tool.
  *
  * Drives around like a normal teleop (left stick = translate, right stick x = turn).
  * The Pinpoint odometry provides (x, y, yaw); z = 0 and roll = pitch = 0 are assumed.
  *
+ * Uses the Limelight FIELD-space robot pose (MegaTag2 botpose, needs the uploaded
+ * field map). Because every reading is in the same fixed field frame, samples
+ * captured facing ANY tags all contribute to one solve.
+ *
  * Controls:
- *   X = capture a sample: averages the last ~avgWindow Limelight
- *       getRobotPoseTargetSpace() readings (dropping single-frame glitch
- *       outliers via median/MAD rejection) together with the matching
- *       odometry 6D pose. Park the robot before pressing X.
- *   Y = solve the odometry->tag transform matrix from all captured samples
- *       (least-squares style mean), and report the RMS residual.
+ *   X = capture a sample: averages the last ~avgWindow Limelight field-space
+ *       readings (dropping single-frame glitch outliers via median/MAD
+ *       rejection) together with the matching odometry 6D pose. Park the
+ *       robot before pressing X.
+ *   Y = solve the odometry->field transform matrix from all captured samples
+ *       (least-squares style mean), report the RMS residual and print the
+ *       full 4x4 matrix. The report stays on screen until the next solve.
  *   A = clear all samples.
+ *
+ * The "Fit" line refreshes whenever samples change, and the "Live err" line
+ * compares the current Limelight reading against the solved transform every
+ * loop, so you can see the calibration quality update live while driving.
  *
  * All math is done in meters/radians (odometry inches are converted), so the
  * resulting transform is a rigid SE(3) transform. Rotation convention is
@@ -42,24 +50,30 @@ public class LLCalibration extends OpMode {
     private Drivetrain drivetrain;
     private Limelight limelight;
 
-    /** One captured correspondence: odometry pose <-> Limelight tag-space pose. */
+    /** One captured correspondence: odometry pose <-> Limelight field-space pose. */
     private static class Sample {
-        final int tagId;
         final double[] odoT;    // {x, y, z} meters (z = 0)
         final double[][] odoR;  // rotation (yaw only)
-        final double[] llT;     // {x, y, z} meters, tag space
-        final double[][] llR;   // rotation, tag space
+        final double[] llT;     // {x, y, z} meters, field frame
+        final double[][] llR;   // rotation, field frame
+        final double travelIn;  // odo straight-line distance from first sample (inches)
+        final double dHeadDeg;  // odo heading change from first sample (degrees)
+        final String tags;      // tag ids visible at capture
 
-        Sample(int tagId, double[] odoT, double[][] odoR, double[] llT, double[][] llR) {
-            this.tagId = tagId;
+        Sample(double[] odoT, double[][] odoR, double[] llT, double[][] llR,
+               double travelIn, double dHeadDeg, String tags) {
             this.odoT = odoT;
             this.odoR = odoR;
             this.llT = llT;
             this.llR = llR;
+            this.travelIn = travelIn;
+            this.dHeadDeg = dHeadDeg;
+            this.tags = tags;
         }
     }
 
     private final List<Sample> samples = new ArrayList<>();
+    private double refOdoX, refOdoY, refOdoYaw;  // first capture of the session (meters/rad)
 
     // ---- robust capture settings ----
     /** Rolling history length (readings with a visible tag). */
@@ -72,19 +86,19 @@ public class LLCalibration extends OpMode {
     public static double stalenessMs = 1000.0;
     /** Minimum samples before the live RMS / solve is shown and trusted. */
     public static int minSolveSamples = 3;
+    /** Alliance for the field map uploaded at init (blue: tags 38-45, red: 30-37). */
+    public static boolean blueAlliance = false;
 
     private static final double TRANS_FLOOR = 0.01;                // m, minimum rejection tolerance
     private static final double ANGLE_FLOOR = Math.toRadians(1.0); // rad, minimum rejection tolerance
 
-    /** One live tag reading (raw material for the robust capture). */
+    /** One live field-space reading (raw material for the robust capture). */
     private static class Reading {
-        final int tagId;
-        final double[] ll;   // {x, y, z, roll, pitch, yaw}, meters/radians
+        final double[] ll;   // {x, y, z, roll, pitch, yaw}, field frame, meters/radians
         final double odoX, odoY, odoYaw;  // meters/radians
         final long timestampNs;
 
-        Reading(int tagId, double[] ll, double odoX, double odoY, double odoYaw, long timestampNs) {
-            this.tagId = tagId;
+        Reading(double[] ll, double odoX, double odoY, double odoYaw, long timestampNs) {
             this.ll = ll;
             this.odoX = odoX;
             this.odoY = odoY;
@@ -94,16 +108,34 @@ public class LLCalibration extends OpMode {
     }
 
     private final ArrayDeque<Reading> history = new ArrayDeque<>();
+    private long lastPipelineFixMs = 0;
+
+    /** Last one-shot status (capture/clear result), rendered every loop so it doesn't flash. */
+    private String statusLine = null;
+    /** Lines of the last Y-button solve report, rendered every loop so they stay on screen. */
+    private final List<String> reportLines = new ArrayList<>();
+    /** Most recent solve, used for the live validation error. */
+    private SolveResult lastSolve = null;
 
     private boolean xWasDown = false;
     private boolean yWasDown = false;
     private boolean aWasDown = false;
+    private boolean bWasDown = false;
+    private boolean dpadUpWasDown = false;
+
+    private boolean mapUploadedHere = false;
+    private String mapChoice = "kept";
 
     @Override
     public void init() {
         drivetrain = new Drivetrain(hardwareMap, true);
         limelight = new Limelight(hardwareMap);
-        telemetry.addLine("Drive the robot around the tag.");
+        // the field map is deliberately NOT uploaded here: TurnRed/TurnBlue own it
+        // and it stays on the Limelight. Press B only if you need to switch it
+        // while calibrating.
+        telemetry.addData("Field map", "kept (set by TurnRed/TurnBlue); B = switch to %s and upload",
+                blueAlliance ? "BLUE" : "RED");
+        telemetry.addLine("Drive the robot around the tags.");
         telemetry.addLine("Park, then X = capture (robust avg), Y = solve, A = clear.");
     }
 
@@ -119,32 +151,50 @@ public class LLCalibration extends OpMode {
         double odoYIn = drivetrain.pose().y();
         double odoYaw = drivetrain.pose().heading();
 
-        LLResultTypes.FiducialResult fiducial = limelight.getPrimaryFiducial();
-        Pose3D targetSpace = fiducial == null ? null : fiducial.getRobotPoseTargetSpace();
+        Pose3D fieldPose = limelight.getPoseField3D();
 
         telemetry.addData("Odo (in)", "(%.2f, %.2f, %.1f deg)", odoXIn, odoYIn, Math.toDegrees(odoYaw));
-        if (targetSpace != null) {
-            telemetry.addData("Tag id", fiducial.getFiducialId());
-            telemetry.addData("LL target-space (m)", "(%.3f, %.3f, %.3f)",
-                    targetSpace.getPosition().x, targetSpace.getPosition().y, targetSpace.getPosition().z);
-            telemetry.addData("LL target-space rpy (deg)", "(%.1f, %.1f, %.1f)",
-                    targetSpace.getOrientation().getRoll(AngleUnit.DEGREES),
-                    targetSpace.getOrientation().getPitch(AngleUnit.DEGREES),
-                    targetSpace.getOrientation().getYaw(AngleUnit.DEGREES));
+        List<Integer> tagIds = limelight.getFiducialIds();
+        telemetry.addData("LL tags", "%d ids %s", tagIds.size(), tagIds.toString());
+
+        // guard: re-assert the pipeline if something (e.g. an open web UI) switched it
+        int activePipe = limelight.getActivePipelineIndex();
+        if (activePipe != Limelight.pipelineIndex) {
+            long nowMs = System.currentTimeMillis();
+            if (nowMs - lastPipelineFixMs > 1000) {
+                lastPipelineFixMs = nowMs;
+                limelight.switchPipeline(Limelight.pipelineIndex);
+            }
+        }
+        telemetry.addData("LL pipeline", "active %d (want %d)%s",
+                activePipe, Limelight.pipelineIndex,
+                activePipe == Limelight.pipelineIndex ? "" : "  <-- MISMATCH");
+        telemetry.addData("LL map / orient POST", "%s [%s] / %s",
+                mapUploadedHere ? (limelight.isFieldMapUploadOk() ? "ok" : "FAILED") : "kept", mapChoice,
+                limelight.isLastOrientationPostOk() ? "ok" : "FAILING");
+        Pose3D mt1 = limelight.getBotposeMt1Raw();
+        telemetry.addData("LL MT1 raw (m)", mt1 == null ? "none" : String.format("(%.3f, %.3f, %.3f)",
+                mt1.getPosition().x, mt1.getPosition().y, mt1.getPosition().z));
+        if (fieldPose != null) {
+            telemetry.addData("LL field (m)", "(%.3f, %.3f, %.3f)",
+                    fieldPose.getPosition().x, fieldPose.getPosition().y, fieldPose.getPosition().z);
+            telemetry.addData("LL field rpy (deg)", "(%.1f, %.1f, %.1f)",
+                    fieldPose.getOrientation().getRoll(AngleUnit.DEGREES),
+                    fieldPose.getOrientation().getPitch(AngleUnit.DEGREES),
+                    fieldPose.getOrientation().getYaw(AngleUnit.DEGREES));
         } else {
-            telemetry.addData("Tag", "none visible");
+            telemetry.addData("LL field", "no MT2 pose (enable MegaTag2 in web UI)");
         }
         telemetry.addData("Samples", samples.size());
 
         // ---- rolling history for the robust capture ----
-        if (targetSpace != null) {
+        if (fieldPose != null) {
             history.addLast(new Reading(
-                    fiducial.getFiducialId(),
                     new double[]{
-                            targetSpace.getPosition().x, targetSpace.getPosition().y, targetSpace.getPosition().z,
-                            targetSpace.getOrientation().getRoll(AngleUnit.RADIANS),
-                            targetSpace.getOrientation().getPitch(AngleUnit.RADIANS),
-                            targetSpace.getOrientation().getYaw(AngleUnit.RADIANS)},
+                            fieldPose.getPosition().x, fieldPose.getPosition().y, fieldPose.getPosition().z,
+                            fieldPose.getOrientation().getRoll(AngleUnit.RADIANS),
+                            fieldPose.getOrientation().getPitch(AngleUnit.RADIANS),
+                            fieldPose.getOrientation().getYaw(AngleUnit.RADIANS)},
                     odoXIn * IN_TO_M, odoYIn * IN_TO_M, odoYaw,
                     System.nanoTime()));
             while (history.size() > historySize) {
@@ -161,9 +211,31 @@ public class LLCalibration extends OpMode {
         // ---- A: clear ----
         if (gamepad1.a && !aWasDown) {
             samples.clear();
-            telemetry.addLine(">> samples cleared");
+            lastSolve = null;
+            reportLines.clear();
+            statusLine = ">> samples cleared";
         }
         aWasDown = gamepad1.a;
+
+        // ---- B: toggle red/blue field map and re-upload ----
+        if (gamepad1.b && !bWasDown) {
+            blueAlliance = !blueAlliance;
+            boolean ok = limelight.uploadHiveFieldMap(blueAlliance);
+            mapUploadedHere = true;
+            mapChoice = (ok ? "ok" : "FAILED") + " (" + (blueAlliance ? "blue" : "red") + ")";
+            statusLine = ">> field map switched to " + (blueAlliance ? "BLUE" : "RED")
+                    + ", upload " + (ok ? "ok" : "FAILED") + " (recapture if you had samples)";
+        }
+        bWasDown = gamepad1.b;
+
+        // ---- dpad_up: export samples to CSV for offline analysis ----
+        if (gamepad1.dpad_up && !dpadUpWasDown) {
+            int exported = exportSamplesCsv();
+            statusLine = exported >= 0
+                    ? ">> exported " + exported + " samples to /sdcard/FIRST/llcal_samples.csv (adb pull)"
+                    : ">> CSV export failed (check /sdcard/FIRST exists)";
+        }
+        dpadUpWasDown = gamepad1.dpad_up;
 
         // ---- Y: full report ----
         if (gamepad1.y && !yWasDown) {
@@ -171,15 +243,38 @@ public class LLCalibration extends OpMode {
         }
         yWasDown = gamepad1.y;
 
-        // ---- live RMS (auto-solves every loop once enough samples exist) ----
+        // ---- live fit + live validation (recomputed every loop) ----
         if (samples.size() >= minSolveSamples) {
-            SolveResult r = solve();
-            if (r != null) {
-                telemetry.addLine(String.format(
-                        "Live tag %d | %d samples | RMS %.2f in / %.2f deg | T trans (%.2f, %.2f, %.2f) in",
-                        r.tagId, r.n, r.rmsTrans * M_TO_IN, r.rmsRot,
-                        r.meanT[0] * M_TO_IN, r.meanT[1] * M_TO_IN, r.meanT[2] * M_TO_IN));
+            lastSolve = solve();
+        }
+        if (lastSolve != null) {
+            telemetry.addLine(String.format(
+                    "Fit | %d samples | RMS %.2f in / %.2f deg | T trans (%.2f, %.2f, %.2f) in",
+                    lastSolve.n, lastSolve.rmsTrans * M_TO_IN, lastSolve.rmsRot,
+                    lastSolve.meanT[0] * M_TO_IN, lastSolve.meanT[1] * M_TO_IN, lastSolve.meanT[2] * M_TO_IN));
+            if (fieldPose != null) {
+                // live check: does the solved T predict the field-space pose of the CURRENT frame?
+                double[][] nowR = rotFromRpy(0.0, 0.0, odoYaw);
+                double[] nowT = {odoXIn * IN_TO_M, odoYIn * IN_TO_M, 0.0};
+                double[][] pR = mul(lastSolve.meanR, nowR);
+                double[] pT = add(mulVec(lastSolve.meanR, nowT), lastSolve.meanT);
+                double[][] llR = rotFromRpy(
+                        fieldPose.getOrientation().getRoll(AngleUnit.RADIANS),
+                        fieldPose.getOrientation().getPitch(AngleUnit.RADIANS),
+                        fieldPose.getOrientation().getYaw(AngleUnit.RADIANS));
+                double[] llT = {fieldPose.getPosition().x, fieldPose.getPosition().y, fieldPose.getPosition().z};
+                double[] err = residual(llR, llT, pR, pT);
+                telemetry.addLine(String.format("Live err vs fit: %.2f in / %.2f deg",
+                        err[0] * M_TO_IN, err[1]));
             }
+        }
+
+        // persistent status + report so they don't flash for a single frame
+        if (statusLine != null) {
+            telemetry.addLine(statusLine);
+        }
+        for (String line : reportLines) {
+            telemetry.addLine(line);
         }
 
         telemetry.update();
@@ -190,11 +285,11 @@ public class LLCalibration extends OpMode {
     // ------------------------------------------------------------------
 
     /**
-     * Capture a sample from the recent tag readings instead of one frame.
+     * Capture a sample from the recent field-space readings instead of one frame.
      * Per component, readings further than outlierSensitivity * MAD (median
      * absolute deviation) from the median are rejected as glitches, then the
-     * surviving values are averaged. Only readings of the dominant tag and
-     * fresher than stalenessMs are considered. Park the robot before pressing X.
+     * surviving values are averaged. Only readings fresher than stalenessMs
+     * are considered. Park the robot before pressing X.
      */
     private void captureRobust() {
         long now = System.nanoTime();
@@ -206,44 +301,26 @@ public class LLCalibration extends OpMode {
             }
         }
         if (fresh.isEmpty()) {
-            telemetry.addLine(">> no recent tag readings, sample NOT captured");
+            statusLine = ">> no recent field readings, sample NOT captured";
             return;
         }
 
         int start = Math.max(0, fresh.size() - avgWindow);
         List<Reading> window = new ArrayList<>(fresh.subList(start, fresh.size()));
-
-        // keep only the dominant tag's readings (single-frame tag flips drop out)
-        int tagId = window.get(window.size() - 1).tagId;
-        int bestCount = 0;
-        for (Reading r : window) {
-            int c = 0;
-            for (Reading t : window) {
-                if (t.tagId == r.tagId) c++;
-            }
-            if (c > bestCount) {
-                bestCount = c;
-                tagId = r.tagId;
-            }
-        }
-        List<Reading> tagged = new ArrayList<>();
-        for (Reading r : window) {
-            if (r.tagId == tagId) tagged.add(r);
-        }
-        int m = tagged.size();
+        int m = window.size();
 
         // robust-average every component (indices 3-5 of ll are angles)
         int minKept = m;
         double[] ll = new double[6];
         for (int c = 0; c < 6; c++) {
             List<Double> vals = new ArrayList<>(m);
-            for (Reading r : tagged) vals.add(r.ll[c]);
+            for (Reading r : window) vals.add(r.ll[c]);
             int[] kept = new int[1];
             ll[c] = robustMean(vals, c >= 3, kept);
             minKept = Math.min(minKept, kept[0]);
         }
         List<Double> oxv = new ArrayList<>(m), oyv = new ArrayList<>(m), oyawv = new ArrayList<>(m);
-        for (Reading r : tagged) {
+        for (Reading r : window) {
             oxv.add(r.odoX);
             oyv.add(r.odoY);
             oyawv.add(r.odoYaw);
@@ -253,12 +330,42 @@ public class LLCalibration extends OpMode {
         double oy = robustMean(oyv, false, kept); minKept = Math.min(minKept, kept[0]);
         double oyaw = robustMean(oyawv, true, kept); minKept = Math.min(minKept, kept[0]);
 
-        samples.add(new Sample(tagId,
+        // diagnostics: travel / heading change since the first capture of this session
+        if (samples.isEmpty()) {
+            refOdoX = ox; refOdoY = oy; refOdoYaw = oyaw;
+        }
+        double travelIn = Math.hypot(ox - refOdoX, oy - refOdoY) * M_TO_IN;
+        double dHeadDeg = Math.toDegrees(wrapPi(oyaw - refOdoYaw));
+
+        samples.add(new Sample(
                 new double[]{ox, oy, 0.0}, rotFromRpy(0.0, 0.0, oyaw),
-                new double[]{ll[0], ll[1], ll[2]}, rotFromRpy(ll[3], ll[4], ll[5])));
-        telemetry.addLine(String.format(
-                ">> captured sample %d (tag %d): %d/%d good readings, up to %d glitch frames dropped",
-                samples.size(), tagId, minKept, m, m - minKept));
+                new double[]{ll[0], ll[1], ll[2]}, rotFromRpy(ll[3], ll[4], ll[5]),
+                travelIn, dHeadDeg, limelight.getFiducialIds().toString()));
+        statusLine = String.format(
+                ">> captured sample %d: %d/%d good readings, up to %d glitch frames dropped",
+                samples.size(), minKept, m, m - minKept);
+    }
+
+    /** Writes all samples as CSV (meters/radians) for offline analysis:
+     *  adb pull /sdcard/FIRST/llcal_samples.csv */
+    private int exportSamplesCsv() {
+        try (java.io.PrintWriter w = new java.io.PrintWriter(
+                new java.io.FileWriter("/sdcard/FIRST/llcal_samples.csv"))) {
+            w.println("odo_x,odo_y,odo_yaw,ll_x,ll_y,ll_z,ll_roll,ll_pitch,ll_yaw");
+            for (Sample s : samples) {
+                double oYaw = Math.atan2(s.odoR[1][0], s.odoR[0][0]);
+                double lYaw = Math.atan2(s.llR[1][0], s.llR[0][0]);
+                double lPitch = -Math.asin(Math.max(-1.0, Math.min(1.0, s.llR[2][0])));
+                double lRoll = Math.atan2(s.llR[2][1], s.llR[2][2]);
+                w.println(String.format(java.util.Locale.US,
+                        "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f",
+                        s.odoT[0], s.odoT[1], oYaw,
+                        s.llT[0], s.llT[1], s.llT[2], lRoll, lPitch, lYaw));
+            }
+            return samples.size();
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     /** Median-and-MAD outlier-rejecting mean. wrap = treat values as angles. */
@@ -293,6 +400,21 @@ public class LLCalibration extends OpMode {
         return n % 2 == 1 ? sorted.get(n / 2) : (sorted.get(n / 2 - 1) + sorted.get(n / 2)) / 2.0;
     }
 
+    /** Pearson correlation; 0 if either side has no variance. */
+    private static double pearson(double[] a, double[] b) {
+        int n = a.length;
+        double ma = 0, mb = 0;
+        for (int i = 0; i < n; i++) { ma += a[i]; mb += b[i]; }
+        ma /= n; mb /= n;
+        double cov = 0, va = 0, vb = 0;
+        for (int i = 0; i < n; i++) {
+            double da = a[i] - ma, db = b[i] - mb;
+            cov += da * db; va += da * da; vb += db * db;
+        }
+        if (va < 1e-12 || vb < 1e-12) return 0;
+        return cov / Math.sqrt(va * vb);
+    }
+
     private static double wrapPi(double a) {
         while (a > Math.PI) a -= 2 * Math.PI;
         while (a < -Math.PI) a += 2 * Math.PI;
@@ -305,20 +427,23 @@ public class LLCalibration extends OpMode {
 
     /** Result of a solve (translation in meters, rotation RMS in degrees). */
     private static class SolveResult {
-        final int tagId;
         final int n;
         final double rmsTrans;   // meters
         final double rmsRot;     // degrees
         final double[] meanT;    // meters
         final double[][] meanR;
+        final double[] sampleErrT;  // meters, per sample in the solved group
+        final double[] sampleErrR;  // degrees, per sample in the solved group
 
-        SolveResult(int tagId, int n, double rmsTrans, double rmsRot, double[] meanT, double[][] meanR) {
-            this.tagId = tagId;
+        SolveResult(int n, double rmsTrans, double rmsRot, double[] meanT, double[][] meanR,
+                    double[] sampleErrT, double[] sampleErrR) {
             this.n = n;
             this.rmsTrans = rmsTrans;
             this.rmsRot = rmsRot;
             this.meanT = meanT;
             this.meanR = meanR;
+            this.sampleErrT = sampleErrT;
+            this.sampleErrR = sampleErrR;
         }
     }
 
@@ -328,34 +453,18 @@ public class LLCalibration extends OpMode {
             return null;
         }
 
-        // group by tag: solve for the tag with the most samples
-        int bestTag = -1;
-        int bestCount = 0;
-        for (Sample s : samples) {
-            int n = 0;
-            for (Sample t : samples) {
-                if (t.tagId == s.tagId) n++;
-            }
-            if (n > bestCount) {
-                bestCount = n;
-                bestTag = s.tagId;
-            }
-        }
-
-        List<Sample> group = new ArrayList<>();
-        for (Sample s : samples) {
-            if (s.tagId == bestTag) group.add(s);
-        }
+        // all samples share the field frame -- solve them together
+        List<Sample> group = new ArrayList<>(samples);
 
         // T_i = LL_i * Odo_i^-1  for each sample
         List<double[][]> tRots = new ArrayList<>();
         List<double[]> tTrans = new ArrayList<>();
         for (Sample s : group) {
             double[][] invOdoR = transpose(s.odoR);
-            double[] invOdoT = mulVec(invOdoR, negate(s.odoT));
-            // T_i rotation = llR * odoR^T ; translation = llR * (-odoR^T * odoT) + llT
+            double[] invOdoT = mulVec(invOdoR, negate(s.odoT));  // = Odo^-1 translation
+            // T_i rotation = llR * odoR^T ; translation = llR * (Odo^-1 translation) + llT
             double[][] tR = mul(s.llR, invOdoR);
-            double[] tT = add(mulVec(s.llR, negate(invOdoT)), s.llT);
+            double[] tT = add(mulVec(s.llR, invOdoT), s.llT);
             tRots.add(tR);
             tTrans.add(tT);
         }
@@ -381,53 +490,93 @@ public class LLCalibration extends OpMode {
         double[] qMean = {qSum[0] / norm, qSum[1] / norm, qSum[2] / norm, qSum[3] / norm};
         double[][] meanR = rotFromQuat(qMean);
 
-        // residuals: predicted = T * Odo_i, compare to LL_i
+        // residuals: predicted = T * Odo_i, compare to LL_i (kept per sample for the report)
         double sumSqTrans = 0;
         double sumSqRot = 0;
-        for (Sample s : group) {
+        double[] sampleErrT = new double[group.size()];
+        double[] sampleErrR = new double[group.size()];
+        for (int i = 0; i < group.size(); i++) {
+            Sample s = group.get(i);
             double[][] pR = mul(meanR, s.odoR);
             double[] pT = add(mulVec(meanR, s.odoT), meanT);
-            // dT = LL * pred^-1
-            double[][] invPR = transpose(pR);
-            double[] invPT = mulVec(invPR, negate(pT));
-            double[][] dR = mul(s.llR, invPR);
-            double[] dT = add(mulVec(s.llR, negate(invPT)), s.llT);
-            double eT = Math.sqrt(dT[0] * dT[0] + dT[1] * dT[1] + dT[2] * dT[2]);
-            double tr = dR[0][0] + dR[1][1] + dR[2][2];
-            double eR = Math.toDegrees(Math.acos(clamp((tr - 1.0) / 2.0, -1.0, 1.0)));
-            sumSqTrans += eT * eT;
-            sumSqRot += eR * eR;
+            double[] err = residual(s.llR, s.llT, pR, pT);
+            sampleErrT[i] = err[0];
+            sampleErrR[i] = err[1];
+            sumSqTrans += err[0] * err[0];
+            sumSqRot += err[1] * err[1];
         }
         double rmsTrans = Math.sqrt(sumSqTrans / group.size());
         double rmsRot = Math.sqrt(sumSqRot / group.size());
 
-        return new SolveResult(bestTag, group.size(), rmsTrans, rmsRot, meanT, meanR);
+        return new SolveResult(group.size(), rmsTrans, rmsRot, meanT, meanR, sampleErrT, sampleErrR);
     }
 
-    /** Y: full report with the 4x4 matrix. */
+    /**
+     * Residual between an actual LL pose and the pose predicted by the transform:
+     * d = LL * pred^-1, so identity d (0 trans, 0 rot) means a perfect match.
+     * Returns {translation error (m), rotation error (deg)}.
+     */
+    private static double[] residual(double[][] llR, double[] llT, double[][] pR, double[] pT) {
+        double[][] invPR = transpose(pR);
+        double[] invPT = mulVec(invPR, negate(pT));  // = pred^-1 translation
+        double[][] dR = mul(llR, invPR);
+        double[] dT = add(mulVec(llR, invPT), llT);
+        double eT = Math.sqrt(dT[0] * dT[0] + dT[1] * dT[1] + dT[2] * dT[2]);
+        double tr = dR[0][0] + dR[1][1] + dR[2][2];
+        double eR = Math.toDegrees(Math.acos(clamp((tr - 1.0) / 2.0, -1.0, 1.0)));
+        return new double[]{eT, eR};
+    }
+
+    /**
+     * Y: full report with the 4x4 matrix. Built into reportLines so it stays on
+     * screen every loop instead of flashing for a single frame.
+     */
     private void reportSolve() {
         SolveResult r = solve();
+        reportLines.clear();
         if (r == null) {
-            telemetry.addLine(">> no samples captured yet");
+            statusLine = ">> no samples captured yet";
             return;
         }
+        lastSolve = r;
         if (r.n < minSolveSamples) {
-            telemetry.addLine(String.format(">> only %d sample(s) for tag %d -- capture at least %d for a trustworthy fit",
-                    r.n, r.tagId, minSolveSamples));
+            reportLines.add(String.format(">> only %d sample(s) -- capture at least %d for a trustworthy fit",
+                    r.n, minSolveSamples));
         }
-        telemetry.addLine(String.format(">> SOLVE tag %d (%d samples)", r.tagId, r.n));
-        telemetry.addLine(String.format(">> RMS trans: %.2f in (%.4f m)", r.rmsTrans * M_TO_IN, r.rmsTrans));
-        telemetry.addLine(String.format(">> RMS rot:   %.2f deg", r.rmsRot));
-        telemetry.addLine(">> T (tag <- odo), 4x4 row-major, meters:");
-        telemetry.addLine(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[0][0], r.meanR[0][1], r.meanR[0][2], r.meanT[0]));
-        telemetry.addLine(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[1][0], r.meanR[1][1], r.meanR[1][2], r.meanT[1]));
-        telemetry.addLine(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[2][0], r.meanR[2][1], r.meanR[2][2], r.meanT[2]));
-        telemetry.addLine("  [0 0 0 1]");
+        reportLines.add(String.format(">> SOLVE (%d samples, field frame)", r.n));
+        reportLines.add(String.format(">> RMS trans: %.2f in (%.4f m)", r.rmsTrans * M_TO_IN, r.rmsTrans));
+        reportLines.add(String.format(">> RMS rot:   %.2f deg", r.rmsRot));
+        reportLines.add(">> T (field <- odo), 4x4 row-major, meters:");
+        reportLines.add(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[0][0], r.meanR[0][1], r.meanR[0][2], r.meanT[0]));
+        reportLines.add(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[1][0], r.meanR[1][1], r.meanR[1][2], r.meanT[1]));
+        reportLines.add(String.format("  [%.4f %.4f %.4f %.4f]", r.meanR[2][0], r.meanR[2][1], r.meanR[2][2], r.meanT[2]));
+        reportLines.add("  [0 0 0 1]");
         double[] rpy = rotToRpy(r.meanR);
-        telemetry.addLine(String.format(">> T translation (in): (%.2f, %.2f, %.2f)",
+        reportLines.add(String.format(">> T translation (in): (%.2f, %.2f, %.2f)",
                 r.meanT[0] * M_TO_IN, r.meanT[1] * M_TO_IN, r.meanT[2] * M_TO_IN));
-        telemetry.addLine(String.format(">> T rpy (deg): (%.2f, %.2f, %.2f)",
+        reportLines.add(String.format(">> T rpy (deg): (%.2f, %.2f, %.2f)",
                 Math.toDegrees(rpy[0]), Math.toDegrees(rpy[1]), Math.toDegrees(rpy[2])));
+        reportLines.add(">> per-sample residuals (a bad capture stands out here):");
+        for (int i = 0; i < r.n; i++) {
+            boolean suspicious = r.rmsTrans > 1e-6 && r.sampleErrT[i] > 3.0 * r.rmsTrans;
+            Sample s = samples.get(i);
+            reportLines.add(String.format("  s%d: %.2f in / %.2f deg  (traveled %.0f in, turned %.0f deg, tags %s)%s",
+                    i + 1, r.sampleErrT[i] * M_TO_IN, r.sampleErrR[i],
+                    s.travelIn, s.dHeadDeg, s.tags,
+                    suspicious ? "  <-- suspicious" : ""));
+        }
+        if (r.n >= 3) {
+            double[] err = new double[r.n], trav = new double[r.n], turn = new double[r.n];
+            for (int i = 0; i < r.n; i++) {
+                err[i] = r.sampleErrT[i];
+                trav[i] = samples.get(i).travelIn;
+                turn[i] = Math.abs(samples.get(i).dHeadDeg);
+            }
+            reportLines.add(String.format(">> corr(err, distance traveled) = %+.2f  [toward +1: odo drift or scale error]",
+                    pearson(err, trav)));
+            reportLines.add(String.format(">> corr(err, amount turned)      = %+.2f  [toward +1: heading scale or MT2 yaw skew]",
+                    pearson(err, turn)));
+        }
     }
 
     // ------------------------------------------------------------------

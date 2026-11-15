@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public class Limelight {
     // Tunables (Dashboard: "Limelight" category)
     // ------------------------------------------------------------------
     /** Index of the AprilTag pipeline (slot number in the web UI). */
-    public static int pipelineIndex = 4;
+    public static int pipelineIndex = 3;
 
     /** true = MegaTag2 (IMU-fused, needs updateRobotHeading each loop), false = MegaTag1. */
     public static boolean useMT2 = true;
@@ -64,6 +65,10 @@ public class Limelight {
 
     private final Limelight3A limelight;
     private LLResult lastResult;
+
+    // ---- health flags (diagnostics) ----
+    private volatile boolean lastOrientationPostOk = false;
+    private volatile boolean fieldMapUploadOk = false;
 
     // ---- drivetrain-frame calibration (set by calibrate()) ----
     private boolean calibrated = false;
@@ -92,7 +97,50 @@ public class Limelight {
      * Pinpoint: Math.toDegrees(drivetrain.pose().getHeading()).
      */
     public void updateRobotHeading(double yawDeg) {
-        limelight.updateRobotOrientation(yawDeg);
+        lastOrientationPostOk = limelight.updateRobotOrientation(yawDeg);
+    }
+
+    /** Whether the last updateRobotHeading POST reached the Limelight. */
+    public boolean isLastOrientationPostOk() {
+        return lastOrientationPostOk;
+    }
+
+    /** Whether the last uploadHiveFieldMap POST succeeded (false if never called). */
+    public boolean isFieldMapUploadOk() {
+        return fieldMapUploadOk;
+    }
+
+    /** IDs of the fiducials seen in the latest result (empty list if none). */
+    public List<Integer> getFiducialIds() {
+        LLResult result = latest();
+        if (result == null || !result.isValid()) {
+            return new ArrayList<>();
+        }
+        List<Integer> ids = new ArrayList<>();
+        for (LLResultTypes.FiducialResult f : result.getFiducialResults()) {
+            ids.add(f.getFiducialId());
+        }
+        return ids;
+    }
+
+    /** Pipeline index the device itself reports as active ("pID"), -1 if no result. */
+    public int getActivePipelineIndex() {
+        LLResult result = latest();
+        return result == null ? -1 : result.getPipelineIndex();
+    }
+
+    /**
+     * RAW MT1 field-space pose (no zero-filtering) for diagnostics. When this
+     * is nonzero but getPoseField3D() is null, MegaTag2 is not computing
+     * (toggle off or orientation not received). When both are zero/absent,
+     * the device has no field map.
+     */
+    public Pose3D getBotposeMt1Raw() {
+        LLResult result = latest();
+        if (result == null || !result.isValid() || result.getStaleness() > maxStalenessMs) {
+            return null;
+        }
+        return result.getBotpose();
     }
 
     // ------------------------------------------------------------------
@@ -165,15 +213,38 @@ public class Limelight {
     // ------------------------------------------------------------------
 
     /**
-     * Robot pose in the LIMELIGHT FIELD frame (field-center origin, inches,
-     * yaw in radians). null when no fresh valid pose.
+     * Raw robot pose in the LIMELIGHT FIELD frame as a full 6D Pose3D (meters,
+     * field-center origin; read the orientation with AngleUnit). MegaTag2
+     * (IMU-fused, needs updateRobotHeading each loop) when enabled.
+     * null when no fresh valid pose.
      */
-    public Pose getPoseField() {
+    public Pose3D getPoseField3D() {
         LLResult result = latest();
         if (result == null || !result.isValid() || result.getStaleness() > maxStalenessMs) {
             return null;
         }
-        Pose3D botpose = useMT2 ? result.getBotpose_MT2() : result.getBotpose();
+        Pose3D pose = useMT2 ? result.getBotpose_MT2() : result.getBotpose();
+        if (pose == null) {
+            return null;
+        }
+        // The SDK returns an all-zero Pose3D when the botpose key is missing
+        // from the JSON (e.g. MegaTag2 not enabled on the device, or no field
+        // map). A real pose is never exactly all-zero, so treat it as no data.
+        if (pose.getPosition().x == 0.0 && pose.getPosition().y == 0.0 && pose.getPosition().z == 0.0
+                && pose.getOrientation().getRoll(AngleUnit.DEGREES) == 0.0
+                && pose.getOrientation().getPitch(AngleUnit.DEGREES) == 0.0
+                && pose.getOrientation().getYaw(AngleUnit.DEGREES) == 0.0) {
+            return null;
+        }
+        return pose;
+    }
+
+    /**
+     * Robot pose in the LIMELIGHT FIELD frame (field-center origin, inches,
+     * yaw in radians). null when no fresh valid pose.
+     */
+    public Pose getPoseField() {
+        Pose3D botpose = getPoseField3D();
         if (botpose == null) {
             return null;
         }
@@ -269,6 +340,27 @@ public class Limelight {
     }
 
     /**
+     * LLFieldMap that also carries the fieldlength/fieldwidth entries present
+     * in the original BIOBUZZ .fmap files (the SDK's toJson() omits them).
+     */
+    private static class HiveFieldMap extends LLFieldMap {
+        HiveFieldMap(List<LLFieldMap.Fiducial> fiducials) {
+            super(fiducials, "ftc");
+        }
+
+        @Override
+        protected JSONObject toJson() {
+            JSONObject json = super.toJson();
+            try {
+                json.put("fieldlength", 17.5482504);
+                json.put("fieldwidth", 8.0519016);
+            } catch (Exception ignored) {
+            }
+            return json;
+        }
+    }
+
+    /**
      * Upload the BIOBUZZ HiveFlat field map to the Limelight from code
      * (no web UI needed). Call once at opmode init for your alliance:
      *   limelight.uploadHiveFieldMap(true);   // blue: tags 38-45
@@ -300,7 +392,9 @@ public class Limelight {
             tags.add(hiveTag(36, 0.32, -0.2535, false));
             tags.add(hiveTag(37, 0.32, -0.1585, false));
         }
-        return limelight.uploadFieldmap(new LLFieldMap(tags, "ftc"), null);
+        boolean ok = limelight.uploadFieldmap(new HiveFieldMap(tags), null);
+        fieldMapUploadOk = ok;
+        return ok;
     }
 
     // ------------------------------------------------------------------
