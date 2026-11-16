@@ -50,8 +50,8 @@ public class Turret extends SubsystemBase {
     public static double ServoLoff = 0;
 
     public Turret(HardwareMap hardwareMap, boolean isTele) {
-        turretServoLeft = hardwareMap.get(ServoImplEx.class, "turretServoL");
-        turretServoRight = hardwareMap.get(ServoImplEx.class, "turretServoR");
+        turretServoLeft = hardwareMap.get(ServoImplEx.class, "hood");
+        turretServoRight = hardwareMap.get(ServoImplEx.class, "shootLimit");
         turretServoLeft.setPwmRange(new PwmControl.PwmRange(500, 2500));
         turretServoRight.setPwmRange(new PwmControl.PwmRange(500, 2500));
 
