@@ -43,10 +43,10 @@ public class Intake extends SubsystemBase {
     }
 
     public enum IntakeState {
-        INTAKING(0.8,0.8),
-        INTAKING_FLOWER(0.8,0.18),
-        INTAKE_STOP(0,0.8),
-        OUTTAKING(-0.6,0.8);
+        INTAKING(0.8,0.18),
+        INTAKING_FLOWER(0.8,0.8),
+        INTAKE_STOP(0,0.18),
+        OUTTAKING(-0.6,0.18);
         private final double intakeMotorPower, flowerPoseL;
 
         IntakeState(double intakeMotorPower, double flowerPoseL) {

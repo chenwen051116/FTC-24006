@@ -124,6 +124,7 @@ public class Garden_2Tip_Park extends OpMode {
                 follow(follower, FAP(Shoot)),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,0, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, FAF(FlowerAudienceP)),
+                pushForward(0.5, 1.0),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,0.7, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower, toShoot(FlowerAudienceF)),
                 setIntake(Intake.IntakeState.INTAKE_STOP,0, Intake.IntakeState.INTAKE_STOP),
@@ -133,6 +134,7 @@ public class Garden_2Tip_Park extends OpMode {
                 follow(follower,FDP(Shoot)),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,0, Intake.IntakeState.INTAKING_FLOWER),
                 follow(follower,FDF(FlowerDriveP)),
+                pushForward(0.5, 1.0),
                 setIntake(Intake.IntakeState.INTAKING_FLOWER,1.0, Intake.IntakeState.INTAKING_FLOWER),
                 setIntake(Intake.IntakeState.INTAKING,0, Intake.IntakeState.INTAKING),
                 ShootCommand(Shooter.ShooterStatus.Idling,0, Shooter.ShooterStatus.Idling),
@@ -193,6 +195,22 @@ public class Garden_2Tip_Park extends OpMode {
                 .requiring(intake);
 
     }
+
+    /**
+     * Push straight forward in the robot frame at a fixed power for a fixed time.
+     * Used after reaching a flower Finish pose to keep shoving the flower for a
+     * set time before the next action. Odometry keeps tracking during the push,
+     * and the robot actively holds wherever the push ends.
+     */
+    private Command pushForward(double power, double seconds) {
+        Timer pushTimer = new Timer();
+        return Command.build()
+                .setStart(() -> pushTimer.reset())
+                .setExecute(() -> follower.manual(power, 0, 0))
+                .setDone(() -> pushTimer.seconds() > seconds)
+                .setEnd(endCondition -> follower.hold(follower.pose()));
+    }
+
     Command ResetTele = Command.build()
             .setStart(() -> {
                 shooter.resetTeleop();
